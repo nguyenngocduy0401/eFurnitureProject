@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("eFurnitureProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98aa444c1c2bb3c579ee8cad37d7eaf3f0f2e57d")]
 [assembly: System.Reflection.AssemblyProductAttribute("eFurnitureProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("eFurnitureProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace eFurnitureProject.Domain.Entities
+{
+    public class OrderProcessing : BaseEntity
+    {
+        public int Price { get; set; }
+
+        public Guid? StatusOrderProcessingId { get; set; }
+        [ForeignKey("StatusOrderProcessingId")]
+        public StatusOrderProcessing? StatusOrderProcessing { get; set; }
+        public string? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
+
+        public virtual ICollection<OrderProcessingDetail>? OrderProcessingDetail { get; set; }
+    }
+}

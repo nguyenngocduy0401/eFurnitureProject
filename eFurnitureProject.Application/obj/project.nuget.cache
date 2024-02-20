@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/8coVw2gfLNynK6TQ/Bk4IudqZZEpx9r1jgqZsKHi8ba48uWrI8WEf9NnoIwjnG8ZJ07WoIQ0LM/91r2q8B3Jw==",
+  "dgSpecHash": "B8NdkEgPKO8UGy3vLDaEBNoAINP6Anz1Rjr55E8EgpLx/xGdcbFGfVjVettx6hd4cEtpT58nPnYXAF80gxx2Ew==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
+  "projectFilePath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.15\\microsoft.aspnetcore.authentication.jwtbearer.7.0.15.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

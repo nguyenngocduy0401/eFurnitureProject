@@ -1658,11 +1658,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
       "projectName": "eFurnitureProject.Domain",
-      "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+      "projectPath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
       "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\obj\\",
+      "outputPath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -425,15 +425,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 columns: table => new
                 {
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModificationBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ojj2SjAu42ccL1zaCs1uvY7RYE5UPuyO9NJszLojl3e276V9AnXKPpUS+q47JvQ2wqgSGNTStvUfMrL3HjfKAg==",
+  "dgSpecHash": "uFQN1n0/sDNg2Jl4AEGUwF3vl1bPBALtipY51PmIxx8PoI1JshBhRjNZgwQZE2TSea7TKSqkJL92j2j7t7COzQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+  "projectFilePath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Duy\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.15\\microsoft.aspnetcore.authentication.jwtbearer.7.0.15.nupkg.sha512",

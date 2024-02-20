@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Entities
 {
-    public class CartDetail : BaseEntity 
+    public class CartDetail
     {
         public Guid CartId { get; set; }
         [ForeignKey("CartId")]

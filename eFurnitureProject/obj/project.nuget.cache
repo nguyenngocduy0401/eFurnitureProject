@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Sc4SxfV32X6I4juDwRLEUAR1jOwf4wtww2wy2ufyBk67ocUWCi9L627Twzx5rRJTjnddsGuPeozjcXkKqQz7gQ==",
+  "dgSpecHash": "jkfR0/xbDN/jkuXSCI/QpY2vc4Lzg+lk+TM3hqt6J9CGJRB/WU3GeAWpKOo9f5fD7M0SC4M1O6qeO8UK5Sm8Fw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
+  "projectFilePath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.14\\microsoft.aspnetcore.openapi.7.0.14.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.15\\microsoft.entityframeworkcore.7.0.15.nupkg.sha512",

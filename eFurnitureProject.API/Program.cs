@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var configuration = builder.Configuration.Get<AppConfiguration>();
 builder.Services.AddInfrastructuresService(configuration.DatabaseConnection);
+
 /*
     register with singleton life time
     now we can use dependency injection for AppConfiguration

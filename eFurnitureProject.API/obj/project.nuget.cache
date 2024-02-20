@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jOrpyIZ8G6jPf0svb3NbPxgi9mcJwmoCbtRTTzHH090wU+tlYl034C8v6Qd2HmTPCVn6hss9fJ3ZtrMlNhKUIg==",
+  "dgSpecHash": "deKxEnJpfiuWbPxno/SvAfOMCkAdVSye28okVSI3OjDd2HYL/5N9moOGSWfP0ZWW3Zdqa6GbzsfbM9O+Xk0ynQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
+  "projectFilePath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Duy\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

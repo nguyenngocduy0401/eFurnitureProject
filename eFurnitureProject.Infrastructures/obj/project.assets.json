@@ -1172,6 +1172,21 @@
           }
         }
       },
+      "eFurnitureProject.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.15",
+          "Microsoft.EntityFrameworkCore": "7.0.15",
+          "eFurnitureProject.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/eFurnitureProject.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/eFurnitureProject.Application.dll": {}
+        }
+      },
       "eFurnitureProject.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -3142,6 +3157,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "eFurnitureProject.Application/1.0.0": {
+      "type": "project",
+      "path": "../eFurnitureProject.Application/eFurnitureProject.Application.csproj",
+      "msbuildProject": "../eFurnitureProject.Application/eFurnitureProject.Application.csproj"
+    },
     "eFurnitureProject.Domain/1.0.0": {
       "type": "project",
       "path": "../eFurnitureProject.Domain/eFurnitureProject.Domain.csproj",
@@ -3150,6 +3170,7 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.15",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.15",
       "Microsoft.EntityFrameworkCore >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.15",
@@ -3157,6 +3178,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.15",
       "Microsoft.Extensions.DependencyInjection >= 7.0.0",
+      "eFurnitureProject.Application >= 1.0.0",
       "eFurnitureProject.Domain >= 1.0.0"
     ]
   },
@@ -3166,11 +3188,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+      "projectUniqueName": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
       "projectName": "eFurnitureProject.Infrastructures",
-      "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+      "projectPath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
       "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\obj\\",
+      "outputPath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Infrastructures\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3187,8 +3209,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
-              "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
+            "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
+              "projectPath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
+            },
+            "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
+              "projectPath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
             }
           }
         }
@@ -3203,6 +3228,10 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "target": "Package",
+            "version": "[7.0.15, )"
+          },
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",
             "version": "[7.0.15, )"

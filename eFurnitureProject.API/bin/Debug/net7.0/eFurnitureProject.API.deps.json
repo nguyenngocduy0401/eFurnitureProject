@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "eFurnitureProject.API/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.15",
           "Microsoft.AspNetCore.OpenApi": "7.0.14",
           "Microsoft.EntityFrameworkCore": "7.0.15",
           "Microsoft.EntityFrameworkCore.Design": "7.0.15",
@@ -709,6 +710,7 @@
       },
       "eFurnitureProject.Application/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.15",
           "Microsoft.EntityFrameworkCore": "7.0.15",
           "eFurnitureProject.Domain": "1.0.0"
         },
@@ -727,11 +729,13 @@
       },
       "eFurnitureProject.Infrastructures/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.15",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.15",
           "Microsoft.EntityFrameworkCore": "7.0.15",
           "Microsoft.EntityFrameworkCore.InMemory": "7.0.15",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.15",
           "Microsoft.Extensions.DependencyInjection": "7.0.0",
+          "eFurnitureProject.Application": "1.0.0",
           "eFurnitureProject.Domain": "1.0.0"
         },
         "runtime": {

@@ -11,8 +11,5 @@ namespace eFurnitureProject.Infrastructures.Repositories
     public class CartDetailRepository : ICartDetailRepository
     {
         private readonly AppDbContext _dbContext;
-        public CartDetailRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
-        {
-        }
     }
 }

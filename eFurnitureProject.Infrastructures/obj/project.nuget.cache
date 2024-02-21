@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "d4ijezcIm9YFp0ViMfGZ//naD7kNHHRxm++vP+LkL5vOflaLkJ7m3VVmRSUGP2YJLFr+Ftb0oe3krVsNCBlD2Q==",
+  "dgSpecHash": "YmYpuzzrYotkTiBdsE90T5yjRYJrpXMRhhXgRS8MVrTieKCW065CGuvrOAi9/z1clX0SinaieqU2Yl90jECFKg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Duy\\Desktop\\New folder (3)\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+  "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Duy\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

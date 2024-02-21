@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Infrastructures.Repositories;
+using eFurnitureProject.Infrastructures.Mappers;
+using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.Services;
 
 namespace eFurnitureProject.Infrastructures
 {
@@ -15,16 +18,19 @@ namespace eFurnitureProject.Infrastructures
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, string databaseConnection)
         {
-
+            services.AddScoped<ICurrentTime, CurrentTime>();
+            /*services.AddScoped<IClaimsService, ClaimsService>();*/
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            
 
             // ATTENTION: if you do migration please check file README.md
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(databaseConnection));
 
             // this configuration just use in-memory for fast develop
             //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
+            services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 
-            
 
             return services;
         }

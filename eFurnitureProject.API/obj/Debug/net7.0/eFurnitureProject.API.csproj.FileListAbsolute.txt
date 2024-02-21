@@ -94,3 +94,4 @@ C:\Users\Duy\Desktop\eFurnitureProject\eFurnitureProject.API\bin\Debug\net7.0\Mi
 C:\Users\Duy\Desktop\eFurnitureProject\eFurnitureProject.API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Duy\Desktop\eFurnitureProject\eFurnitureProject.API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Duy\Desktop\eFurnitureProject\eFurnitureProject.API\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Duy\Desktop\eFurnitureProject\eFurnitureProject.API\bin\Debug\net7.0\AutoMapper.dll

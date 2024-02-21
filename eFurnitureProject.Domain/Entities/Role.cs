@@ -9,5 +9,6 @@ namespace eFurnitureProject.Domain.Entities
 {
     public class Role : IdentityRole
     {
+        public Role() : base() { }
     }
 }

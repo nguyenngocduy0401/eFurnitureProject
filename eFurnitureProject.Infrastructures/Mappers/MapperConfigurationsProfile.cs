@@ -16,7 +16,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
         {
             CreateMap<UserLoginDTO, User>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-          
+            CreateMap<UserRegisterDTO, User>();
         }
     }
 }

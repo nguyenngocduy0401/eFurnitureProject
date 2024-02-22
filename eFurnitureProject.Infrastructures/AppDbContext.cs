@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : IdentityDbContext<User, Role, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        { 
+        {
         }
 
         #region Dbset
@@ -50,6 +51,8 @@ namespace eFurnitureProject.Infrastructures
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderDetailConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderProcessingDetailConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(VoucherDetailConfiguration).Assembly);
+
+            
         }
     }
 }

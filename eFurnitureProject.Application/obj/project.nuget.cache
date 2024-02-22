@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "FwHNcgi1UR4WR1SUustf3/GWn/GRHXzdp9Fxweim6dN44YO6uUb6KD9S0hIDHj/7XgbMEtEN1WFR+8Tz8tiKpQ==",
+  "dgSpecHash": "keh+ZQlSbbqWFIXhtB59I56Butwl7a4kR0gUKAUyREFxjrQX5WZoOIi38B5ZsCysBF1zEOxpb94Jy6t9J3jvLQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Duy\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.15\\microsoft.aspnetcore.authentication.jwtbearer.7.0.15.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.15\\microsoft.entityframeworkcore.7.0.15.nupkg.sha512",

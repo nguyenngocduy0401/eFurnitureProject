@@ -18,11 +18,15 @@ namespace eFurnitureProject.Infrastructures
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, string databaseConnection)
         {
+            #region Service DI
             services.AddScoped<ICurrentTime, CurrentTime>();
-            /*services.AddScoped<IClaimsService, ClaimsService>();*/
+            services.AddScoped<IUserService, UserService>();
+            #endregion
+
+            #region Repository DI
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            
+            #endregion
 
             // ATTENTION: if you do migration please check file README.md
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(databaseConnection));

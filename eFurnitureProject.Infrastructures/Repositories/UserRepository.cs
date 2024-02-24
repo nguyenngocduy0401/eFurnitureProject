@@ -15,7 +15,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
     {
         private readonly AppDbContext _dbContext;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        
         public UserRepository(AppDbContext context, ICurrentTime timeService,
             IClaimsService claimsService)
         {

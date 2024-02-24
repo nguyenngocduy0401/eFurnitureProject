@@ -62,6 +62,19 @@
           }
         }
       },
+      "FluentValidation/11.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1282,29 +1295,12 @@
           }
         }
       },
-      "eFurnitureProject/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
-        "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": "7.0.14",
-          "Microsoft.EntityFrameworkCore": "7.0.15",
-          "Swashbuckle.AspNetCore": "6.5.0"
-        },
-        "compile": {
-          "bin/placeholder/eFurnitureProject.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/eFurnitureProject.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
-      },
       "eFurnitureProject.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "AutoMapper": "13.0.1",
+          "FluentValidation": "11.9.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.15",
           "Microsoft.EntityFrameworkCore": "7.0.15",
           "eFurnitureProject.Domain": "1.0.0"
@@ -1405,6 +1401,31 @@
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "FluentValidation/11.9.0": {
+      "sha512": "VneVlTvwYDkfHV5av3QrQ0amALgrLX6LV94wlYyEsh0B/klJBW7C8y2eAtj5tOZ3jH6CAVpr4s1ZGgew/QWyig==",
+      "type": "package",
+      "path": "fluentvalidation/11.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.11.9.0.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net5.0/FluentValidation.dll",
+        "lib/net5.0/FluentValidation.xml",
+        "lib/net6.0/FluentValidation.dll",
+        "lib/net6.0/FluentValidation.xml",
+        "lib/net7.0/FluentValidation.dll",
+        "lib/net7.0/FluentValidation.xml",
+        "lib/net8.0/FluentValidation.dll",
+        "lib/net8.0/FluentValidation.xml",
+        "lib/netstandard2.0/FluentValidation.dll",
+        "lib/netstandard2.0/FluentValidation.xml",
+        "lib/netstandard2.1/FluentValidation.dll",
+        "lib/netstandard2.1/FluentValidation.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -3647,11 +3668,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "eFurnitureProject/1.0.0": {
-      "type": "project",
-      "path": "../eFurnitureProject/eFurnitureProject.csproj",
-      "msbuildProject": "../eFurnitureProject/eFurnitureProject.csproj"
-    },
     "eFurnitureProject.Application/1.0.0": {
       "type": "project",
       "path": "../eFurnitureProject.Application/eFurnitureProject.Application.csproj",
@@ -3670,12 +3686,12 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "FluentValidation >= 11.9.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.15",
       "Microsoft.AspNetCore.OpenApi >= 7.0.14",
       "Microsoft.EntityFrameworkCore >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.15",
       "Swashbuckle.AspNetCore >= 6.5.0",
-      "eFurnitureProject >= 1.0.0",
       "eFurnitureProject.Application >= 1.0.0",
       "eFurnitureProject.Domain >= 1.0.0",
       "eFurnitureProject.Infrastructures >= 1.0.0"
@@ -3716,9 +3732,6 @@
             },
             "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
               "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj"
-            },
-            "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
-              "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj"
             }
           }
         }
@@ -3733,6 +3746,10 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
+          "FluentValidation": {
+            "target": "Package",
+            "version": "[11.9.0, )"
+          },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[7.0.15, )"

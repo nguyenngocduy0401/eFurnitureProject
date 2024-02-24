@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "0YUEfke8ULgSzFKigZYb5yBj98C+ojebButnqP6+M85XEOYmhaE2aGe4flSO/YSa88nvUA35tz3vQA7eSQNcOQ==",
+  "dgSpecHash": "D2DgFnPEE2PyIzZGfC63aHy05i3zlhDMbLI/8VDUp1CnhjA2y+MgXsB+tKVk4jLnKtbk4XkfapuC168woHZlZg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Duy\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
+    "C:\\Users\\Duy\\.nuget\\packages\\fluentvalidation\\11.9.0\\fluentvalidation.11.9.0.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.15\\microsoft.aspnetcore.authentication.jwtbearer.7.0.15.nupkg.sha512",
     "C:\\Users\\Duy\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.15\\microsoft.aspnetcore.cryptography.internal.7.0.15.nupkg.sha512",

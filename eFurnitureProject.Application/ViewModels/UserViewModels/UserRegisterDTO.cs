@@ -14,6 +14,5 @@ namespace eFurnitureProject.Application.ViewModels.UserViewModels
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }
-        public bool Status { get; set; }
     }
 }

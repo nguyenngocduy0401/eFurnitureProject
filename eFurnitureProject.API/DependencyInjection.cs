@@ -1,5 +1,13 @@
 ﻿using eFurnitureProject.API.Services;
+using eFurnitureProject.API.Validator.AuthenticationValidator;
+using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.Services;
+using eFurnitureProject.Application.ViewModels.UserViewModels;
+using eFurnitureProject.Domain.Entities;
+using eFurnitureProject.Infrastructures;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
 
 namespace eFurnitureProject.API
@@ -14,7 +22,13 @@ namespace eFurnitureProject.API
             services.AddHealthChecks();
             services.AddSingleton<Stopwatch>();
             services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddHttpContextAccessor();
+
+            #region Validator
+            services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
+            #endregion
+
             return services;
         }
     }

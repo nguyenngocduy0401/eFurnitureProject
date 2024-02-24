@@ -1,4 +1,5 @@
-﻿using eFurnitureProject.Application.Repositories;
+﻿using eFurnitureProject.Application;
+using eFurnitureProject.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
 
         private readonly AppDbContext _dbContext;
@@ -80,7 +81,8 @@ namespace eFurnitureProject.Infrastructures
         public IUserRepository UserRepository => _userRepository;
         public IVoucherDetailRepository VoucherDetailRepository => _voucherDetailRepository;
         public IVoucherRepository VoucherRepository => _voucherRepository;
- 
+
+        public ICartRepository CartRepository => _cartRepository;
 
         public async Task<int> SaveChangeAsync()
         {

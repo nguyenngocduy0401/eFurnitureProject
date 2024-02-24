@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
@@ -21,7 +22,6 @@
     <ProjectReference Include="..\eFurnitureProject.Application\eFurnitureProject.Application.csproj" />
     <ProjectReference Include="..\eFurnitureProject.Domain\eFurnitureProject.Domain.csproj" />
     <ProjectReference Include="..\eFurnitureProject.Infrastructures\eFurnitureProject.Infrastructures.csproj" />
-    <ProjectReference Include="..\eFurnitureProject\eFurnitureProject.csproj" />
   </ItemGroup>
 
 </Project>

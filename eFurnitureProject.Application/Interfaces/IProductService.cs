@@ -11,8 +11,11 @@ namespace eFurnitureProject.Application.Interfaces
     public interface IProductService
     {
         Task<ApiResponse<IEnumerable<ProductDTO>>> getAllProduct();
-        Task<ApiResponse<ProductDTO>> GetProductByID(int id);
-        Task<ApiRespons<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO,  Guid productID);
-        Task<ApiRespons<ProductDTO>> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid productID);
+        Task<ApiResponse<ProductDTO>> GetProductByID(Guid id);
+        Task<ApiResponse<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO);
+        Task<ApiResponse<ProductDTO>> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid productID);
+        Task<ApiResponse<bool>> DeleteProduct(Guid productID);
+        Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByNameAsync(string name);
+        Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByCategoryNameAsync(string name);
     }
 }

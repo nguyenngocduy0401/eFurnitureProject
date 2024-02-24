@@ -52,14 +52,13 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IVoucherRepository, VoucherRepository>();
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
+            services.AddScoped<IProductService, ProductService>();
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-            // ATTENTION: if you do migration please check file README.md
-            services.AddDbContext<AppDbContext>(option => option.UseSqlServer(databaseConnection));
+           services.AddDbContext<AppDbContext>(option => option.UseSqlServer(databaseConnection));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // this configuration just use in-memory for fast develop
-            //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 
 

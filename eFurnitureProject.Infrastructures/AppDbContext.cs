@@ -51,8 +51,8 @@ namespace eFurnitureProject.Infrastructures
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderDetailConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderProcessingDetailConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(VoucherDetailConfiguration).Assembly);
-
             
+
         }
     }
 }

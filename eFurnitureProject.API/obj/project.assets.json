@@ -1295,6 +1295,24 @@
           }
         }
       },
+      "eFurnitureProject/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.OpenApi": "7.0.14",
+          "Microsoft.EntityFrameworkCore": "7.0.15",
+          "Swashbuckle.AspNetCore": "6.5.0"
+        },
+        "compile": {
+          "bin/placeholder/eFurnitureProject.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/eFurnitureProject.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "eFurnitureProject.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -3668,6 +3686,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "eFurnitureProject/1.0.0": {
+      "type": "project",
+      "path": "../eFurnitureProject/eFurnitureProject.csproj",
+      "msbuildProject": "../eFurnitureProject/eFurnitureProject.csproj"
+    },
     "eFurnitureProject.Application/1.0.0": {
       "type": "project",
       "path": "../eFurnitureProject.Application/eFurnitureProject.Application.csproj",
@@ -3692,6 +3715,7 @@
       "Microsoft.EntityFrameworkCore >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.15",
       "Swashbuckle.AspNetCore >= 6.5.0",
+      "eFurnitureProject >= 1.0.0",
       "eFurnitureProject.Application >= 1.0.0",
       "eFurnitureProject.Domain >= 1.0.0",
       "eFurnitureProject.Infrastructures >= 1.0.0"
@@ -3732,6 +3756,9 @@
             },
             "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
               "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj"
+            },
+            "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
+              "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj"
             }
           }
         }

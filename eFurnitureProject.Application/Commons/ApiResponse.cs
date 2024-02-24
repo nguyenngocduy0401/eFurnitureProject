@@ -8,8 +8,11 @@ namespace eFurnitureProject.Application.Commons
 {
     public class ApiResponse<T>
     {
-        public T? Data { get; set; }
+        public T Data { get; set; }
         public bool isSuccess { get; set; } = true;
-        public string? Message { get; set; }
+        public string Message { get; set; } = null;
+        public string Error { get; set; } = null;
+        public List<string> ErrorMessages { get; set; } = null;
+
     }
 }

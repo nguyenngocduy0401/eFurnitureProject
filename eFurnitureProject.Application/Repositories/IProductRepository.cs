@@ -9,5 +9,7 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
+        Task<IEnumerable<Product>> GetProductsByCategoryNameAsync(string categoryName);
+        Task<IEnumerable<Product>> GetProductsByNameAsync(string productName);
     }
 }

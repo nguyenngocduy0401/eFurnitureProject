@@ -22,6 +22,7 @@
     <ProjectReference Include="..\eFurnitureProject.Application\eFurnitureProject.Application.csproj" />
     <ProjectReference Include="..\eFurnitureProject.Domain\eFurnitureProject.Domain.csproj" />
     <ProjectReference Include="..\eFurnitureProject.Infrastructures\eFurnitureProject.Infrastructures.csproj" />
+    <ProjectReference Include="..\eFurnitureProject\eFurnitureProject.csproj" />
   </ItemGroup>
 
 </Project>

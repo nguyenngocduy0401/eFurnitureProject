@@ -1282,24 +1282,6 @@
           }
         }
       },
-      "eFurnitureProject/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
-        "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": "7.0.14",
-          "Microsoft.EntityFrameworkCore": "7.0.15",
-          "Swashbuckle.AspNetCore": "6.5.0"
-        },
-        "compile": {
-          "bin/placeholder/eFurnitureProject.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/eFurnitureProject.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
-      },
       "eFurnitureProject.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -3647,11 +3629,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "eFurnitureProject/1.0.0": {
-      "type": "project",
-      "path": "../eFurnitureProject/eFurnitureProject.csproj",
-      "msbuildProject": "../eFurnitureProject/eFurnitureProject.csproj"
-    },
     "eFurnitureProject.Application/1.0.0": {
       "type": "project",
       "path": "../eFurnitureProject.Application/eFurnitureProject.Application.csproj",
@@ -3675,26 +3652,25 @@
       "Microsoft.EntityFrameworkCore >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.15",
       "Swashbuckle.AspNetCore >= 6.5.0",
-      "eFurnitureProject >= 1.0.0",
       "eFurnitureProject.Application >= 1.0.0",
       "eFurnitureProject.Domain >= 1.0.0",
       "eFurnitureProject.Infrastructures >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Duy\\.nuget\\packages\\": {}
+    "C:\\Users\\nhatt\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
+      "projectUniqueName": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
       "projectName": "eFurnitureProject.API",
-      "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
-      "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\obj\\",
+      "projectPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
+      "packagesPath": "C:\\Users\\nhatt\\.nuget\\packages\\",
+      "outputPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\nhatt\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3708,17 +3684,14 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
-              "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
+            "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
+              "projectPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
             },
-            "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
-              "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
+            "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
+              "projectPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
             },
-            "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
-              "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj"
-            },
-            "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
-              "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj"
+            "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
+              "projectPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj"
             }
           }
         }
@@ -3727,6 +3700,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3767,6 +3745,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.16, 7.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[7.0.16, 7.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.16, 7.0.16]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.16, 7.0.16]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -3775,7 +3771,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.ProductViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using System;
@@ -17,6 +18,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UserLoginDTO, User>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
             CreateMap<UserRegisterDTO, User>();
+            CreateMap<ProductViewDTO, Product>();
         }
     }
 }

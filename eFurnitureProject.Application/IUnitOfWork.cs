@@ -23,7 +23,7 @@ namespace eFurnitureProject.Application
         public IOrderProcessingRepository OrderProcessingRepository { get; }
         public IOrderProcessingDetailRepository OrderProcessingDetailRepository { get; }
         public IProductRepository ProductRepository { get; }
-         public IRoleRepository RoleRepository { get; }
+        public IRoleRepository RoleRepository { get; }
         public IStatusOrderProcessingRepository StatusOrderProcessingRepository { get; }
         public IStatusOrderRepository StatusOrderRepository { get; }
         public ITransactionRepository TransactionRepository { get; }

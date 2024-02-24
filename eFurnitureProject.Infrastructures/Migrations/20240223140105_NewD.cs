@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class _212 : Migration
+    public partial class NewD : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

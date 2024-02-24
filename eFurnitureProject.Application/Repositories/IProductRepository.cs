@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
+        Task<IEnumerable<Product>> GetProductPaging(int pageIndex, int pageSize);
     }
 }

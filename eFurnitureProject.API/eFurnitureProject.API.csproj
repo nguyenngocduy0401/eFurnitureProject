@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>fea6f3a4-6f02-4e70-b6c8-f74f02f6a45a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
     <ProjectReference Include="..\eFurnitureProject.Application\eFurnitureProject.Application.csproj" />
     <ProjectReference Include="..\eFurnitureProject.Domain\eFurnitureProject.Domain.csproj" />
     <ProjectReference Include="..\eFurnitureProject.Infrastructures\eFurnitureProject.Infrastructures.csproj" />
-    <ProjectReference Include="..\eFurnitureProject\eFurnitureProject.csproj" />
   </ItemGroup>
 
 </Project>

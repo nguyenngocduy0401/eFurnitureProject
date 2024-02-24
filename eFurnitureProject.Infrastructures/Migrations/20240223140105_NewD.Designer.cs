@@ -12,8 +12,8 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240221170345_21-2")]
-    partial class _212
+    [Migration("20240223140105_NewD")]
+    partial class NewD
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

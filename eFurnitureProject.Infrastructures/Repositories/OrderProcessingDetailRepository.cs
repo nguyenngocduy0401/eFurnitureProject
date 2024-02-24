@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Repositories
 {
-    public class OderProcessingDetailRepository : IOrderProcessingDetailRepository
+    public class OrderProcessingDetailRepository : IOrderProcessingDetailRepository
     {
     }
 }

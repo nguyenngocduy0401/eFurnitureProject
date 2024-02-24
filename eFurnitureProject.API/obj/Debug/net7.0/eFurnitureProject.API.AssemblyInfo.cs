@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("fea6f3a4-6f02-4e70-b6c8-f74f02f6a45a")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("eFurnitureProject.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fef98767cce68db89b048366ca98f77295299e02")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1645c15689570d95dc3712ccd125b76c29aa8d44")]
 [assembly: System.Reflection.AssemblyProductAttribute("eFurnitureProject.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("eFurnitureProject.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

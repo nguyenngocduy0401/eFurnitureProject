@@ -116,7 +116,7 @@ namespace eFurnitureProject.Application.Services
                     response.Message = "PhoneNumber is existed!";
                 }
                 else {
-                    await _userManager.CreateAsync(user, user.PasswordHash);
+                    await _userManager.CreateAsync(user, password: user.PasswordHash);
                     var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                     if (isSuccess == true)
                     {

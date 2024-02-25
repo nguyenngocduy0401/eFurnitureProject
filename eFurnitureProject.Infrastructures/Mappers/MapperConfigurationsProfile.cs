@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.AppointmentDTO;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
@@ -22,6 +23,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
+            CreateMap<CreateAppointmentDTO,Appointment>().ReverseMap();
+            CreateMap<Appointment,AppointmentDTO>().ReverseMap();
+            CreateMap<AddStaffDTO, Appointment>();
+            CreateMap<AddStaffDTO, AppointmentDetail>();
+            CreateMap<Appointment, AppointmentDetail>();
         }
     }
 }

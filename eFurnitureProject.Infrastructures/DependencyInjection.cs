@@ -26,6 +26,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<ICurrentTime, CurrentTime>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IContractService, ContractService>();
             #endregion
 
             #region Repository DI

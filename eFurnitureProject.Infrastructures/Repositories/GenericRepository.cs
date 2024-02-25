@@ -29,7 +29,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public async Task<TEntity?> GetByIdAsync(Guid id)
         {
             var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
-            // todo should throw exception when not found
+            if(result == null)
+            {
+                throw new Exception($"Not found any object with id: {id}");
+            }   
             return result;
         }
 
@@ -43,6 +46,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public void SoftRemove(TEntity entity)
         {
             entity.IsDeleted = true;
+            entity.DeletionDate = _timeService.GetCurrentTime();
             entity.DeleteBy = _claimsService.GetCurrentUserId;
             _dbSet.Update(entity);
         }

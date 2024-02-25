@@ -1,0 +1,10 @@
+﻿namespace eFurnitureProject.Application.ViewModels.ContractViewModels
+{
+    public class CreateContractViewModel
+    {
+        public string Title { get; set; }
+        public string? Description { get; set; }
+        public int Value { get; set; }
+        public int Status { get; set; }
+    }
+}

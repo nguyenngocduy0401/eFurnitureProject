@@ -1,6 +1,7 @@
 using eFurnitureProject.API;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Infrastructures;
+using eFurnitureProject.Infrastructures.DataInitializer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -49,7 +50,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

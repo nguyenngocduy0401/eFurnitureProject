@@ -31,10 +31,11 @@ namespace eFurnitureProject.Application.Services
         private readonly SignInManager<User> _signInManager;
         private readonly AppConfiguration _appConfiguration;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IValidator<UserRegisterDTO> _validatorRegister;
         public AuthenticationService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentTime currentTime, 
             SignInManager<User> signInManager, AppConfiguration appConfiguration, UserManager<User> userManager,
-            IValidator<UserRegisterDTO> validatorRegister)
+            IValidator<UserRegisterDTO> validatorRegister, RoleManager<Role> roleManager)
         {
 
             _signInManager = signInManager;
@@ -44,6 +45,7 @@ namespace eFurnitureProject.Application.Services
             _appConfiguration = appConfiguration;
             _userManager = userManager;
             _validatorRegister = validatorRegister;
+            _roleManager = roleManager;
         }
         public async Task<ApiResponse<string>> LoginAsync(UserLoginDTO userLoginDTO)
         {
@@ -55,12 +57,15 @@ namespace eFurnitureProject.Application.Services
 
                 if (result.Succeeded)
                 {
-                    var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPasswordHash(
+                    var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPassword(
                         userLoginDTO.UserName, userLoginDTO.Password);
+                    var userRole = await _userManager.GetRolesAsync(user);
                     var token = user.GenerateJsonWebToken(
                         _appConfiguration,
                         _appConfiguration.JwtOptions.Secret,
-                        _currentTime.GetCurrentTime());
+                        _currentTime.GetCurrentTime(),
+                        userRole
+                        );
                     response.Data = token;
                     response.isSuccess = true;
                     response.Message = "Login is successful!";
@@ -116,10 +121,14 @@ namespace eFurnitureProject.Application.Services
                     response.Message = "PhoneNumber is existed!";
                 }
                 else {
-                    await _userManager.CreateAsync(user, user.PasswordHash);
-                    var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                    if (isSuccess == true)
+                   var identityResult = await _userManager.CreateAsync(user, user.PasswordHash);
+                    if (identityResult.Succeeded == true)
                     {
+                        if (!await _roleManager.RoleExistsAsync(AppRole.Customer))
+                        {
+                            await _roleManager.CreateAsync(new Role { Name = AppRole.Customer });
+                        }
+                        await _userManager.AddToRoleAsync(user, AppRole.Customer);
                         response.Data = userRegisterDTO;
                         response.isSuccess = true;
                         response.Message = "Register is successful!";

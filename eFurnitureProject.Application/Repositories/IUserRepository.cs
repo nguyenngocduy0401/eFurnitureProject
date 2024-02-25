@@ -1,4 +1,5 @@
 ﻿using eFurnitureProject.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace eFurnitureProject.Application.Repositories
         Task<bool> CheckPhoneNumberExisted(string phoneNumber);
         Task<bool> CheckEmailNameExisted(string emailName);
         Task<bool> CheckUserNameExisted(string userName);
-        Task<User> GetUserByUserNameAndPasswordHash(string username, string password);
+        Task<User> GetUserByUserNameAndPassword(string username, string password);
         Task AddAsync(User user);
 
     }

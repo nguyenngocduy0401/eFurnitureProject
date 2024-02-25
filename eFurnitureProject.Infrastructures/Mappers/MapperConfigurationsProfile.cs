@@ -2,6 +2,7 @@
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.ViewModels.ProductViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
+using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
             CreateMap<UserRegisterDTO, User>();
             CreateMap<ProductViewDTO, Product>();
+            CreateMap<CreateVoucherDTO, Voucher>();
+            CreateMap<VoucherViewDTO, Voucher>();
+            CreateMap<Voucher, VoucherViewDTO>();
         }
     }
 }

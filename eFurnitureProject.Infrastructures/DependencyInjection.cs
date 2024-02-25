@@ -26,6 +26,7 @@ namespace eFurnitureProject.Infrastructures
             #endregion
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IVoucherService, VoucherService>();
 
             #region Repository DI
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();

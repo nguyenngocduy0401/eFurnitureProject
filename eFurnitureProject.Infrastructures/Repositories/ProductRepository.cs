@@ -1,6 +1,7 @@
 ﻿using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,30 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Repositories
 {
-    public class ProductRepository:GenericRepository<Product>,IProductRepository
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         private readonly AppDbContext _dbContext;
         public ProductRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
+            _dbContext = context;
+        }
+
+        public async Task<IEnumerable<Product>> GetProductPaging(int pageIndex, int pageSize)
+        {
+            try
+            {
+                var items = await _dbSet.OrderByDescending(x => x.CreationDate)
+                                    .Skip(pageIndex * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+                return items;
+            }
+            catch (Exception)
+            {
+
+                throw new NotImplementedException();
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.ProductViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
+using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
         {
             CreateMap<UserLoginDTO, User>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<UserRegisterDTO, User>().ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password)); ;
+            CreateMap<UserRegisterDTO, User>().ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
+            CreateMap<ProductViewDTO, Product>();
+            CreateMap<CreateVoucherDTO, Voucher>();
+            CreateMap<VoucherViewDTO, Voucher>();
+            CreateMap<Voucher, VoucherViewDTO>();
         }
     }
 }

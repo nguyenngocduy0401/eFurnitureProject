@@ -1,0 +1,320 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\viewmodels\\voucherdto\\updatevoucherdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\services\\voucherservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\viewmodels\\voucherdto\\createvoucherdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\interfaces\\ivoucherservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C29F57C-9FA4-4295-9124-A8FF20034F56}|..\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj|c:\\project\\efurnitureproject\\efurnitureproject.domain\\entities\\voucherdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\viewmodels\\voucherdto\\voucherviewdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18CE08F3-C115-4AE7-892D-8EC36BB94E8A}|..\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj|c:\\project\\efurnitureproject\\efurnitureproject.infrastructures\\efurnitureproject.infrastructures.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9CB0E4-E953-4B76-A9AF-406A9EA5536F}|..\\eFurnitureProject.API\\eFurnitureProject.API.csproj|c:\\project\\efurnitureproject\\efurnitureproject.api\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18CE08F3-C115-4AE7-892D-8EC36BB94E8A}|..\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj|c:\\project\\efurnitureproject\\efurnitureproject.infrastructures\\mappers\\mapperconfigurationsprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9CB0E4-E953-4B76-A9AF-406A9EA5536F}|..\\eFurnitureProject.API\\eFurnitureProject.API.csproj|c:\\project\\efurnitureproject\\efurnitureproject.api\\controllers\\vouchercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C29F57C-9FA4-4295-9124-A8FF20034F56}|..\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj|c:\\project\\efurnitureproject\\efurnitureproject.domain\\entities\\voucher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18CE08F3-C115-4AE7-892D-8EC36BB94E8A}|..\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj|c:\\project\\efurnitureproject\\efurnitureproject.infrastructures\\repositories\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\viewmodels\\productviewmodels\\productviewdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\repositories\\iproductrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7B29828-B4BC-410A-8C06-1FDCF49CBE44}|..\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj|c:\\project\\efurnitureproject\\efurnitureproject.application\\interfaces\\iproductservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C29F57C-9FA4-4295-9124-A8FF20034F56}|..\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj|c:\\project\\efurnitureproject\\efurnitureproject.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 16,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Voucher.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\Entities\\Voucher.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Domain\\Entities\\Voucher.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\Entities\\Voucher.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Domain\\Entities\\Voucher.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-26T05:48:41.96Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "VoucherViewDTO.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\VoucherViewDTO.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\VoucherViewDTO.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\VoucherViewDTO.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\VoucherViewDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-26T05:46:36.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Product.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Domain\\Entities\\Product.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\Entities\\Product.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Domain\\Entities\\Product.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABEAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T04:54:49.22Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ProductRepository.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\Repositories\\ProductRepository.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Infrastructures\\Repositories\\ProductRepository.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\Repositories\\ProductRepository.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Infrastructures\\Repositories\\ProductRepository.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAA6wBIAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T00:47:11.875Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ProductViewDTO.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\ProductViewModels\\ProductViewDTO.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\ViewModels\\ProductViewModels\\ProductViewDTO.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\ProductViewModels\\ProductViewDTO.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\ViewModels\\ProductViewModels\\ProductViewDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAgAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T04:53:54.407Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IProductRepository.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Repositories\\IProductRepository.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\Repositories\\IProductRepository.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Repositories\\IProductRepository.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\Repositories\\IProductRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T07:35:54.651Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IProductService.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Interfaces\\IProductService.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\Interfaces\\IProductService.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Interfaces\\IProductService.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\Interfaces\\IProductService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T07:44:10.927Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Services\\ProductService.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\Services\\ProductService.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Services\\ProductService.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\Services\\ProductService.cs",
+              "ViewState": "AQIAAGoAAAAAAAAAAAAvwHcAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T04:24:40.52Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.API\\Controllers\\ProductController.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.API\\Controllers\\ProductController.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAYwBoAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T01:21:54.77Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "eFurnitureProject.Infrastructures.csproj",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+              "RelativeToolTip": "..\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-02-25T05:55:38.691Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateVoucherDTO.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\CreateVoucherDTO.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\CreateVoucherDTO.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\CreateVoucherDTO.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\CreateVoucherDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T05:34:11.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UpdateVoucherDTO.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\UpdateVoucherDTO.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\UpdateVoucherDTO.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\UpdateVoucherDTO.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\ViewModels\\VoucherDTO\\UpdateVoucherDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAkAAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T05:34:02.771Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MapperConfigurationsProfile.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\Mappers\\MapperConfigurationsProfile.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Infrastructures\\Mappers\\MapperConfigurationsProfile.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Infrastructures\\Mappers\\MapperConfigurationsProfile.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Infrastructures\\Mappers\\MapperConfigurationsProfile.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T05:25:13.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "VoucherController.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\Controllers\\VoucherController.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.API\\Controllers\\VoucherController.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.API\\Controllers\\VoucherController.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.API\\Controllers\\VoucherController.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAcwBAAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T04:39:28.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IVoucherService.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Interfaces\\IVoucherService.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\Interfaces\\IVoucherService.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Interfaces\\IVoucherService.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\Interfaces\\IVoucherService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T04:54:39.851Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VoucherService.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Services\\VoucherService.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Application\\Services\\VoucherService.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Application\\Services\\VoucherService.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Application\\Services\\VoucherService.cs",
+              "ViewState": "AQIAAFsAAAAAAAAAAAAqwGMAAABXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T04:53:56.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "VoucherDetail.cs",
+              "DocumentMoniker": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\Entities\\VoucherDetail.cs",
+              "RelativeDocumentMoniker": "..\\eFurnitureProject.Domain\\Entities\\VoucherDetail.cs",
+              "ToolTip": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\Entities\\VoucherDetail.cs",
+              "RelativeToolTip": "..\\eFurnitureProject.Domain\\Entities\\VoucherDetail.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAA8AAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T04:47:36.207Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

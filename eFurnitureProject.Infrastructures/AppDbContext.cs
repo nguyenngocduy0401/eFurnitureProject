@@ -1,4 +1,4 @@
-﻿using eFurnitureProject.Domain.Entities;
+using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Infrastructures.FluentAPIs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

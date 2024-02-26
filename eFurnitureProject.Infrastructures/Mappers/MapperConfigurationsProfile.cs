@@ -1,6 +1,7 @@
-﻿using AutoMapper;
+using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.ViewModels.ProductViewModels;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
@@ -23,6 +24,10 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateVoucherDTO, Voucher>();
             CreateMap<VoucherViewDTO, Voucher>();
             CreateMap<Voucher, VoucherViewDTO>();
+            CreateMap<Product,ProductDTO>().ReverseMap();
+            CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
+            CreateMap<Product,CreateProductDTO>();
+            CreateMap<CreateProductDTO, Product>();
         }
     }
 }

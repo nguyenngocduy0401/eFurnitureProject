@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "maOepX47bvx8X3nTf8e/H0mlWFjqu/AJbOZBxqb7ka0=",
+  "Hash": "THq8RUDvamlUooaDD3xneFnhRlPY/CervDr2FmLtkIE=",
   "Source": "eFurnitureProject.API",
   "BasePath": "_content/eFurnitureProject.API",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
+      "Version": 2,
+      "Source": "eFurnitureProject",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [],
   "Assets": []
 }

@@ -1,0 +1,26 @@
+<<<<<<< HEAD
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+=======
+<Project Sdk="Microsoft.NET.Sdk.Web">
+>>>>>>> parent of 8d303a4 (Delete empty file)
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+<<<<<<< HEAD
+=======
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+>>>>>>> parent of 8d303a4 (Delete empty file)
+</Project>

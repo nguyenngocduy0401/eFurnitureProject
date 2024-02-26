@@ -69,7 +69,7 @@ namespace eFurnitureProject.API.Controllers
             }
 
         }
-        [HttpDelete("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var result = await _productService.DeleteProduct(id);

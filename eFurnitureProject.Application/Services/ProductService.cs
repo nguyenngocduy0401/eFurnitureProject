@@ -50,7 +50,6 @@ namespace eFurnitureProject.Application.Services
                     response.Data = productDTO;
                     response.isSuccess = true;
                     response.Message = "Create new Product successfully";
-                    response.Error = string.Empty;
                     return response;
                 }
             }
@@ -58,13 +57,12 @@ namespace eFurnitureProject.Application.Services
             {
                 // Handle any exceptions
                 response.isSuccess = false;
-                response.Error = "An error occurred while creating the product.";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
 
                 // If there's an inner exception, include its message as well
                 if (ex.InnerException != null)
                 {
-                    response.ErrorMessages.Add("Inner Exception: " + ex.InnerException.Message);
+                    response.Message = ex.Message + "Inner Exception: " + ex.InnerException.Message;
                 }
             }
 
@@ -106,10 +104,8 @@ namespace eFurnitureProject.Application.Services
             }
             catch (Exception ex)
             {
-                response.Data = false;
                 response.isSuccess = false;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
             }
             return response;
 
@@ -135,14 +131,12 @@ namespace eFurnitureProject.Application.Services
                     response.Data = productDTOs;
                     response.isSuccess = true;
                     response.Message = $"Have {productDTOs.Count} product.";
-                    response.Error = "Not error";
                     return response;
                 }
                 else
                 {
                     response.isSuccess = false;
                     response.Message = $"Have {productDTOs.Count} product.";
-                    response.Error = "Not have a product";
                     return response;
                 }
             }
@@ -150,8 +144,6 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                response.Error = "Exception";
-                response.ErrorMessages = new List<string> { ex.Message };
                 return response;
             }
         }
@@ -166,7 +158,6 @@ namespace eFurnitureProject.Application.Services
                 {
                     response.isSuccess = false;
                     response.Message = "not found product";
-                    response.Error = "Product is null";
                 }
                 else
                 {
@@ -180,8 +171,6 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                response.Error = "Exception";
-                response.ErrorMessages = new List<string> { ex.Message };
                 return response;
             }
             return response;
@@ -219,10 +208,8 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                response.ErrorMessages= new List<string> { ex.Message };
                 return response;
             }
-            return response;
         }
         public async Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByCategoryNameAsync(string name)
         {
@@ -242,7 +229,7 @@ namespace eFurnitureProject.Application.Services
                 if (productDTOs.Count != 0)
                 {
                     response.isSuccess = true;
-                    response.Message = "Produc retrieved successfully";
+                    response.Message = "Product retrieved successfully";
                     response.Data = productDTOs;
                 }
                 else
@@ -254,8 +241,7 @@ namespace eFurnitureProject.Application.Services
             catch (Exception ex)
             {
                 response.isSuccess = false;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
             }
 
             return response;
@@ -279,7 +265,7 @@ namespace eFurnitureProject.Application.Services
                 if (productDTOs.Count != 0)
                 {
                     response.isSuccess = true;
-                    response.Message = "Produc retrieved successfully";
+                    response.Message = "Product retrieved successfully";
                     response.Data = productDTOs;
                 }
                 else
@@ -291,8 +277,7 @@ namespace eFurnitureProject.Application.Services
             catch (Exception ex)
             {
                 response.isSuccess = false;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
             }
 
             return response;
@@ -322,7 +307,6 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    response.Data = null;
                     response.isSuccess = true;
                     response.Message = "No record match have found!";
                 }
@@ -330,9 +314,8 @@ namespace eFurnitureProject.Application.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                response.Data = null;
                 response.isSuccess = false;
-                response.Message = ex.ToString();
+                response.Message = ex.Message;
                 return response;
             }
 
@@ -355,7 +338,6 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    response.Data = null;
                     response.isSuccess = true;
                     response.Message = "Id has not existed";
                 }
@@ -372,9 +354,8 @@ namespace eFurnitureProject.Application.Services
             {
                 //throw new NotImplementedException();
                 Console.WriteLine(ex.ToString());
-                response.Data = null;
                 response.isSuccess = false;
-                response.Message = ex.ToString();
+                response.Message = ex.Message;
                 return response;
             }
             return response;
@@ -408,7 +389,6 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    response.Data = null;
                     response.isSuccess = true;
                     response.Message = "No results found";
                 }
@@ -416,9 +396,8 @@ namespace eFurnitureProject.Application.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                response.Data = null;
                 response.isSuccess= false;
-                response.Message = ex.ToString();
+                response.Message = ex.Message;
                 return response;
             }
             return response;

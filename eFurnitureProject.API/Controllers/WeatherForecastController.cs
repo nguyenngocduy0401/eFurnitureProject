@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace eFurnitureProject.API.Controllers
+namespace eFurnitureProject.Controllers
 {
     [ApiController]
     [Route("[controller]")]

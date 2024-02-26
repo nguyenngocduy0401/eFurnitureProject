@@ -114,9 +114,13 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    voucher.StartDate = updateVoucherDTO.StartDate;
-                    voucher.EndDate = updateVoucherDTO.EndDate;
-                    voucher.Percent = updateVoucherDTO.Percent;
+                    //voucher.StartDate = updateVoucherDTO.StartDate;
+                    //voucher.EndDate = updateVoucherDTO.EndDate;
+                    //voucher.Percent = updateVoucherDTO.Percent;
+                    voucher.IsDeleted = updateVoucherDTO.IsDeleted;
+                    voucher.DeletionDate = updateVoucherDTO.DeletionDate;
+                    voucher.DeleteBy = updateVoucherDTO.DeleteBy;
+                    voucher.ModificationBy = updateVoucherDTO.ModificationBy;
                     voucher.ModificationDate = DateTime.Now;
 
                     int update = await _unitOfWork.SaveChangeAsync();

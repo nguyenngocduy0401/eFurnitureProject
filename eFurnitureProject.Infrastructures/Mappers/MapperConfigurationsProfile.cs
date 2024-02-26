@@ -2,14 +2,10 @@ using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.ViewModels.ProductViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -28,6 +24,10 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
+            CreateMap<CreateContractViewModel, Contract>();
+            CreateMap<Contract, ContractViewModel>()
+                 .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
+            CreateMap<UpdateContractDTO, Contract>();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<ICurrentTime, CurrentTime>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IContractService, ContractService>();
             #endregion
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();

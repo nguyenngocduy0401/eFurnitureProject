@@ -1,8 +1,10 @@
 ﻿using eFurnitureProject.API.Services;
 using eFurnitureProject.API.Validator.AuthenticationValidator;
+using eFurnitureProject.API.Validator.ContractValidator;
 using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Services;
+using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Infrastructures;
@@ -68,6 +70,8 @@ namespace eFurnitureProject.API
             services.AddHostedService<SetupIdentityDataSeeder>();
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
+            services.AddTransient<IValidator<CreateContractViewModel>, CreateContractViewModelValidation>();
+            services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
             #endregion
 
             return services;

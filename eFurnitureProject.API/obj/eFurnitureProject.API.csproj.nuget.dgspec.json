@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj": {}
+    "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj": {}
   },
   "projects": {
-    "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj": {
+    "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
+        "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
         "projectName": "eFurnitureProject.API",
-        "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
-        "packagesPath": "C:\\Users\\lecon\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.API\\obj\\",
+        "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\eFurnitureProject.API.csproj",
+        "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lecon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,17 +28,17 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
               },
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
               },
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj"
               },
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj"
               }
             }
           }
@@ -103,21 +103,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
+    "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
+        "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
         "projectName": "eFurnitureProject.Application",
-        "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
-        "packagesPath": "C:\\Users\\lecon\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\obj\\",
+        "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj",
+        "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lecon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -131,8 +131,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
               }
             }
           }
@@ -180,21 +180,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
+    "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
         "projectName": "eFurnitureProject.Domain",
-        "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
-        "packagesPath": "C:\\Users\\lecon\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\obj\\",
+        "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+        "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lecon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -257,21 +257,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
+    "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+        "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
         "projectName": "eFurnitureProject.Infrastructures",
-        "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
-        "packagesPath": "C:\\Users\\lecon\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Infrastructures\\obj\\",
+        "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\eFurnitureProject.Infrastructures.csproj",
+        "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Infrastructures\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lecon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -285,11 +285,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Application\\eFurnitureProject.Application.csproj"
               },
-              "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
-                "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
+              "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj": {
+                "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj"
               }
             }
           }
@@ -361,21 +361,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
+    "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
+        "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
         "projectName": "eFurnitureProject",
-        "projectPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
-        "packagesPath": "C:\\Users\\lecon\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\obj\\",
+        "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
+        "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lecon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -433,7 +433,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

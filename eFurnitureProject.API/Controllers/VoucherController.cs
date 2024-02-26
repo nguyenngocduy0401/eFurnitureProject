@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eFurnitureProject.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
-    public class VoucherController : Controller
+    public class VoucherController : BaseController
     {
         private readonly IVoucherService _service;
 

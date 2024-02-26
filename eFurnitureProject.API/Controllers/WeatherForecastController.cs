@@ -1,6 +1,4 @@
-using eFurnitureProject.Application.Commons;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -21,7 +19,6 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        [Authorize(Roles = AppRole.Customer)]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

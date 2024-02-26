@@ -1653,19 +1653,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nhatt\\.nuget\\packages\\": {}
+    "C:\\Users\\Duy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
       "projectName": "eFurnitureProject.Domain",
-      "projectPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
-      "packagesPath": "C:\\Users\\nhatt\\.nuget\\packages\\",
-      "outputPath": "C:\\Project\\eFurnitureProject\\eFurnitureProject.Domain\\obj\\",
+      "projectPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\eFurnitureProject.Domain.csproj",
+      "packagesPath": "C:\\Users\\Duy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nhatt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Duy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1685,11 +1685,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -1728,26 +1723,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[7.0.16, 7.0.16]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[7.0.16, 7.0.16]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[7.0.16, 7.0.16]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

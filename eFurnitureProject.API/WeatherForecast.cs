@@ -1,4 +1,4 @@
-namespace eFurnitureProject.API
+namespace eFurnitureProject
 {
     public class WeatherForecast
     {

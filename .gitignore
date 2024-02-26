@@ -1,7 +1,21 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,dotnetcore
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,dotnetcore
-
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 ### DotnetCore ###
 # .NET Core build folders
 bin/
@@ -432,3 +446,7 @@ eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastruct
 eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfoInputs.cache
 eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
 eFurnitureProject.Infrastructures/obj/Debug/net7.0/ref/eFurnitureProject.Infrastructures.dll
+eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
+eFurnitureProject.Infrastructures/bin/Debug/net7.0/eFurnitureProject.Infrastructures.pdb
+eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
+eFurnitureProject.API/appsettings.Development.json

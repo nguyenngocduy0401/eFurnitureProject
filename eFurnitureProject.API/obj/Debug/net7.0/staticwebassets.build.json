@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "THq8RUDvamlUooaDD3xneFnhRlPY/CervDr2FmLtkIE=",
+  "Hash": "EK2V4IsCO7oNNCIt0ReraIWcLjQkL3MkzbfDMgQAQ6w=",
   "Source": "eFurnitureProject.API",
   "BasePath": "_content/eFurnitureProject.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "D:\\FPT\\PRU_Pr\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
+      "Identity": "C:\\Users\\Duy\\Desktop\\eFurnitureProject\\eFurnitureProject\\eFurnitureProject.csproj",
       "Version": 2,
       "Source": "eFurnitureProject",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",

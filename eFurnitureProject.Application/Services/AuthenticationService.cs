@@ -54,7 +54,6 @@ namespace eFurnitureProject.Application.Services
             {
                 var result = await _signInManager.PasswordSignInAsync(
                     userLoginDTO.UserName, userLoginDTO.Password, false, false);
-
                 if (result.Succeeded)
                 {
                     var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPassword(
@@ -88,6 +87,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
+
 
         public async Task<ApiResponse<UserRegisterDTO>> RegisterAsync(UserRegisterDTO userRegisterDTO)
         {

@@ -427,26 +427,3 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,dotnetcore
-CoverageReport/
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.AssemblyInfo.cs
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.AssemblyInfo.cs
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.AssemblyInfoInputs.cache
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.assets.cache
-eFurnitureProject.Application/obj/Debug/net7.0/eFurnitureProject.Application.AssemblyInfo.cs
-eFurnitureProject.API/obj/project.nuget.cache
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.AssemblyInfo.cs
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.AssemblyInfoInputs.cache
-eFurnitureProject.API/obj/Debug/net7.0/eFurnitureProject.API.csproj.AssemblyReference.cache
-eFurnitureProject.API/obj/project.nuget.cache
-eFurnitureProject.Application/obj/Debug/net7.0/eFurnitureProject.Application.assets.cache
-eFurnitureProject/.vs/ProjectEvaluation/efurnitureproject.metadata.v7.bin
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.csproj.AssemblyReference.cache
-eFurnitureProject/obj/Debug/net7.0/eFurnitureProject.AssemblyInfoInputs.cache
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfoInputs.cache
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/ref/eFurnitureProject.Infrastructures.dll
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
-eFurnitureProject.Infrastructures/bin/Debug/net7.0/eFurnitureProject.Infrastructures.pdb
-eFurnitureProject.Infrastructures/obj/Debug/net7.0/eFurnitureProject.Infrastructures.AssemblyInfo.cs
-eFurnitureProject.API/appsettings.Development.json

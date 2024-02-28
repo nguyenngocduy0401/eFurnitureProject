@@ -1,10 +1,7 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
-<<<<<<< HEAD
 using eFurnitureProject.Application.ViewModels.CategoryViewModels;
-=======
 using eFurnitureProject.Application.ViewModels.ProductDTO;
->>>>>>> main
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
@@ -32,14 +29,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
-<<<<<<< HEAD
             CreateMap<CreateCategoryViewModel, Category>();
             CreateMap<Category, CategoryViewModel>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
-=======
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
->>>>>>> main
         }
     }
 }

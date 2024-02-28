@@ -8,6 +8,7 @@ namespace eFurnitureProject.Domain.Entities
 {
     public class Voucher : BaseEntity
     {
+        public string VoucherName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double Percent { get; set; }

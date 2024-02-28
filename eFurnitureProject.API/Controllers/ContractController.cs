@@ -16,15 +16,15 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<ContractViewModel>> CreateContract(CreateContractViewModel contract) => await _contractService.CreateContractAsync(contract);
+        public async Task<ApiResponse<ContractViewDTO>> CreateContract(CreateContractDTO contract) => await _contractService.CreateContractAsync(contract);
 
         [HttpGet]
-        public async Task<ApiResponse<Pagination<ContractViewModel>>> GetContractPagingsion(int pageIndex = 0, int pageSize = 10) => await _contractService.GetContractPagingsionAsync(pageIndex, pageSize);
+        public async Task<ApiResponse<Pagination<ContractViewDTO>>> GetContractPaging(int pageIndex = 0, int pageSize = 10) => await _contractService.GetContractPagingAsync(pageIndex, pageSize);
 
         [HttpPut]
-        public async Task<ApiResponse<ContractViewModel>> UpdateContract(Guid contractId, UpdateContractDTO contract) => await _contractService.UpdateContractAsync(contractId, contract);
+        public async Task<ApiResponse<ContractViewDTO>> UpdateContract(Guid contractId, UpdateContractDTO contract) => await _contractService.UpdateContractAsync(contractId, contract);
 
         [HttpPut]
-        public async Task<ApiResponse<ContractViewModel>> SoftRemoveContractById(Guid contractId) => await _contractService.SoftRemoveContractByIdAsync(contractId);
+        public async Task<ApiResponse<ContractViewDTO>> SoftRemoveContractById(Guid contractId) => await _contractService.SoftRemoveContractByIdAsync(contractId);
     }
 }

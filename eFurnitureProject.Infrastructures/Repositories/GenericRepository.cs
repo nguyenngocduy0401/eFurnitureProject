@@ -108,5 +108,6 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
             _dbSet.UpdateRange(entities);
         }
+
     }
 }

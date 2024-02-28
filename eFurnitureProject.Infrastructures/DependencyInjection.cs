@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using eFurnitureProject.Application;
+using eFurnitureProject.Infrastructures.DataInitializer;
 
 namespace eFurnitureProject.Infrastructures
 {
@@ -29,6 +31,10 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<ICategoryService, CategoryService>();
             #endregion
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IVoucherService, VoucherService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             #region Repository DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -54,14 +60,25 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IVoucherRepository, VoucherRepository>();
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
+            services.AddScoped<IProductService, ProductService>();
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Set your desired password requirements here
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6; // Set your desired minimum length
+                options.Password.RequiredUniqueChars = 0; // Set your desired number of unique characters
+            });
 
             // ATTENTION: if you do migration please check file README.md
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(databaseConnection));
 
-            // this configuration just use in-memory for fast develop
-            //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 
 

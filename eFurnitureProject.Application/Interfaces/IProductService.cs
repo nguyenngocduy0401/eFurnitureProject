@@ -1,4 +1,5 @@
 ﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IProductService
     {
+        Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetProductsInPageAsync(int page, int amount);
+        Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetFilterProductsInPageAsync(int page, int amount, string searchValue);
+        Task<ApiResponse<ProductViewDTO>> GetProductDetail(Guid productId);
         Task<ApiResponse<IEnumerable<ProductDTO>>> getAllProduct();
         Task<ApiResponse<ProductDTO>> GetProductByID(Guid id);
         Task<ApiResponse<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO);

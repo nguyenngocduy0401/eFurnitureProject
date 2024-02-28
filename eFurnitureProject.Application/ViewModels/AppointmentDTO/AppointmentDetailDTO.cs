@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.ViewModels.AppointmentDTO
     public class AppointmentDetailDTO
     {
         public string? UserId { get; set; }
+        public Guid AppointmentId { get; set; }
     }
 }

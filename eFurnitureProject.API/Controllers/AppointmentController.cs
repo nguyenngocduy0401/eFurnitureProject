@@ -45,34 +45,6 @@ namespace eFurnitureProject.API.Controllers
             }
 
         }
-        [HttpPost]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddStaff(AddStaffDTO addStaffDTO, Guid appointmenrID)
-        {
-            try
-            {
-                var result = await _appointmentService.AddStaff(addStaffDTO,appointmenrID);
-                dynamic reponseObject = new ExpandoObject();
-                reponseObject.StatusCode = 0;
-                reponseObject.Result = result;
-                if (result.isSuccess)
-                {
-                    reponseObject.StatusCode = HttpStatusCode.OK;
-                    return Ok(reponseObject);
-                }
-                else
-                {
-                    reponseObject.StatusCode = HttpStatusCode.NotFound;
-                    return NotFound(reponseObject);
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-        }
+        
     }
 }

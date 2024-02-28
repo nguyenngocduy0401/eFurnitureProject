@@ -41,14 +41,42 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
             var response = new ApiResponse<AppointmentDTO>();
+
             try
             {
-                var appointment = _mapper.Map<Appointment>(createAppointmentDTO);
+                // Tạo một đối tượng Appointment từ thông tin trong DTO đầu vào
+                var appointment = new Appointment
+                {
+                    Name = createAppointmentDTO.Name,
+                    Date = createAppointmentDTO.Date,
+                    PhoneNumber = createAppointmentDTO.PhoneNumber,
+                    Email = createAppointmentDTO.Email,
+                    Status = createAppointmentDTO.Status,
+                    Time = createAppointmentDTO.Time,
+                    CreatedBy = createAppointmentDTO.CustomerUserId
+                };
+
+              /*  // Lưu thông tin các nhân viên (staff) nếu có
+                if (createAppointmentDTO.StaffUserIds != null && createAppointmentDTO.StaffUserIds.Any())
+                {
+                    foreach (var staffUserId in createAppointmentDTO.StaffUserIds)
+                    {
+                       
+                        appointment.AppointmentDetail.Add(new AppointmentDetail
+                        {
+                            UserId = staffUserId
+                      
+                        });
+                    }
+                }*/
+
+               
                 await _unitOfWork.AppointmentRepository.AddAsync(appointment);
-                var appointmentDTO= _mapper.Map<AppointmentDTO>(appointment);
                 var isSuccess = await _unitOfWork.SaveChangeAsync();
+
                 if (isSuccess > 0)
                 {
+                    var appointmentDTO = _mapper.Map<AppointmentDTO>(appointment);
 
                     response.Data = appointmentDTO;
                     response.isSuccess = true;
@@ -59,57 +87,12 @@ namespace eFurnitureProject.Application.Services
             }
             catch (Exception ex)
             {
-                // Handle any exceptions
+              
                 response.isSuccess = false;
-                response.Error = "An error occurred while creating the Appointment .";
+                response.Error = "An error occurred while creating the Appointment.";
                 response.ErrorMessages = new List<string> { ex.Message };
 
-                // If there's an inner exception, include its message as well
-                if (ex.InnerException != null)
-                {
-                    response.ErrorMessages.Add("Inner Exception: " + ex.InnerException.Message);
-                }
-            }
-
-            return response;
-        }
-        public async Task<ApiResponse<AppointmentDetail>> AddStaff(AddStaffDTO addStaffDTO, Guid appointmenrID)
-        {
-            var response = new ApiResponse<AppointmentDetail>();
-            try
-            {
-                var existAppointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmenrID);
-                if (existAppointment != null)
-                {
-                    var appointment = _mapper.Map<Appointment>(addStaffDTO);
-                    await _unitOfWork.AppointmentRepository.AddAsync(appointment);
-                    var appointmentDTO = _mapper.Map<AppointmentDetail>(appointment);
-                    var isSuccess = await _unitOfWork.SaveChangeAsync();
-                    if (isSuccess > 0)
-                    {
-
-                        response.Data = appointmentDTO;
-                        response.isSuccess = true;
-                        response.Message = "Add successfully";
-                        response.Error = string.Empty;
-                        return response;
-                    }
-                }
-                else
-                {
-                    response.isSuccess = false;
-                    response.Message = "Appointment not found";
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions
-                response.isSuccess = false;
-                response.Error = "An error occurred while Add .";
-                response.ErrorMessages = new List<string> { ex.Message };
-
-                // If there's an inner exception, include its message as well
+            
                 if (ex.InnerException != null)
                 {
                     response.ErrorMessages.Add("Inner Exception: " + ex.InnerException.Message);
@@ -119,4 +102,7 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
     }
+
+       
+    
 }

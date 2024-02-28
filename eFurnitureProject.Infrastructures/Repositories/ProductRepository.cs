@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Repositories
 {
-    public class ProductRepository:GenericRepository<Product>,IProductRepository
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         private readonly AppDbContext _dbContext;
 
@@ -24,6 +24,23 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = context;
         }
 
+        public async Task<IEnumerable<Product>> GetProductPaging(int pageIndex, int pageSize)
+        {
+            try
+            {
+                var items = await _dbSet.OrderByDescending(x => x.CreationDate)
+                                    .Skip(pageIndex * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+                return items;
+            }
+            catch (Exception)
+            {
+
+                throw new NotImplementedException();
+            }
+        }
         public async Task<IEnumerable<Product>> GetProductsByCategoryNameAsync(string categoryName)
         {
             var products = await _dbContext.Products

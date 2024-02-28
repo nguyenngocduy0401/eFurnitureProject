@@ -17,6 +17,8 @@ namespace eFurnitureProject.Application.ViewModels.AppointmentDTO
         public string? Email { get; set; }
         public int Status { get; set; }
         public int Time { get; set; }
-        public List<AppointmentDetailDTO> AppointmentDetails { get; set; }
+        
+        public int CustomerUserId { get; set; } // UserId của khách hàng (người khởi tạo)
+     
     }
 }

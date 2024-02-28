@@ -1,13 +1,15 @@
-﻿using AutoMapper;
+using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
-using eFurnitureProject.Application.Repositories;
-using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
+using Microsoft.Extensions.Caching.Memory;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,7 +49,6 @@ namespace eFurnitureProject.Application.Services
                     response.Data = productDTO;
                     response.isSuccess = true;
                     response.Message = "Create new Product successfully";
-                    response.Error = string.Empty;
                     return response;
                 }
             }
@@ -55,13 +56,12 @@ namespace eFurnitureProject.Application.Services
             {
                 // Handle any exceptions
                 response.isSuccess = false;
-                response.Error = "An error occurred while creating the product.";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
 
                 // If there's an inner exception, include its message as well
                 if (ex.InnerException != null)
                 {
-                    response.ErrorMessages.Add("Inner Exception: " + ex.InnerException.Message);
+                    response.Message = ex.Message + "Inner Exception: " + ex.InnerException.Message;
                 }
             }
 
@@ -103,10 +103,8 @@ namespace eFurnitureProject.Application.Services
             }
             catch (Exception ex)
             {
-                response.Data = false;
                 response.isSuccess = false;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
             }
             return response;
 
@@ -132,14 +130,12 @@ namespace eFurnitureProject.Application.Services
                     response.Data = productDTOs;
                     response.isSuccess = true;
                     response.Message = $"Have {productDTOs.Count} product.";
-                    response.Error = "Not error";
                     return response;
                 }
                 else
                 {
                     response.isSuccess = false;
                     response.Message = $"Have {productDTOs.Count} product.";
-                    response.Error = "Not have a product";
                     return response;
                 }
             }
@@ -147,8 +143,6 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                response.Error = "Exception";
-                response.ErrorMessages = new List<string> { ex.Message };
                 return response;
             }
         }
@@ -163,7 +157,6 @@ namespace eFurnitureProject.Application.Services
                 {
                     response.isSuccess = false;
                     response.Message = "not found product";
-                    response.Error = "Product is null";
                 }
                 else
                 {
@@ -177,8 +170,6 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                response.Error = "Exception";
-                response.ErrorMessages = new List<string> { ex.Message };
                 return response;
             }
             return response;
@@ -216,10 +207,8 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                response.ErrorMessages= new List<string> { ex.Message };
                 return response;
             }
-            return response;
         }
         public async Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByCategoryNameAsync(string name)
         {
@@ -239,7 +228,7 @@ namespace eFurnitureProject.Application.Services
                 if (productDTOs.Count != 0)
                 {
                     response.isSuccess = true;
-                    response.Message = "Produc retrieved successfully";
+                    response.Message = "Product retrieved successfully";
                     response.Data = productDTOs;
                 }
                 else
@@ -251,8 +240,7 @@ namespace eFurnitureProject.Application.Services
             catch (Exception ex)
             {
                 response.isSuccess = false;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
             }
 
             return response;
@@ -276,7 +264,7 @@ namespace eFurnitureProject.Application.Services
                 if (productDTOs.Count != 0)
                 {
                     response.isSuccess = true;
-                    response.Message = "Produc retrieved successfully";
+                    response.Message = "Product retrieved successfully";
                     response.Data = productDTOs;
                 }
                 else
@@ -288,11 +276,131 @@ namespace eFurnitureProject.Application.Services
             catch (Exception ex)
             {
                 response.isSuccess = false;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { ex.Message };
+                response.Message = ex.Message;
             }
 
             return response;
         }
+    public async Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetFilterProductsInPageAsync(int page, int amount, string searchValue)
+        {
+            var response = new ApiResponse<IEnumerable<ProductViewDTO>>();
+
+            try
+            {
+                var result = await _unitOfWork.ProductRepository.GetAllAsync();
+
+                var productsDTO = new List<ProductViewDTO>();
+                foreach (var product in result)
+                {
+                    if (!product.IsDeleted)
+                    {
+                        productsDTO.Add(_mapper.Map<ProductViewDTO>(product));
+                    }
+                }
+
+                if (productsDTO.Count != 0)
+                {
+                    response.Data = productsDTO;
+                    response.isSuccess = true;
+                    response.Message = "";
+                }
+                else
+                {
+                    response.isSuccess = true;
+                    response.Message = "No record match have found!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+
+            return response;
+        }
+
+        public async Task<ApiResponse<ProductViewDTO>> GetProductDetail(Guid productId)
+        {
+            var response = new ApiResponse<ProductViewDTO>();
+
+            try
+            {
+                var result = await _unitOfWork.ProductRepository.GetByIdAsync(productId);
+                var productDTO = _mapper.Map<ProductViewDTO>(result);
+                if (result != null)
+                { 
+                    response.isSuccess = true;
+                    response.Data = productDTO;
+                    response.Message = "";
+                }
+                else
+                {
+                    response.isSuccess = true;
+                    response.Message = "Id has not existed";
+                }
+                
+                //foreach (var product in result)
+                //{
+                //    if (!product.IsDeleted)
+                //    {
+                //        productsDTO.Add(_mapper.Map<ProductViewDTO>(product));
+                //    }
+                //}
+            }
+            catch (Exception ex)
+            {
+                //throw new NotImplementedException();
+                Console.WriteLine(ex.ToString());
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+            return response;
+            
+        }
+
+        public async Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetProductsInPageAsync(int page, int amount)
+        {
+            var response = new ApiResponse<IEnumerable<ProductViewDTO>>();
+
+            try
+            {
+                //var result = await _unitOfWork.ProductRepository.GetAllAsync();
+                var result = await _unitOfWork.ProductRepository.GetProductPaging(page, amount);
+
+                var productsDTO = new List<ProductViewDTO>();
+                foreach (var product in result)
+                {
+                    if (!product.IsDeleted)
+                    {
+                        productsDTO.Add(_mapper.Map<ProductViewDTO>(product));
+                    }
+                }
+
+                if (productsDTO.Count != 0)
+                {
+                    //throw new Exception("Loi khong xac dinh");
+                    response.Data = productsDTO;
+                    response.isSuccess = true;
+                    response.Message = "";
+                }
+                else
+                {
+                    response.isSuccess = true;
+                    response.Message = "No results found";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                response.isSuccess= false;
+                response.Message = ex.Message;
+                return response;
+            }
+            return response;
+        }
+
     }
 }

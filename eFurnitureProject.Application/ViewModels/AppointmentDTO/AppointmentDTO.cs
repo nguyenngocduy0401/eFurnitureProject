@@ -14,6 +14,7 @@ namespace eFurnitureProject.Application.ViewModels.AppointmentDTO
         public string? Email { get; set; }
         public int Status { get; set; }
         public int Time { get; set; }
+        public Guid? CreatedBy { get; set; }
         public ICollection<AppointmentParticipantDTO> Participants { get; set; }
     }
 }

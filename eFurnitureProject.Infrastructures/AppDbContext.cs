@@ -1,5 +1,6 @@
-﻿using eFurnitureProject.Domain.Entities;
+using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Infrastructures.FluentAPIs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -51,8 +52,6 @@ namespace eFurnitureProject.Infrastructures
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderDetailConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderProcessingDetailConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(VoucherDetailConfiguration).Assembly);
-            
-
         }
     }
 }

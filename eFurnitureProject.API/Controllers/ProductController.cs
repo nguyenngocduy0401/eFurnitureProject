@@ -1,5 +1,9 @@
-﻿using eFurnitureProject.Application.Interfaces;
+
+using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Dynamic;
 using System.Net.Mime;
 using System.Net;
@@ -10,11 +14,32 @@ namespace eFurnitureProject.API.Controllers
     public class ProductController:BaseController
     {
         private readonly IProductService _productService;
-        
         public ProductController(IProductService productService)
         {
             _productService = productService;
         }
+
+
+        [HttpGet("{page}")]
+        public async Task<IActionResult> GetProductsInPage(int page, int amount) {
+            var result = await _productService.GetProductsInPageAsync(page, amount);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FilterProduct(int page, int amount, string searchValue)
+        {
+            var result = await _productService.GetFilterProductsInPageAsync(page, amount, searchValue);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProductDetail(Guid productId)
+        {
+            var result = await _productService.GetProductDetail(productId);
+            return Ok(result);
+        }
+
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]

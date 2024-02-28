@@ -2,6 +2,7 @@
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using eFurnitureProject.Application.Commons;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -22,38 +23,15 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVoucher([FromBody] CreateVoucherDTO createVoucherDTO) 
+        public async Task<ApiResponse<CreateVoucherDTO>> CreateVoucher([FromBody] CreateVoucherDTO createVoucherDTO) 
         {
-            var createVoucher = await _service.CreateVoucherAsync(createVoucherDTO);
-
-            if (!createVoucher.isSuccess)
-            {
-                return BadRequest(createVoucherDTO);
-            }
-            else
-            {
-                return Ok(createVoucherDTO);
-            }
+            return await _service.CreateVoucherAsync(createVoucherDTO);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateVoucher([FromBody] UpdateVoucherDTO updateVoucherDTO)
+        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher([FromBody] UpdateVoucherDTO updateVoucherDTO)
         {
-            var updatevoucher = await _service.UpdateVoucher(updateVoucherDTO);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!updatevoucher.isSuccess)
-            {
-                return BadRequest(updateVoucherDTO);
-            }
-            else
-            {
-                return Ok(updateVoucherDTO);
-            }
+            return await _service.UpdateVoucher(updateVoucherDTO);
         }
     }
 }

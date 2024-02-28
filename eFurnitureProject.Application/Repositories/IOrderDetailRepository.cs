@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IOrderDetailRepository
     {
+        Task<IEnumerable<OrderDetail>> GetAllAsync();
     }
 }

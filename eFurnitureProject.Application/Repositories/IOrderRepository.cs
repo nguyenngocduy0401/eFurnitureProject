@@ -11,6 +11,6 @@ namespace eFurnitureProject.Application.Repositories
     public interface IOrderRepository : IGenericRepository<Order>
     {
         Task<IEnumerable<Order>> Get(int pageIndex, int pageSize);
-        Task<IEnumerable<Order>> GetOrderByFilter(FilterOrderDTO filter);
+        Task<IEnumerable<Order>> GetOrderByFilter(int pageIndex, int pageSize,FilterOrderDTO filter);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
@@ -17,6 +18,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Contract, ContractViewModel>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
+            CreateMap<CreateCategoryViewModel, Category>();
+            CreateMap<Category, CategoryViewModel>()
+                 .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
         }
     }
 }

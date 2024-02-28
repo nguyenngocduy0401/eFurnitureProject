@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace eFurnitureProject.API.Validator.ContractValidator
 {
-    public class CreateContractViewModelValidation : AbstractValidator<CreateContractViewModel>
+    public class CreateContractViewModelValidation : AbstractValidator<CreateContractDTO>
     {
         public CreateContractViewModelValidation()
         {

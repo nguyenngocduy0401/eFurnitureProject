@@ -15,10 +15,10 @@ namespace eFurnitureProject.Application.Services
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IValidator<CreateContractViewModel> _validatorCreateContract;
+        private readonly IValidator<CreateContractDTO> _validatorCreateContract;
         private readonly IValidator<UpdateContractDTO> _validatorUpdateContract;
 
-        public ContractService(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateContractViewModel> validatorCreateContract, IValidator<UpdateContractDTO> validatorUpdateContract)
+        public ContractService(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateContractDTO> validatorCreateContract, IValidator<UpdateContractDTO> validatorUpdateContract)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -26,9 +26,9 @@ namespace eFurnitureProject.Application.Services
             _validatorUpdateContract = validatorUpdateContract;
         }
 
-        public async Task<ApiResponse<ContractViewModel>> CreateContractAsync(CreateContractViewModel contract)
+        public async Task<ApiResponse<ContractViewDTO>> CreateContractAsync(CreateContractDTO contract)
         {
-            var response = new ApiResponse<ContractViewModel>();
+            var response = new ApiResponse<ContractViewDTO>();
             try
             {
                 var contractObj = _mapper.Map<Contract>(contract);
@@ -45,7 +45,7 @@ namespace eFurnitureProject.Application.Services
                     var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                     if (isSuccess == true)
                     {
-                        response.Data = _mapper.Map<ContractViewModel>(contractObj);
+                        response.Data = _mapper.Map<ContractViewDTO>(contractObj);
                         response.Message = "Create contract is successful!";
                     }
                 }
@@ -63,9 +63,9 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<ContractViewModel>> SoftRemoveContractByIdAsync(Guid contractId)
+        public async Task<ApiResponse<ContractViewDTO>> SoftRemoveContractByIdAsync(Guid contractId)
         {
-            var response = new ApiResponse<ContractViewModel>();
+            var response = new ApiResponse<ContractViewDTO>();
             try
             {
                 var existingContract = await _unitOfWork.ContractRepository.GetByIdAsync(contractId);
@@ -73,7 +73,7 @@ namespace eFurnitureProject.Application.Services
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                 if (isSuccess == true)
                 {
-                    response.Data = _mapper.Map<ContractViewModel>(existingContract);
+                    response.Data = _mapper.Map<ContractViewDTO>(existingContract);
                     response.Message = "Remove is successful!";
                 }
             }
@@ -85,18 +85,18 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<Pagination<ContractViewModel>>> GetContractPagingsionAsync(int pageIndex = 0, int pageSize = 10)
+        public async Task<ApiResponse<Pagination<ContractViewDTO>>> GetContractPagingAsync(int pageIndex = 0, int pageSize = 10)
         {
-            var response = new ApiResponse<Pagination<ContractViewModel>>();
+            var response = new ApiResponse<Pagination<ContractViewDTO>>();
             var contracts = await _unitOfWork.ContractRepository.ToPagination(pageIndex, pageSize);
-            var result = _mapper.Map<Pagination<ContractViewModel>>(contracts);
+            var result = _mapper.Map<Pagination<ContractViewDTO>>(contracts);
             response.Data = result;
             return response;
         }
 
-        public async Task<ApiResponse<ContractViewModel>> UpdateContractAsync(Guid contractId, UpdateContractDTO contract)
+        public async Task<ApiResponse<ContractViewDTO>> UpdateContractAsync(Guid contractId, UpdateContractDTO contract)
         {
-            var response = new ApiResponse<ContractViewModel>();
+            var response = new ApiResponse<ContractViewDTO>();
             try
             {
                 var existingContract = await _unitOfWork.ContractRepository.GetByIdAsync(contractId);
@@ -118,7 +118,7 @@ namespace eFurnitureProject.Application.Services
                     var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                     if (isSuccess == true)
                     {
-                        response.Data = _mapper.Map<ContractViewModel>(existingContract);
+                        response.Data = _mapper.Map<ContractViewDTO>(existingContract);
                         response.Message = "Update contract is successful!";
                     }
                 }

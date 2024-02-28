@@ -70,7 +70,7 @@ namespace eFurnitureProject.API
             services.AddHostedService<SetupIdentityDataSeeder>();
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
-            services.AddTransient<IValidator<CreateContractViewModel>, CreateContractViewModelValidation>();
+            services.AddTransient<IValidator<CreateContractDTO>, CreateContractViewModelValidation>();
             services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
             #endregion
 

@@ -1,5 +1,4 @@
 ﻿using eFurnitureProject.Application.Commons;
-using eFurnitureProject.Application.ViewModels.ProductViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System;

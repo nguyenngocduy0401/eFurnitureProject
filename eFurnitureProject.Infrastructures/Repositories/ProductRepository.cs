@@ -1,6 +1,6 @@
-﻿using eFurnitureProject.Application.Interfaces;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
-using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -67,20 +67,13 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetAll2(int page, string CategoryName, string ProductName, int amount, int pageSize)
-        {
-            return await _dbContext.Products.ToListAsync();
-        }
+       
      
 
-        public  Task<IEnumerable<Product>> GetAll(int page, string CategoryName, string ProductName, int amount, int pageSize)
+      
+        public async Task<IEnumerable<Product>> GetAll(int page, List<Guid> categoryId, string ProductName, int amount, int pageSize)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<ProductViewDTO>> GetAll2(int page, List<Guid> categoryId, string ProductName, int amount, int pageSize)
-        {
-            IQueryable<ProductViewDTO> query = _dbContext.Products;
+            IQueryable<Product> query = _dbContext.Products;
 
             // Apply filters
             if (categoryId != null && categoryId.Any())
@@ -100,6 +93,47 @@ namespace eFurnitureProject.Infrastructures.Repositories
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
 
             return await query.ToListAsync();
+        }
+        public async Task<IEnumerable<Product>> GetProductsByCategoryIDAsync(List<Guid> categoryIds)
+        {
+            IQueryable<Product> query = _dbContext.Products;
+            if (categoryIds != null && categoryIds.Any())
+            {
+                query = query.Where(p => categoryIds.Contains(p.CategoryId.Value));
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+
+      
+
+      
+
+        public async Task<Pagination<Product>> ToPaginationProduct(int pageIndex = 0, int pageSize = 10)
+        {
+            var query = _dbSet.AsQueryable();
+
+            // Thêm điều kiện isDelete == false vào truy vấn
+            query = query.Where(x => x.IsDeleted == false);
+
+            var itemCount = await query.CountAsync();
+            var items = await query.OrderByDescending(x => x.CreationDate)
+                                   .Skip(pageIndex * pageSize)
+                                   .Take(pageSize)
+                                   .AsNoTracking()
+                                   .ToListAsync();
+
+            var result = new Pagination<Product>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+
+            return result;
         }
     }
 }

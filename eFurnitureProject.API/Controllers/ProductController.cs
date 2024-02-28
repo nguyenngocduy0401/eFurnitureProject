@@ -23,11 +23,11 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ActionResult<ApiResponse<IEnumerable<ProductViewDTO>>>> FilterProducts222(
          [FromQuery] int page,
          [FromQuery] List<Guid> categoryId,
-         [FromQuery] string productName,
+         [FromQuery] string? productName,
          [FromQuery] int amount,
          [FromQuery] int pageSize)
         {
-            var response = await _productService.FilterProducts(page, categoryId, productName, amount, pageSize);
+            var response = await _productService.GetAll(page, categoryId, productName, amount, pageSize);
             if (response.isSuccess)
             {
                 return Ok(response);
@@ -39,13 +39,7 @@ namespace eFurnitureProject.API.Controllers
             var result = await _productService.GetProductsInPageAsync(page, amount);
             return Ok(result);
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAll(int page, List<Guid> CategoryId, string ProductName, int amount, string searchValue, int pageSize)
-        {
-            var result = await _productService.FilterProducts(page, CategoryId, ProductName, amount, pageSize);
-            return Ok(result);
-               
-        }
+     
         [HttpGet]
         public async Task<IActionResult> FilterProduct(int page, int amount, string searchValue)
         {
@@ -103,6 +97,12 @@ namespace eFurnitureProject.API.Controllers
         public async Task<IActionResult> ViewAllProduct()
         {
             var result = await _productService.getAllProduct();
+            return Ok(result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ViewAllProductNotDeleted()
+        {
+            var result = await _productService.getAllProductNotdeleted();
             return Ok(result);
         }
         [HttpGet("{id}")]

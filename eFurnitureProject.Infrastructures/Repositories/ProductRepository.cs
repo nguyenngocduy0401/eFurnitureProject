@@ -1,5 +1,6 @@
 ﻿using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,6 +25,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = context;
         }
 
+        
         public async Task<IEnumerable<Product>> GetProductPaging(int pageIndex, int pageSize)
         {
             try
@@ -57,6 +59,47 @@ namespace eFurnitureProject.Infrastructures.Repositories
                
 
             return products;
+        }
+        public async Task<IEnumerable<Product>> GetProductsByAmountAsync(int amount)
+        {
+            return await _dbContext.Products
+                .Where(p => p.InventoryQuantity >= amount)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAll2(int page, string CategoryName, string ProductName, int amount, int pageSize)
+        {
+            return await _dbContext.Products.ToListAsync();
+        }
+     
+
+        public  Task<IEnumerable<Product>> GetAll(int page, string CategoryName, string ProductName, int amount, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ProductViewDTO>> GetAll2(int page, List<Guid> categoryId, string ProductName, int amount, int pageSize)
+        {
+            IQueryable<ProductViewDTO> query = _dbContext.Products;
+
+            // Apply filters
+            if (categoryId != null && categoryId.Any())
+            {
+                query = query.Where(p => categoryId.Contains(p.CategoryId.Value));
+            }
+            if (!string.IsNullOrEmpty(ProductName))
+            {
+                query = query.Where(p => p.Name.Contains(ProductName));
+            }
+            if (amount > 0)
+            {
+                query = query.Where(p => p.InventoryQuantity >= amount);
+            }
+
+            // Paginate the results
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+            return await query.ToListAsync();
         }
     }
 }

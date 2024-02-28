@@ -41,7 +41,7 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
             var response = new ApiResponse<AppointmentDTO>();
-
+/*
             try
             {
                 // Tạo một đối tượng Appointment từ thông tin trong DTO đầu vào
@@ -53,10 +53,10 @@ namespace eFurnitureProject.Application.Services
                     Email = createAppointmentDTO.Email,
                     Status = createAppointmentDTO.Status,
                     Time = createAppointmentDTO.Time,
-                    CreatedBy = createAppointmentDTO.CustomerUserId
+                
                 };
 
-              /*  // Lưu thông tin các nhân viên (staff) nếu có
+              *//*  // Lưu thông tin các nhân viên (staff) nếu có
                 if (createAppointmentDTO.StaffUserIds != null && createAppointmentDTO.StaffUserIds.Any())
                 {
                     foreach (var staffUserId in createAppointmentDTO.StaffUserIds)
@@ -68,7 +68,7 @@ namespace eFurnitureProject.Application.Services
                       
                         });
                     }
-                }*/
+                }*//*
 
                
                 await _unitOfWork.AppointmentRepository.AddAsync(appointment);
@@ -97,7 +97,7 @@ namespace eFurnitureProject.Application.Services
                 {
                     response.ErrorMessages.Add("Inner Exception: " + ex.InnerException.Message);
                 }
-            }
+            }*/
 
             return response;
         }

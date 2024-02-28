@@ -11,6 +11,7 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IProductService
     {
+        Task<ApiResponse<IEnumerable<ProductDTO>>> GetAll(int page, string CategoryName, string ProductName, int amount, int pageSize);
         Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetProductsInPageAsync(int page, int amount);
         Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetFilterProductsInPageAsync(int page, int amount, string searchValue);
         Task<ApiResponse<ProductViewDTO>> GetProductDetail(Guid productId);
@@ -21,5 +22,6 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<bool>> DeleteProduct(Guid productID);
         Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByNameAsync(string name);
         Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByCategoryNameAsync(string name);
+        Task<ApiResponse<IEnumerable<ProductViewDTO>>> FilterProducts(int page, List<Guid> categoryId, string productName, int amount, int pageSize);
     }
 }

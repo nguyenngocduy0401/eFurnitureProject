@@ -3,6 +3,7 @@ using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using eFurnitureProject.Application.Commons;
+using AutoMapper.Configuration.Conventions;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -19,6 +20,13 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllVoucher() {
             var vouchers = await _service.GetAllVoucher();
+            return Ok(vouchers);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllVoucherPaging(int pageIndex, int pageSize)
+        {
+            var vouchers = await _service.GetAllVoucherPaging(pageIndex, pageSize);
             return Ok(vouchers);
         }
 

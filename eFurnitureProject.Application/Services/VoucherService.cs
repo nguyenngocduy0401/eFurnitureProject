@@ -147,5 +147,42 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
+
+        public async Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucherPaging(int pageIndex, int pageSize)
+        {
+            var response = new ApiResponse<IEnumerable<VoucherViewDTO>>();
+
+            try
+            {
+                var result = await _unitOfWork.VoucherRepository.Get(pageIndex, pageSize);
+                var viewItems = new List<VoucherViewDTO>();
+
+                foreach (var voucher in result)
+                {
+                    viewItems.Add(_mapper.Map<VoucherViewDTO>(voucher));
+                }
+
+                if (viewItems.Count != 0)
+                {
+                    response.Data = viewItems;
+                    response.isSuccess = true;
+                    response.Message = "Success!";
+                }
+                else
+                {
+                    response.Data = null;
+                    response.isSuccess = true;
+                    response.Message = "No reocrd!";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Application.ViewModels.ProductViewModels
+namespace eFurnitureProject.Application.ViewModels.ProductDTO
 {
     public class ProductViewDTO
     {

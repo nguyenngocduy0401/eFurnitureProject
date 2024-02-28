@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.ViewModels.ContractViewModels
 {
-    public class ContractViewModel
+    public class ContractViewDTO
     {
         public Guid _Id { get; set; }
         public string Title { get; set; }

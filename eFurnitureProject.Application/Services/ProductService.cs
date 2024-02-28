@@ -1,7 +1,6 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
-using eFurnitureProject.Application.ViewModels.ProductViewModels;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace eFurnitureProject.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IClaimsService _claimsService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper) { 
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) { 
             _mapper = mapper;
-            _unitOfWork = unitOfWork;   
+            _unitOfWork = unitOfWork;  
+            _claimsService = claimsService;
         }
 
         public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetAllOrder()
@@ -57,7 +60,49 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(string UserID, Guid StatusId)
+        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(int pageIndex, int pageSize, Guid orderId)
+        {
+            var response = new ApiResponse<IEnumerable<OrderDetailViewDTO>>();
+            try
+            {
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+                if (order is null)
+                {
+                    throw new Exception("Order has not existed!");
+                }
+                else
+                {
+                    var viewItems = new List<OrderDetailViewDTO> ();
+                    foreach (var item in order.OrderDetail)
+                    {
+                        viewItems.Add(_mapper.Map<OrderDetailViewDTO>(item));
+                    }
+                    if(viewItems.Count != 0)
+                    {
+                        response.Data = viewItems;
+                        response.isSuccess = true;
+                        response.Message = "Success";
+                    }
+                    else
+                    {
+                        response.Data = viewItems;
+                        response.isSuccess = true;
+                        response.Message = "No record found!";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize,string UserID, Guid StatusId)
         {
             FilterOrderDTO filterDTO = new FilterOrderDTO();
             filterDTO.UserId = UserID;
@@ -66,7 +111,7 @@ namespace eFurnitureProject.Application.Services
 
             try
             {
-                var result = await _unitOfWork.OrderRepository.GetOrderByFilter(filterDTO);
+                var result = await _unitOfWork.OrderRepository.GetOrderByFilter(pageIndex, pageSize,filterDTO);
                 var viewItems = new List<OrderViewDTO>();
 
                 foreach (var order in result)

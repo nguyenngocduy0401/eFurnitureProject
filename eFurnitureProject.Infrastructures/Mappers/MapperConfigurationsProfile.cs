@@ -6,6 +6,7 @@ using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.TransactionViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -30,6 +31,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
+            CreateMap<Transaction,TransactionViewDTO>();
+            CreateMap<TransactionViewDTO, Transaction>();
         }
     }
 }

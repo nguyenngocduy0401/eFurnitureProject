@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface ITransactionRepository : IGenericRepository<Transaction>
     {
+        Task<IEnumerable<Transaction>> Get(int pageIndex, int pageSize);
     }
 }

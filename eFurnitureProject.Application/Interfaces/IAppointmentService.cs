@@ -10,7 +10,8 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IAppointmentService
     {
-        Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO,string currentUserId);
+        Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO);
+        Task<ApiResponse<AppointmentDTO>> UpdateAppointment(Guid ID,CreateAppointmentDTO appointmentDTO);
 
     }
 }

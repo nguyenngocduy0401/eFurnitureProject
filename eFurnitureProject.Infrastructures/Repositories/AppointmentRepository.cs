@@ -15,5 +15,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public AppointmentRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
         }
+
+        public Task<IEnumerable<Product>> GetAppointmentPaging(int pageIndex, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

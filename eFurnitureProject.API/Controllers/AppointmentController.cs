@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace eFurnitureProject.API.Controllers
 {
-    public class AppointmentController: BaseController
+    public class AppointmentController : BaseController
     {
         private readonly IAppointmentService _appointmentService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -20,20 +20,12 @@ namespace eFurnitureProject.API.Controllers
             _appointmentService = appointmentService;
             _httpContextAccessor = httpContextAccessor;
         }
-
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
-            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        
-            if (string.IsNullOrEmpty(currentUserId))
-            {
-                return BadRequest("User not authenticated");
-            }
-
-            var response = await _appointmentService.CreateAppointment(createAppointmentDTO, currentUserId);
+         var response = await _appointmentService.CreateAppointment(createAppointmentDTO);
 
             if (response.isSuccess)
             {
@@ -43,6 +35,19 @@ namespace eFurnitureProject.API.Controllers
             {
                 return BadRequest(response);
             }
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAppointmentByAdmin(CreateAppointmentDTO createAppointmentDTO , Guid id)
+        {
+            var result = await _appointmentService.UpdateAppointment(id, createAppointmentDTO);
+
+            if (result.isSuccess)
+            {
+
+                return Ok(result);
+            }
+            return BadRequest(result);
+
         }
     }
 }

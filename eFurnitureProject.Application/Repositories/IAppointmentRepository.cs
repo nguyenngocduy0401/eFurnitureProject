@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IAppointmentRepository : IGenericRepository<Appointment>
     {
+        Task<IEnumerable<Product>> GetAppointmentPaging(int pageIndex, int pageSize);
     }
 }

@@ -6,6 +6,8 @@ using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -30,6 +32,16 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
+            CreateMap<CreateAppointmentDTO, Appointment>();
+            CreateMap<AppointmentDetailDTO, AppointmentDetail>();
+            CreateMap<Appointment, AppointmentDTO>();
+            CreateMap<AppointmentDetail, AppointmentDetailDTO>();
+            CreateMap<AppointmentDetailDTO, AppointmentDetail>();
+            CreateMap<AppointmentDetail, AppointmentDetailDTO>();
+            CreateMap<AppointmentDetailDTO, AppointmentDetail>().ReverseMap();
+            CreateMap<CreateAppointmentDTO, AppointmentDetail>();
+            CreateMap<User, AppointmentDetail>();
+            CreateMap<AppointmentDetailDTO, User>();
         }
     }
 }

@@ -68,6 +68,8 @@ namespace eFurnitureProject.API
             services.AddScoped<RoleInitializer>();
             services.AddHttpContextAccessor();
             services.AddHostedService<SetupIdentityDataSeeder>();
+            services.AddControllers();
+            services.AddLogging();
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
             services.AddTransient<IValidator<CreateContractDTO>, CreateContractViewModelValidation>();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel
 {
-    public class AppointmentDetailDTO
+    public class CreateAppointmentDetailDTO
     {
         public Guid AppointmentId { get; set; }
         public string? UserId { get; set; }

@@ -115,7 +115,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
         {
             var query = _dbSet.AsQueryable();
 
-            // Thêm điều kiện isDelete == false vào truy vấn
+            
             query = query.Where(x => x.IsDeleted == false);
 
             var itemCount = await query.CountAsync();

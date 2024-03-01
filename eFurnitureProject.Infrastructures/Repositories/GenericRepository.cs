@@ -3,11 +3,6 @@ using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace eFurnitureProject.Infrastructures.Repositories
@@ -29,10 +24,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public async Task<TEntity?> GetByIdAsync(Guid id)
         {
             var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
-            if(result == null)
+            if (result == null)
             {
                 throw new Exception($"Not found any object with id: {id}");
-            }   
+            }
             return result;
         }
 

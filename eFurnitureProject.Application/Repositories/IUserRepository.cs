@@ -15,6 +15,5 @@ namespace eFurnitureProject.Application.Repositories
         Task<bool> CheckUserNameExisted(string userName);
         Task<User> GetUserByUserNameAndPassword(string username, string password);
         Task AddAsync(User user);
-
     }
 }

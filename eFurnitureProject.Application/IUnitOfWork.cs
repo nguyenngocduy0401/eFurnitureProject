@@ -9,6 +9,7 @@ namespace eFurnitureProject.Application
 {
     public interface IUnitOfWork
     {
+        public IRefreshTokenRepository RefreshTokenRepository { get; }
         public IAppointmentRepository AppointmentRepository { get; }
         public IAppointmentDetailRepository AppointmentDetailRepository { get; }
         public ICartDetailRepository CartDetailRepository { get; }

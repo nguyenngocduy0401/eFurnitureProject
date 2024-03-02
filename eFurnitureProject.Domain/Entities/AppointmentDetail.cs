@@ -17,6 +17,7 @@ namespace eFurnitureProject.Domain.Entities
         [Column(Order = 2)]
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
-        public User? User { get; set; } 
+        public User? User { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

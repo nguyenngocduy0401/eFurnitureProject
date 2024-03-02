@@ -35,6 +35,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Order, OrderViewDTO>();
             CreateMap <ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
+
         }
     }
 }

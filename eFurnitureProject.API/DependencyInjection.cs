@@ -1,10 +1,12 @@
 ﻿using eFurnitureProject.API.Services;
 using eFurnitureProject.API.Validator.AuthenticationValidator;
 using eFurnitureProject.API.Validator.ContractValidator;
+using eFurnitureProject.API.Validator.ProductValidator;
 using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Services;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Infrastructures;
@@ -68,10 +70,12 @@ namespace eFurnitureProject.API
             services.AddScoped<RoleInitializer>();
             services.AddHttpContextAccessor();
             services.AddHostedService<SetupIdentityDataSeeder>();
+
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
             services.AddTransient<IValidator<CreateContractDTO>, CreateContractViewModelValidation>();
             services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
+            services.AddTransient<IValidator<CreateProductDTO>, CreateProductValidation>();
             #endregion
 
             return services;

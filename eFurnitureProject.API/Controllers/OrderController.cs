@@ -42,9 +42,9 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(Guid OrderId)
+        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(int pageIndex,int pageSize, Guid OrderId)
         {
-            return await _service.GetOrderDetailById(OrderId);
+            return await _service.GetOrderDetailById(pageIndex, pageSize, OrderId);
         }
     }
 }

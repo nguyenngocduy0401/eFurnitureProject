@@ -61,6 +61,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IVoucherRepository, VoucherRepository>();
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 

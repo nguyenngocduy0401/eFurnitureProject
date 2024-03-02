@@ -1,6 +1,8 @@
 ﻿using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.RefreshTokenModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
+using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eFurnitureProject.API.Controllers
@@ -20,11 +22,15 @@ namespace eFurnitureProject.API.Controllers
             return await _authenticationService.RegisterAsync(registerObject);
 
         }
-
         [HttpPost]
-        public async Task<ApiResponse<string>> LoginAsync(UserLoginDTO loginObject)
+        public async Task<ApiResponse<TokenRefreshDTO>> LoginAsync(UserLoginDTO loginObject)
         {
             return await _authenticationService.LoginAsync(loginObject); 
+        }
+        [HttpPost]
+        public async Task<ApiResponse<TokenRefreshDTO>> RenewTokenAsync(TokenRefreshDTO tokenRefreshDTO)
+        {
+            return await _authenticationService.RenewTokenAsync(tokenRefreshDTO);
         }
     }
 }

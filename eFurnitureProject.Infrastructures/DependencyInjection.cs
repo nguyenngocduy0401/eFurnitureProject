@@ -29,12 +29,14 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IContractService, ContractService>();
-            #endregion
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IVoucherService, VoucherService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            #endregion
+            
+
             #region Repository DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -61,6 +63,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 

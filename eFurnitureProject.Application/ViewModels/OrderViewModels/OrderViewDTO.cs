@@ -15,6 +15,5 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
         public StatusOrder? StatusOrder { get; set; }
         public Transaction? Transaction { get; set; }
         public User? User { get; set; }
-        public List<Product> listProduct { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,23 +73,32 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    var viewItems = new List<OrderDetailViewDTO> ();
-                    foreach (var item in order.OrderDetail)
-                    {
-                        viewItems.Add(_mapper.Map<OrderDetailViewDTO>(item));
-                    }
-                    if(viewItems.Count != 0)
+                    var viewItems = new Collection<OrderDetailViewDTO> ();
+                    if (order.OrderDetail is null)
                     {
                         response.Data = viewItems;
                         response.isSuccess = true;
-                        response.Message = "Success";
+                        response.Message = "No product in order";
                     }
                     else
                     {
-                        response.Data = viewItems;
-                        response.isSuccess = true;
-                        response.Message = "No record found!";
-                    }
+                        foreach (var item in order.OrderDetail)
+                        {
+                            viewItems.Add(_mapper.Map<OrderDetailViewDTO>(item));
+                        }
+                        if (viewItems.Count != 0)
+                        {
+                            response.Data = viewItems;
+                            response.isSuccess = true;
+                            response.Message = "Success";
+                        }
+                        else
+                        {
+                            response.Data = viewItems;
+                            response.isSuccess = true;
+                            response.Message = "No record found!";
+                        }
+                    }          
                 }
             }
             catch (Exception ex)

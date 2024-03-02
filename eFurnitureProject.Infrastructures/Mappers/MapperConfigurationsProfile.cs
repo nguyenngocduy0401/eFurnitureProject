@@ -1,5 +1,6 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.AppointmentDTO;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
@@ -26,6 +27,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
+            CreateMap<CreateAppointmentDTO,Appointment>().ReverseMap();
+            CreateMap<Appointment,AppointmentDTO>().ReverseMap();
+            CreateMap<AddStaffDTO, Appointment>();
+            CreateMap<AddStaffDTO, AppointmentDetail>();
+            CreateMap<Appointment, AppointmentDetail>();
             CreateMap<CreateContractDTO, Contract>();
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
@@ -36,6 +42,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<OrderDetailViewDTO, OrderDetail>();
             CreateMap<Transaction,TransactionViewDTO>();
             CreateMap<TransactionViewDTO, Transaction>();
+            CreateMap <ProductViewDTO , Product>();
+            CreateMap<Product,ProductViewDTO>();
         }
     }
 }

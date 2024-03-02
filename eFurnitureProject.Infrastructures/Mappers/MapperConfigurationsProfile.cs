@@ -30,6 +30,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
+            CreateMap<User, UserViewDTO>(); 
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.ViewModels.UserViewModels
 {
-    public class UserCreateDTO
+    public class UpdateUserDTO
     {
     }
 }

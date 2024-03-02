@@ -26,4 +26,8 @@
     <ProjectReference Include="..\eFurnitureProject.Infrastructures\eFurnitureProject.Infrastructures.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validator\UserValidator\" />
+  </ItemGroup>
+
 </Project>

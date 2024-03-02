@@ -11,7 +11,7 @@ namespace eFurnitureProject.Domain.Entities
     public abstract class BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        /*[DatabaseGenerated(DatabaseGeneratedOption.Identity)]*/
         public Guid Id { get; set; }
 
         public DateTime CreationDate { get; set; }

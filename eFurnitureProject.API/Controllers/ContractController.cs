@@ -2,6 +2,7 @@
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eFurnitureProject.API.Controllers
@@ -14,7 +15,7 @@ namespace eFurnitureProject.API.Controllers
         {
             _contractService = contractService;
         }
-
+        [Authorize()]
         [HttpPost]
         public async Task<ApiResponse<ContractViewDTO>> CreateContract(CreateContractDTO contract) => await _contractService.CreateContractAsync(contract);
 

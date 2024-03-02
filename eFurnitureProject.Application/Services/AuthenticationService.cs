@@ -6,25 +6,16 @@ using eFurnitureProject.Application.ViewModels.RefreshTokenModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace eFurnitureProject.Application.Services
 {
+    
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -153,7 +144,7 @@ namespace eFurnitureProject.Application.Services
                         response.Data = userRegisterDTO;
                         response.isSuccess = true;
                         response.Message = "Register is successful!";
-
+                        
                     }
                 }
             }

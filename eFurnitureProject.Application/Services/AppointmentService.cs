@@ -153,7 +153,7 @@ namespace eFurnitureProject.Application.Services
                 if (string.IsNullOrEmpty(UserID) && string.IsNullOrEmpty(AppointName) && DateTime == default && string.IsNullOrEmpty(Email) && Status == 0)
                 {
                   
-                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page, pageSize);
+                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page=0, pageSize=10);
                     var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
 
                     response.Data = result;

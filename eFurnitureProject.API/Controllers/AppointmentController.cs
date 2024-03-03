@@ -58,8 +58,11 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<Pagination<AppointmentDTO>>> GetAllAppointmentNotDelete(int page = 1, int amout = 10) => await _appointmentService.GetAppointmentPagingNotDelete(page, amout);
         [HttpGet]
-        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserID, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize)=>
-         await _appointmentService.Filter(page, UserID, AppointName, DateTime, Email, Status, pageSize);
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserID, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize)
+        {
+            
+           return await _appointmentService.Filter(page, UserID, AppointName, DateTime, Email, Status, pageSize);
+        }
       
 
         [HttpPost]

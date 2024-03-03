@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class DB : Migration
+    public partial class newmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,6 +60,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Wallet = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpire = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -104,8 +106,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),

@@ -19,7 +19,7 @@ namespace eFurnitureProject.API.Controllers
             _productService = productService;
         }
 
-
+        
         [HttpGet("{page}")]
         public async Task<IActionResult> GetProductsInPage(int page, int amount) {
             var result = await _productService.GetProductsInPageAsync(page, amount);

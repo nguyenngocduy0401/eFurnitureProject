@@ -14,5 +14,6 @@ namespace eFurnitureProject.Application.Interfaces
         public Task<ApiResponse<Pagination<CategoryViewModel>>> GetCategoryPagingsionAsync(int pageIndex = 0, int pageSize = 10);
         public Task<ApiResponse<CategoryViewModel>> UpdateCategoryAsync(Guid categoryId, CreateCategoryViewModel updateCategory);
         public Task<ApiResponse<CategoryViewModel>> SoftRemoveCategoryAsync(Guid categoryId);
+        public Task<ApiResponse<List<CategoryViewModel>>> GetAllCategoryAsync();
     }
 }

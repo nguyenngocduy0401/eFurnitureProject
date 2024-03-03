@@ -7,6 +7,8 @@ using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.ImportViewModels;
+using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -34,6 +36,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
+            CreateMap<CreateImportDTO, Import>();
+            CreateMap<Import, ImportViewDTO>()
+                 .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
+            CreateMap<CreateImportDetailDTO, ImportDetail>();
+            CreateMap<UpdateImportDTO, Import>();
         }
     }
 }

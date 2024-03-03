@@ -2,10 +2,9 @@
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.CategoryViewModels;
-using eFurnitureProject.Application.ViewModels.ContractViewModels;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
 using FluentValidation;
-using System.Diagnostics.Contracts;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 
@@ -57,6 +56,16 @@ namespace eFurnitureProject.Application.Services
                 response.isSuccess = false;
                 response.Message = ex.Message;
             }
+            return response;
+        }
+
+        public async Task<ApiResponse<List<CategoryViewModel>>> GetAllCategoryAsync()
+        {
+            var response = new ApiResponse<List<CategoryViewModel>>();
+            var categories = await _unitOfWork.CategoryRepository.GetAllIsNotDeleteAsync();
+            var result = _mapper.Map<List<CategoryViewModel>>(categories);
+            response.Data = result;
+            response.Message = $"Have {result.Count} product.";
             return response;
         }
 

@@ -12,8 +12,8 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240227180520_RefeshToken")]
-    partial class RefeshToken
+    [Migration("20240229022542_new-migration")]
+    partial class newmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -414,10 +414,17 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -944,6 +951,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("VoucherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

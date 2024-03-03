@@ -103,11 +103,33 @@ namespace eFurnitureProject.Infrastructures.Repositories
         {
             foreach (var entity in entities)
             {
-                entity.CreationDate = _timeService.GetCurrentTime();
-                entity.CreatedBy = _claimsService.GetCurrentUserId;
+                entity.ModificationDate = _timeService.GetCurrentTime();
+                entity.ModificationBy = _claimsService.GetCurrentUserId;
             }
             _dbSet.UpdateRange(entities);
         }
 
+        public async Task<List<TEntity>> GetAllIsNotDeleteAsync() => await _dbSet.Where(x => x.IsDeleted == null || x.IsDeleted == false).ToListAsync();
+
+        public async Task<Pagination<TEntity>> ToPaginationIsNotDelete(int pageIndex = 0, int pageSize = 10)
+        {
+            var itemCount = await _dbSet.Where(x => x.IsDeleted == null || x.IsDeleted == false).CountAsync();
+            var items = await _dbSet.Where(x => x.IsDeleted == null || x.IsDeleted == false)
+                                    .OrderByDescending(x => x.CreationDate)
+                                    .Skip(pageIndex * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            var result = new Pagination<TEntity>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+
+            return result;
+        }
     }
 }

@@ -411,10 +411,17 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

@@ -11,6 +11,7 @@ namespace eFurnitureProject.Application.Repositories
     public interface IAppointmentDetailRepository 
     {
         Task AddAsync(AppointmentDetail appointmentDetail);
-
+        Task DeleteByAppointmentIdAsync(Guid appointmentId);
+       
     }
 }

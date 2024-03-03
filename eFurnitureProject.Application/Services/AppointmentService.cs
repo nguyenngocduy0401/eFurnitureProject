@@ -7,6 +7,7 @@ using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentD
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
+using eFurnitureProject.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -27,12 +28,12 @@ namespace eFurnitureProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         
-        public AppointmentService(IClaimsService claimsService, IUnitOfWork unitOfWork, IMapper mapper)
+        public AppointmentService(IClaimsService claimsService, IUnitOfWork unitOfWork, IMapper mapper,UserManager<User> userManager)
         {
             _claimsService = claimsService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-          
+          _userManager= userManager;
         }
        
         public async Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)
@@ -106,11 +107,11 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<Pagination<AppointmentDTO>>> GetAppointmentPaging(int page, int amout)
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentPaging(int page, int amout)
         {
-            var response = new ApiResponse<Pagination<AppointmentDTO>>();
-            var appointment = await _unitOfWork.AppointmentRepository.ToPagination(page, amout);
-            var result = _mapper.Map<Pagination<AppointmentDTO>>(appointment);
+            var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
+            var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page, amout);
+            var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
 
             response.Data = result;
             return response;
@@ -176,57 +177,70 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<AppointmentDTO>> UpdateAppointmentByAdmin(Guid appointmentId, List<string> userIds)
+       
+        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
         {
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-              var  adminID = _claimsService.GetCurrentUserId.ToString();
-                // Kiểm tra vai trò của người dùng thực hiện thay đổi
-                var isAdmin = await _unitOfWork.AppointmentRepository.IsUserAdmin(adminID);
-                if (!isAdmin)
+               var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                if (appointment == null)
                 {
-                    response.isSuccess = false;
-                    response.Message = "Unauthorized. Only admin can update appointment.";
+                    response.Message = "Appointment not found";
                     return response;
                 }
 
-                var existingAppointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
-                if (existingAppointment == null)
+                await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentId);
+                foreach (var id in staffIds)
                 {
-                    response.isSuccess = false;
-                    response.Message = "Appointment not found.";
-                    return response;
-                }
-
-              
-                foreach (var userId in userIds)
-                {
-                    var user = await _userManager.FindByIdAsync(userId);
-                    if (user != null)
+                    var appointmentDetail = new AppointmentDetail
                     {
-                        var appointmentDetail = new AppointmentDetail { UserId = userId };
-                        existingAppointment.AppointmentDetail.Add(appointmentDetail);
+                        AppointmentId = appointment.Id,
+                        UserId = id.ToString()
+                    };
 
-                        // Kiểm tra vai trò của người dùng nếu là "staff" thì đánh dấu IsDeleted = true
-                        if (await _userManager.IsInRoleAsync(user, "staff"))
-                        {
-                            appointmentDetail.IsDeleted = true;
-                        }
-                    }
+                    await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
+
+                    await _unitOfWork.SaveChangeAsync();
                 }
-
-                await _unitOfWork.SaveChangeAsync();
-
-                return response;
+                response.isSuccess = true;
+                response.Message = "Picked staff successfully";
             }
             catch (Exception ex)
             {
                 response.isSuccess = false;
-                response.Message = ex.Message;
-                return response;
+                response.Message = $"Error picking staff: {ex.Message}";
             }
+
+            return response;
         }
+        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)
+        {
+
+            var response = new ApiResponse<bool>();
+
+            try
+            {
+                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                if (appointment == null)
+                {
+                    response.Message = "Appointment not found";
+                    return response;
+                }
+                appointment.Status = (int)newStatus;
+                await _unitOfWork.SaveChangeAsync();
+                response.Data = true;
+                response.Message = "Appointment status updated successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Data = false;
+                response.Message = $"Error updating appointment status: {ex.Message}";
+            }
+
+            return response;
+        }
+    }
     } 
-}
+
 

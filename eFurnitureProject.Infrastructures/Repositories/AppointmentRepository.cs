@@ -1,6 +1,9 @@
-﻿using eFurnitureProject.Application.Commons;
+﻿using eFurnitureProject.Application;
+using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,47 +20,56 @@ namespace eFurnitureProject.Infrastructures.Repositories
     public class AppointmentRepository : GenericRepository<Appointment>, IAppointmentRepository
     {
         private readonly AppDbContext _dbContext;
-
         private readonly UserManager<User> _userManager;
-        public AppointmentRepository(
-          AppDbContext context,
-          ICurrentTime timeService,
-          IClaimsService claimsService
-,
-          UserManager<User> userManager
-
-      )
-          : base(context, timeService, claimsService)
+        public AppointmentRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService, UserManager<User> userManager) : base(context, timeService, claimsService)
         {
             _dbContext = context;
             _userManager = userManager;
         }
 
-        public async Task<Pagination<Appointment>> GetAppointmentPaging(int pageIndex=0, int pageSize=10)
+        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentPaging(int pageIndex=1, int pageSize=10)
         {
-            var query = _dbSet.AsQueryable();
-
-
-            query = query.Where(x => x.IsDeleted == false);
+            var query = _dbSet.Include(a => a.AppointmentDetail)
+                     .ThenInclude(ad => ad.User)
+                     .OrderByDescending(x => x.CreationDate)
+                     .Skip((pageIndex - 1) * pageSize)
+                     .Take(pageSize)
+                     .AsNoTracking();
 
             var itemCount = await query.CountAsync();
-            var items = await query.OrderByDescending(x => x.CreationDate)
-                                   .Skip(pageIndex * pageSize)
-                                   .Take(pageSize)
-                                   .AsNoTracking()
-                                   .ToListAsync();
+            var items = await query.ToListAsync();
 
-            var result = new Pagination<Appointment>()
+           
+            var customerUserIds = await _userManager.GetUsersInRoleAsync("Customer");
+            var customerUserId = customerUserIds.FirstOrDefault()?.Id;
+
+            var staffUserIds = await _userManager.GetUsersInRoleAsync("Staff");
+            var staffUserIdsList = staffUserIds.Select(user => user.Id).ToList();
+
+            var appointmentDTOs = items.Select(appointment => new AppoitmentDetailViewDTO
+            {
+                Id = appointment.Id,
+                Name = appointment.Name,
+                Date = appointment.Date,
+                PhoneNumber = appointment.PhoneNumber,
+                Email = appointment.Email,
+                Status = appointment.Status,
+                Time = appointment.Time,
+                CustomerName = appointment.AppointmentDetail?.FirstOrDefault(ad => ad.UserId == customerUserId)?.User?.UserName,
+                StaffName = appointment.AppointmentDetail?.Where(ad => staffUserIdsList.Contains(ad.UserId)).Select(ad => ad.User?.Name).ToList()
+            }).ToList();
+
+            var result = new Pagination<AppoitmentDetailViewDTO>()
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalItemsCount = itemCount,
-                Items = items,
+                Items = appointmentDTOs,
             };
 
             return result;
-
         }
+
 
         public async Task<IEnumerable<Appointment>> GetAppointmentsByDateTimeAsync(DateTime dateTime)
         {
@@ -99,18 +111,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
                         select appointment;
             return await query.ToListAsync();
         }
-        public async Task<bool> IsUserAdmin(string userId)
-        {
-            // Giả sử bạn có một cơ chế xác thực để xác định vai trò của người dùng
-            // Ví dụ: trong đoạn mã này, giả sử chỉ có vai trò "admin" mới có quyền thực hiện thao tác này
-
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                return await _userManager.IsInRoleAsync(user, "admin") || await _userManager.IsInRoleAsync(user, "staff");
-            }
-            return false;
-        }
+        
 
     }
 }

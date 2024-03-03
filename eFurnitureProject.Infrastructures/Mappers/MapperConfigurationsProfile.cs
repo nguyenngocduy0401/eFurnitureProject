@@ -46,10 +46,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
 
             CreateMap <ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
-            CreateMap<OrderDetail, OrderDetailViewDTO>();
-            CreateMap<OrderDetailViewDTO, OrderDetail>();
-            CreateMap<Transaction,TransactionViewDTO>();
-            CreateMap<TransactionViewDTO, Transaction>();
+            CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
+         
 
 
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();

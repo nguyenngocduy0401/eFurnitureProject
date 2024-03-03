@@ -1,12 +1,13 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
-
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.TransactionViewModels;
+using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -25,7 +26,6 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
-           
             CreateMap<Appointment, AppointmentDetail>();
             CreateMap<CreateContractDTO, Contract>();
             CreateMap<Contract, ContractViewDTO>()
@@ -35,7 +35,10 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Order, OrderViewDTO>();
             CreateMap <ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
-
+            CreateMap<OrderDetail, OrderDetailViewDTO>();
+            CreateMap<OrderDetailViewDTO, OrderDetail>();
+            CreateMap<Transaction,TransactionViewDTO>();
+            CreateMap<TransactionViewDTO, Transaction>();
         }
     }
 }

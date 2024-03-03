@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using eFurnitureProject.Application.Commons;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -17,7 +19,7 @@ namespace eFurnitureProject.API.Controllers
         {
             _logger = logger;
         }
-
+        [Authorize()]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {

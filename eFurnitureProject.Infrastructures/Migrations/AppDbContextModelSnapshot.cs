@@ -646,6 +646,40 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("eFurnitureProject.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssuedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("JwtId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -867,12 +901,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RefreshTokenExpire")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -1127,7 +1155,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasForeignKey("TransactionId");
 
                     b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Order")
                         .HasForeignKey("UserId");
 
                     b.Navigation("StatusOrder");
@@ -1197,6 +1225,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("eFurnitureProject.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
+                        .WithMany("RefreshToken")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Transaction", b =>
@@ -1272,6 +1309,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.User", b =>
                 {
                     b.Navigation("AppointmentDetail");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("RefreshToken");
 
                     b.Navigation("VoucherDetail");
                 });

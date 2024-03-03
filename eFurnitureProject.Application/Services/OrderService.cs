@@ -2,6 +2,8 @@
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,11 +136,66 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
+        public async Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
         {
             // can phai hoi lai nghiep vu
 
-            throw new NotImplementedException();
+            var response = new ApiResponse<UpdateOrderStatusDTO>();
+
+            try
+            {
+                //var result = await _unitOfWork.OrderRepository.Get(pageIndex, pageSize);
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(updateOrderStatusDTO.Id);
+
+                if (order is not null)
+                {
+#pragma warning disable CS8629 // Nullable value type may be null.
+                    Guid statusID = (Guid)order.StatusId;
+#pragma warning restore CS8629 // Nullable value type may be null.
+                    if (order.StatusOrder != null)
+                    {
+                        var orderStatus = await _unitOfWork.StatusOrderRepository.GetByIdAsync(statusID);
+                        if (orderStatus is not null)
+                        {
+                            orderStatus.StatusCode = updateOrderStatusDTO.StatusCode;
+                        }
+                        else
+                        {
+                            throw new Exception("Update Status order fail!");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Order status not found!");
+                    }
+                    int update = await _unitOfWork.SaveChangeAsync();
+                    if (update > 0)
+                    {
+                        response.Data = updateOrderStatusDTO;
+                        response.isSuccess = true;
+                        response.Message = "Update Succesfully";
+                    }
+                    else
+                    {
+                        throw new Exception("Update failled");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Order not found!");
+                }
+
+                
+
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
         }
 
 

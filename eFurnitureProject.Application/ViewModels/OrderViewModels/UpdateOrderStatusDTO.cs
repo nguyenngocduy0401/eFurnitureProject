@@ -10,6 +10,7 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
     public class UpdateOrderStatusDTO
     {
         public Guid Id { get; set; }
-        public Guid StatusId { get; set; }
+        //public Guid StatusId { get; set; }
+        public int StatusCode { get; set; }
     }
 }

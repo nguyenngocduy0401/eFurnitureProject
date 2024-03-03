@@ -12,11 +12,17 @@ namespace eFurnitureProject.API.Controllers
         public OrderDetailController(IOrderDetailService orderDetailService)
         {
             this.orderDetailService = orderDetailService;
-        }   
+        }
 
+        [HttpGet]
         public ApiResponse<IEnumerable<OrderDetailViewDTO>> GetOrderDetailById(Guid OrderId)
         {
             return null;
         }
+
+        //public async ApiResponse<IEnumerable<OrderDetailViewDTO>> GetTop5Product()
+        //{
+        //    return await orderDetailService.GetTop5Product();
+        //}
     }
 }

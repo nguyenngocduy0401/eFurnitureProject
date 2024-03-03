@@ -37,7 +37,27 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
         }
 
-        public async Task<IEnumerable<Order>> GetOrderByFilter(int pageIndex, int pageSize, FilterOrderDTO filter)
+        public async Task<IEnumerable<Order>> GetOrderByFilter(FilterOrderDTO filter)
+        {
+            //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
+
+            try
+            {
+                var items = await _dbSet
+                    .Where(o => o.UserId == filter.UserId)
+                    .Where(o => o.StatusId == filter.StatusId)
+                    .ToListAsync();
+                return items;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+            //return null;
+        }
+
+        public async Task<IEnumerable<Order>> GetOrderByFilter(FilterOrderDTO filter, int pageIndex, int pageSize)
         {
             //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
 

@@ -7,17 +7,16 @@ namespace eFurnitureProject.API.Controllers
 {
     public class OrderDetailController : Controller
     {
-        private readonly IOrderDetailService _service;
+        private readonly IOrderDetailService orderDetailService;
 
         public OrderDetailController(IOrderDetailService orderDetailService)
         {
-            this._service = orderDetailService;
-        }
+            this.orderDetailService = orderDetailService;
+        }   
 
-        //[HttpGet]
-        //public async ApiResponse<IEnumerable<OrderDetailViewDTO>> GetOrderDetailById(Guid OrderId)
-        //{
-        //    return await _service.GetOrderDetailById(OrderId);
-        //}
+        public ApiResponse<IEnumerable<OrderDetailViewDTO>> GetOrderDetailById(Guid OrderId)
+        {
+            return null;
+        }
     }
 }

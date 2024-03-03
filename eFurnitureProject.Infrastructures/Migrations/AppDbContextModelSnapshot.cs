@@ -191,6 +191,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("UserId", "AppointmentId");
 
                     b.HasIndex("AppointmentId");
@@ -665,12 +668,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("JwtId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -1231,7 +1237,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 {
                     b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
                         .WithMany("RefreshToken")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

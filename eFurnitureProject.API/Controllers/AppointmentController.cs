@@ -38,7 +38,7 @@ namespace eFurnitureProject.API.Controllers
                 return BadRequest(response);
             }
         }
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> UpdateAppointmentByCustomer(CreateAppointmentDTO createAppointmentDTO , Guid id)
         {
             var result = await _appointmentService.UpdateAppointmentByCustomer(id, createAppointmentDTO);
@@ -58,7 +58,7 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<IEnumerable<AppointmentDTO>>> Filter(int page, String? UserID, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize)=>
          await _appointmentService.Filter(page, UserID, AppointName, DateTime, Email, Status, pageSize);
-        [HttpPut]
+        [HttpPost]
         public async  Task<ApiResponse<AppointmentDTO>> UpdateAppointmentByAdmin(Guid appointmentId, List<string> userIds)=> await _appointmentService.UpdateAppointmentByAdmin(appointmentId, userIds);
     }
 }

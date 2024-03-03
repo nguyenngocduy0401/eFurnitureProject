@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
@@ -85,17 +85,29 @@ namespace eFurnitureProject.Application.Services
                     {
                         foreach (var item in order.OrderDetail)
                         {
-                            var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
+                           var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
+
+
 
                             viewItem.Product = _mapper.Map<ProductViewDTO>(item.Product);
 
+
+
                             if(item.Product is not null)
+
                             {
+
                                 if (item.Product.Category is not null)
+
                                 {
+
                                     viewItem.Product.CategoryName = item.Product.Category.Name;
+
                                 }
+
                             }
+
+
 
                             viewItems.Add(viewItem);
                         }
@@ -123,11 +135,6 @@ namespace eFurnitureProject.Application.Services
                 return response;
             }
             return response;
-        }
-
-        public Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(Guid orderId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize,string UserID, Guid StatusId)

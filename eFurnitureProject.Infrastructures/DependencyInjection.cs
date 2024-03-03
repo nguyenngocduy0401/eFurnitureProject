@@ -31,13 +31,11 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IContractService, ContractService>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IVoucherService, VoucherService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<ITransactionService, TransactionService>();
-            services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             #endregion
             

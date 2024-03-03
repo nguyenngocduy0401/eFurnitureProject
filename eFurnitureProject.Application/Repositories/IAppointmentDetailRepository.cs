@@ -1,5 +1,4 @@
 ﻿using eFurnitureProject.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,5 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IAppointmentDetailRepository 
     {
-        Task AddAsync(AppointmentDetail appointmentDetail);
-
     }
 }

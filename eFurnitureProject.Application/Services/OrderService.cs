@@ -125,6 +125,11 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
+        public Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(Guid orderId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize,string UserID, Guid StatusId)
         {
             FilterOrderDTO filterDTO = new FilterOrderDTO();

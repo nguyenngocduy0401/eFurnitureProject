@@ -20,6 +20,7 @@ namespace eFurnitureProject.API.Controllers
             return await _service.GetTransaction(pageIndex, pageSize);
         }
 
+        [HttpGet]
         public async Task<ApiResponse<TransactionViewDTO>> GetTransactionById(Guid transactionId)
         {
             return await _service.GetTransactionById(transactionId);

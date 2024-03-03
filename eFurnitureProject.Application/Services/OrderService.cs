@@ -3,6 +3,7 @@ using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -84,7 +85,19 @@ namespace eFurnitureProject.Application.Services
                     {
                         foreach (var item in order.OrderDetail)
                         {
-                            viewItems.Add(_mapper.Map<OrderDetailViewDTO>(item));
+                            var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
+
+                            viewItem.Product = _mapper.Map<ProductViewDTO>(item.Product);
+
+                            if(item.Product is not null)
+                            {
+                                if (item.Product.Category is not null)
+                                {
+                                    viewItem.Product.CategoryName = item.Product.Category.Name;
+                                }
+                            }
+
+                            viewItems.Add(viewItem);
                         }
                         if (viewItems.Count != 0)
                         {
@@ -163,7 +176,36 @@ namespace eFurnitureProject.Application.Services
 
                 foreach (var order in result)
                 {
-                    viewItems.Add(_mapper.Map<OrderViewDTO>(order));
+                    var viewItem = _mapper.Map<OrderViewDTO>(order);
+                    if (order.User != null)
+                    {
+                        viewItem.Name = order.User.Name;
+                    }
+                    else
+                    {
+                        viewItem.Name = "Guest";
+                    }
+
+                    if (order.StatusOrder != null)
+                    {
+                        viewItem.StatusCode = order.StatusOrder.StatusCode;
+                    }
+                    else
+                    {
+                        viewItem.StatusCode = 0;
+                    }
+
+
+                    if (order.Transaction != null)
+                    {
+                        viewItem.Paid = order.Transaction.Amount;
+                    }
+                    else
+                    {
+                        viewItem.Paid = 0;
+                    }
+
+                    viewItems.Add(viewItem);
                 }
 
                 if (viewItems.Count != 0)

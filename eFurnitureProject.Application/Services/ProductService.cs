@@ -42,6 +42,7 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var product = _mapper.Map<Product>(createProductDTO);
+                product.Status = 1;
                 ValidationResult validationResult = await _createProductvalidator.ValidateAsync(createProductDTO);
                 if (!validationResult.IsValid)
                 {
@@ -81,8 +82,25 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
+        public async Task<ApiResponse<int>> CalculateTotalPages(int totalItemsCount, int pageSize)
+        {
+            var response = new ApiResponse<int>();
+            try
+            {
+                int totalPages = totalItemsCount / pageSize;
+                if (totalItemsCount % pageSize != 0)
+                {
+                    totalPages++;
+                }
 
-        public async Task<ApiResponse<bool>> DeleteProduct(Guid productID)
+                return response;
+            }
+            catch (Exception ex)
+            {
+                 return response;
+            }
+        }
+            public async Task<ApiResponse<bool>> DeleteProduct(Guid productID)
         {
             var response = new ApiResponse<bool>();
             try
@@ -134,7 +152,7 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProductNotdeleted(int pageIndex = 0, int pageSize = 10)
         {
             var response = new ApiResponse<Pagination<ProductDTO>>();
-            var products = await _unitOfWork.ProductRepository.ToPaginationProduct(pageIndex, pageSize);
+            var products = await _unitOfWork.ProductRepository.ToPaginationProductNotDeleted(pageIndex, pageSize);
             var result = _mapper.Map<Pagination<ProductDTO>>(products);
             response.Data = result;
             return response;
@@ -215,48 +233,48 @@ namespace eFurnitureProject.Application.Services
                 return response;
             }
         }
- 
-        public async Task<ApiResponse<IEnumerable<ProductDTO>>> GetAll(int page, List<Guid> CategoryID, string ProductName, int amount, int pageSize)
-        {
-            var response = new ApiResponse<IEnumerable<ProductDTO>>();
 
+        public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, Guid CategoryID, string ProductName, double minPrice, double maxPrice, int pageSize)
+        {
+            var  response = new ApiResponse<Pagination<ProductDTO>>();
+            page = 0;
+            pageSize = 10;
             try
             {
-                IEnumerable<ProductDTO> products;
+                Pagination<ProductDTO> products;
 
-                if (CategoryID == null && string.IsNullOrEmpty(ProductName) && amount <= 0)
+                if (CategoryID == Guid.Empty && string.IsNullOrEmpty(ProductName) && minPrice<= 0 && maxPrice <= 0)
                 {
-                    
-                    var pagination = await _unitOfWork.ProductRepository.ToPagination(page, pageSize);
-                    response.Data = _mapper.Map<IEnumerable<ProductDTO>>(pagination.Items);
-                    response.isSuccess = true;
-                    response.Message = "Get all products successfully";
+
+                   
+                    var product = await _unitOfWork.ProductRepository.ToPaginationProduct(page, pageSize);
+                    var result = _mapper.Map<Pagination<ProductDTO>>(product);
+                    response.Data = result;
                     return response;
                 }
 
-
-                if (CategoryID != null && CategoryID.Any())
+                if (CategoryID !=Guid.Empty  )
                 {
-                    products =await  _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID);
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID,page,pageSize);
                 }
                 else if (!string.IsNullOrEmpty(ProductName))
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName);
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName,page,pageSize);
                 }
-                else if (amount > 0)
+                else if (minPrice >= 0 || maxPrice >= 0)
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByAmountAsync(amount);
+                    products = await _unitOfWork.ProductRepository.GetProductsByPriceAsync(minPrice,  maxPrice, page,pageSize);
                 }
                 else
-                { 
-                    var pagination = await _unitOfWork.ProductRepository.ToPaginationProduct(page - 1, pageSize); 
-                    response.Data = _mapper.Map<IEnumerable<ProductDTO>>(pagination.Items);
+                {
+                    var pagination = await _unitOfWork.ProductRepository.ToPaginationProduct(page - 1, pageSize);
+                    response.Data = _mapper.Map<Pagination<ProductDTO>>(pagination);
                     response.isSuccess = true;
                     response.Message = "Get all products successfully";
                     return response;
                 }
 
-                var productDTOs = _mapper.Map<IEnumerable<ProductDTO>>(products);
+                var productDTOs = _mapper.Map<Pagination<ProductDTO>>(products);
                 response.Data = productDTOs;
                 response.isSuccess = true;
                 response.Message = "Get all products successfully";
@@ -270,6 +288,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
+
 
 
 

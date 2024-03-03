@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.Net.Mime;
 using System.Net;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -20,36 +21,29 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ProductDTO>>>> FilterProducts2(
+        public async Task<ActionResult<ApiResponse<Pagination<ProductDTO>>>> FilterProducts2(
           int page,
-         [FromQuery] List<Guid> categoryId,
+         [FromQuery] Guid categoryId,
          string? productName,
-          int amount,
+           double minPrice, double maxPrice,
          int pageSize)
         {
-            var response = await _productService.GetAll(page, categoryId, productName, amount, pageSize);
+            var response = await _productService.GetAll(page, categoryId, productName, minPrice, maxPrice, pageSize);
             if (response.isSuccess)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
-      
-     
-     
-       
-
         [HttpPost]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        
         public async Task<IActionResult> CreatePoduct(CreateProductDTO createProductDTO)
         {
             try
             {
                 var result = await _productService.CreateProductByAdmin(createProductDTO);
                 dynamic reponseObject = new ExpandoObject();
-                reponseObject.StatusCode = 0;
+                reponseObject.StatusCode = 1;
                 reponseObject.Result = result;
                 if (result.isSuccess)
                 {
@@ -109,7 +103,9 @@ namespace eFurnitureProject.API.Controllers
             return BadRequest(result);
 
         }
-       
-       
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize)=>  await _productService.CalculateTotalPages(totalItemsCount, pageSize);
+   
+
     }
 }

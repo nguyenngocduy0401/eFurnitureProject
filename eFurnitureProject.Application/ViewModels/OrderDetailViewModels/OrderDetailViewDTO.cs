@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 
 namespace eFurnitureProject.Application.ViewModels.OrderDetailViewModels
 {
@@ -14,6 +15,6 @@ namespace eFurnitureProject.Application.ViewModels.OrderDetailViewModels
         public Guid OrderId { get; set; }
         public Order? Order { get; set; }
         public Guid ProductId { get; set; }
-        public Product? Product { get; set; }
+        public ProductViewDTO Product { get; set; }
     }
 }

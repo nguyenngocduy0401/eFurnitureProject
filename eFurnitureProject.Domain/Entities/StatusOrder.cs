@@ -9,5 +9,6 @@ namespace eFurnitureProject.Domain.Entities
     public class StatusOrder : BaseEntity
     {
         public string Name { get; set; }
+        public int StatusCode { get; set; }
     }
 }

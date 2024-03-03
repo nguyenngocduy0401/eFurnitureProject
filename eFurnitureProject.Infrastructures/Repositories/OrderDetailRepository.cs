@@ -1,4 +1,7 @@
-﻿using eFurnitureProject.Application.Repositories;
+﻿using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Repositories
 {
-    public class OrderDetailRepository :IOrderDetailRepository
+    public class OrderDetailRepository : IOrderDetailRepository
     {
     }
 }

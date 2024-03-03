@@ -11,17 +11,12 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IProductService
     {
-        Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetAll(int page, List<Guid> CategoryID, string ProductName, int amount, int pageSize);
-        Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetProductsInPageAsync(int page, int amount);
-        Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetFilterProductsInPageAsync(int page, int amount, string searchValue);
-        Task<ApiResponse<ProductViewDTO>> GetProductDetail(Guid productId);
+        Task<ApiResponse<IEnumerable<ProductDTO>>> GetAll(int page, List<Guid> CategoryID, string ProductName, int amount, int pageSize);
         Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex = 0, int pageSize = 10);
         Task<ApiResponse<ProductDTO>> GetProductByID(Guid id);
         Task<ApiResponse<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO);
         Task<ApiResponse<ProductDTO>> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid productID);
         Task<ApiResponse<bool>> DeleteProduct(Guid productID);
-        Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByNameAsync(string name);
-        Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByCategoryNameAsync(string name);
         Task<ApiResponse<Pagination<ProductDTO>>> getAllProductNotdeleted(int pageIndex = 0, int pageSize = 10);
 
 

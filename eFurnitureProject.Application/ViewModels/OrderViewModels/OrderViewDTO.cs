@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
 {
-    public class OrderViewDTO: BaseEntity
+    public class OrderViewDTO
     {
+        public Guid Id { get; set; }
         public DateTime DateTime { get; set; }
         public int Price { get; set; }
-        public StatusOrder? StatusOrder { get; set; }
-        public Transaction? Transaction { get; set; }
-        public User? User { get; set; }
+        public int StatusCode { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public int Paid { get; set; }
     }
 }

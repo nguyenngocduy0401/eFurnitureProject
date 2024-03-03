@@ -80,5 +80,29 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
             //return null;
         }
+
+
+        public async Task<IEnumerable<Order>> GetOrderByStatus(int pageIndex, int pageSize, Guid statusId)
+        {
+            //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
+
+            try
+            {
+                var items = await _dbSet
+                    .Where(o => o.StatusId == statusId)
+                    .OrderByDescending(x => x.CreationDate)
+                    .Skip(pageIndex * pageSize)
+                    .Take(pageSize)
+                    .AsNoTracking()
+                    .ToListAsync();
+                return items;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+            //return null;
+        }
     }
 }

@@ -11,7 +11,5 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
     {
         public Guid Id { get; set; }
         public Guid StatusId { get; set; }
-
-        public Guid UserId { get; set; }
     }
 }

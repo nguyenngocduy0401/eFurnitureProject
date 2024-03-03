@@ -19,13 +19,13 @@ namespace eFurnitureProject.API.Controllers
             _productService = productService;
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ProductViewDTO>>>> FilterProducts222(
-         [FromQuery] int page,
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<IEnumerable<ProductDTO>>>> FilterProducts2(
+          int page,
          [FromQuery] List<Guid> categoryId,
-         [FromQuery] string? productName,
-         [FromQuery] int amount,
-         [FromQuery] int pageSize)
+         string? productName,
+          int amount,
+         int pageSize)
         {
             var response = await _productService.GetAll(page, categoryId, productName, amount, pageSize);
             if (response.isSuccess)
@@ -34,25 +34,10 @@ namespace eFurnitureProject.API.Controllers
             }
             return BadRequest(response);
         }
-        [HttpGet("{page}")]
-        public async Task<IActionResult> GetProductsInPage(int page, int amount) {
-            var result = await _productService.GetProductsInPageAsync(page, amount);
-            return Ok(result);
-        }
+      
      
-        [HttpGet]
-        public async Task<IActionResult> FilterProduct(int page, int amount, string searchValue)
-        {
-            var result = await _productService.GetFilterProductsInPageAsync(page, amount, searchValue);
-            return Ok(result);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ProductDetail(Guid productId)
-        {
-            var result = await _productService.GetProductDetail(productId);
-            return Ok(result);
-        }
+     
+       
 
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -83,7 +68,7 @@ namespace eFurnitureProject.API.Controllers
             }
 
         }
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var result = await _productService.DeleteProduct(id);
@@ -105,13 +90,13 @@ namespace eFurnitureProject.API.Controllers
             var result = await _productService.getAllProductNotdeleted();
             return Ok(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> ViewProductById(Guid id)
         {
             var result = await _productService.GetProductByID(id);
             return Ok(result);
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid id)
         {
             var result = await _productService.UpdateProductByAdmin(createProductDTO, id);
@@ -124,33 +109,7 @@ namespace eFurnitureProject.API.Controllers
             return BadRequest(result);
 
         }
-        [HttpGet("{name}")]
-        public async Task<IActionResult> SearchByName(string name)
-        {
-            var result = await _productService.SearchProductByNameAsync(name);
-
-            if (result.isSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
-        [HttpGet("{name}")]
-        public async Task<IActionResult> SearchByCategoryName(string name)
-        {
-            var result = await _productService.SearchProductByCategoryNameAsync(name);
-
-            if (result.isSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
+       
+       
     }
 }

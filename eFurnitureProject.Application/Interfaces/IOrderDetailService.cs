@@ -10,6 +10,6 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IOrderDetailService
     {
-        Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(Guid orderId);
+        Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetTop5Product();
     }
 }

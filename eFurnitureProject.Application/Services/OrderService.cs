@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
-using eFurnitureProject.Application.ViewModels.VoucherDTO;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -85,7 +85,31 @@ namespace eFurnitureProject.Application.Services
                     {
                         foreach (var item in order.OrderDetail)
                         {
-                            viewItems.Add(_mapper.Map<OrderDetailViewDTO>(item));
+                           var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
+
+
+
+                            viewItem.Product = _mapper.Map<ProductViewDTO>(item.Product);
+
+
+
+                            if(item.Product is not null)
+
+                            {
+
+                                if (item.Product.Category is not null)
+
+                                {
+
+                                    viewItem.Product.CategoryName = item.Product.Category.Name;
+
+                                }
+
+                            }
+
+
+
+                            viewItems.Add(viewItem);
                         }
                         if (viewItems.Count != 0)
                         {
@@ -164,7 +188,36 @@ namespace eFurnitureProject.Application.Services
 
                 foreach (var order in result)
                 {
-                    viewItems.Add(_mapper.Map<OrderViewDTO>(order));
+                    var viewItem = _mapper.Map<OrderViewDTO>(order);
+                    if (order.User != null)
+                    {
+                        viewItem.Name = order.User.Name;
+                    }
+                    else
+                    {
+                        viewItem.Name = "Guest";
+                    }
+
+                    if (order.StatusOrder != null)
+                    {
+                        viewItem.StatusCode = order.StatusOrder.StatusCode;
+                    }
+                    else
+                    {
+                        viewItem.StatusCode = 0;
+                    }
+
+
+                    if (order.Transaction != null)
+                    {
+                        viewItem.Paid = order.Transaction.Amount;
+                    }
+                    else
+                    {
+                        viewItem.Paid = 0;
+                    }
+
+                    viewItems.Add(viewItem);
                 }
 
                 if (viewItems.Count != 0)
@@ -190,56 +243,11 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
+        public Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
         {
             // can phai hoi lai nghiep vu
-            var response = new ApiResponse<UpdateOrderStatusDTO>
-            {
-                isSuccess = false,
-                Message = "Update new order status failled!"
-            };
 
-            try
-            {
-                var order = await _unitOfWork.OrderRepository.GetByIdAsync(updateOrderStatusDTO.Id);
-                if (order is null)
-                {
-                    throw new Exception("No voucher found to update!");
-                }
-                else
-                {
-                    //voucher.StartDate = updateVoucherDTO.StartDate;
-                    //voucher.EndDate = updateVoucherDTO.EndDate;
-                    //voucher.Percent = updateVoucherDTO.Percent;
-                    order.StatusId = updateOrderStatusDTO.StatusId;
-                    //order.DeletionDate = updateVoucherDTO.DeletionDate;
-                    //order.DeleteBy = updateVoucherDTO.DeleteBy;
-                    order.ModificationBy = updateOrderStatusDTO.UserId;
-                    order.ModificationDate = DateTime.Now;
-
-                    int update = await _unitOfWork.SaveChangeAsync();
-                    if (update > 0)
-                    {
-                        response.Data = updateOrderStatusDTO;
-                        response.isSuccess = true;
-                        response.Message = "Update Succesfully";
-                    }
-                    else
-                    {
-                        throw new Exception("Update failled");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                response.Data = null;
-                response.isSuccess = false;
-                response.Message = ex.Message;
-                return response;
-            }
-
-            return response;
+            throw new NotImplementedException();
         }
 
 

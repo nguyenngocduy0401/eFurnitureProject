@@ -11,7 +11,8 @@ namespace eFurnitureProject.Application.Interfaces
     public interface IOrderService
     {
         Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetAllOrder();
-        Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(string userId, Guid StatusId);
+        Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(Guid orderId);
+        Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize, string userId, Guid StatusId);
         Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderPaging(int pageIndex, int pageSize);
         Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO);
     }

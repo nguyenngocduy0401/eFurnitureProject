@@ -57,7 +57,39 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(string UserID, Guid StatusId)
+        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(Guid orderId)
+        {
+            var response = new ApiResponse<IEnumerable<OrderDetailViewDTO>>();
+
+            try
+            {
+                var result = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+                var viewItems = (from order in result.OrderDetail
+                                 select _mapper.Map<OrderViewDTO>(order)).ToList();
+                if (viewItems.Count != 0)
+                {
+                    response.Data = (IEnumerable<OrderDetailViewDTO>?)viewItems;
+                    response.isSuccess = true;
+                    response.Message = "Success!";
+                }
+                else
+                {
+                    response.Data = null;
+                    response.isSuccess = true;
+                    response.Message = "No reocrd!";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
+        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize, string UserID, Guid StatusId)
         {
             FilterOrderDTO filterDTO = new FilterOrderDTO();
             filterDTO.UserId = UserID;
@@ -66,7 +98,7 @@ namespace eFurnitureProject.Application.Services
 
             try
             {
-                var result = await _unitOfWork.OrderRepository.GetOrderByFilter(filterDTO);
+                var result = await _unitOfWork.OrderRepository.GetOrderByFilter(pageIndex,pageSize,filterDTO);
                 var viewItems = new List<OrderViewDTO>();
 
                 foreach (var order in result)

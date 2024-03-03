@@ -19,27 +19,13 @@ namespace eFurnitureProject.API.Controllers
             _productService = productService;
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ProductViewDTO>>>> FilterProducts222(
-         [FromQuery] int page,
-         [FromQuery] List<Guid> categoryId,
-         [FromQuery] string? productName,
-         [FromQuery] int amount,
-         [FromQuery] int pageSize)
-        {
-            var response = await _productService.GetAll(page, categoryId, productName, amount, pageSize);
-            if (response.isSuccess)
-            {
-                return Ok(response);
-            }
-            return BadRequest(response);
-        }
+
         [HttpGet("{page}")]
         public async Task<IActionResult> GetProductsInPage(int page, int amount) {
             var result = await _productService.GetProductsInPageAsync(page, amount);
             return Ok(result);
         }
-     
+
         [HttpGet]
         public async Task<IActionResult> FilterProduct(int page, int amount, string searchValue)
         {
@@ -97,12 +83,6 @@ namespace eFurnitureProject.API.Controllers
         public async Task<IActionResult> ViewAllProduct()
         {
             var result = await _productService.getAllProduct();
-            return Ok(result);
-        }
-        [HttpGet]
-        public async Task<IActionResult> ViewAllProductNotDeleted()
-        {
-            var result = await _productService.getAllProductNotdeleted();
             return Ok(result);
         }
         [HttpGet("{id}")]

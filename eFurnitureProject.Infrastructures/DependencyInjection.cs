@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using eFurnitureProject.Application;
 using eFurnitureProject.Infrastructures.DataInitializer;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
+using FluentValidation;
 
 namespace eFurnitureProject.Infrastructures
 {
@@ -61,9 +63,10 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
+         
 
             services.Configure<IdentityOptions>(options =>
             {

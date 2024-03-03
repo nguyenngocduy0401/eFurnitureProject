@@ -24,12 +24,16 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
+            CreateMap<Appointment, AppointmentDetail>();
             CreateMap<CreateContractDTO, Contract>();
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
+            CreateMap <ProductViewDTO , Product>();
+            CreateMap<Product,ProductViewDTO>();
+
         }
     }
 }

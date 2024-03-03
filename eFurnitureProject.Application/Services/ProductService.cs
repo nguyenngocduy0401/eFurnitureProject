@@ -237,8 +237,7 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, Guid CategoryID, string ProductName, double minPrice, double maxPrice, int pageSize)
         {
             var  response = new ApiResponse<Pagination<ProductDTO>>();
-            page = 0;
-            pageSize = 10;
+          
             try
             {
                 Pagination<ProductDTO> products;

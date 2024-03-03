@@ -8,6 +8,7 @@ using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Domain.Enums;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -27,13 +30,14 @@ namespace eFurnitureProject.Application.Services
         private readonly IClaimsService _claimsService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        
-        public AppointmentService(IClaimsService claimsService, IUnitOfWork unitOfWork, IMapper mapper,UserManager<User> userManager)
+        private readonly IValidator<CreateAppointmentDTO>   _createAppointmentValidator;
+        public AppointmentService(IValidator<CreateAppointmentDTO> validatorCreateAppointment, IClaimsService claimsService, IUnitOfWork unitOfWork, IMapper mapper,UserManager<User> userManager)
         {
             _claimsService = claimsService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
           _userManager= userManager;
+            _createAppointmentValidator = validatorCreateAppointment;
         }
        
         public async Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)
@@ -41,29 +45,40 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-                
+
                 var appointment = _mapper.Map<Appointment>(createAppointmentDTO);
-               
-                await _unitOfWork.AppointmentRepository.AddAsync(appointment);
-                await _unitOfWork.SaveChangeAsync();
-
-                var currentID = _claimsService.GetCurrentUserId;
-                var appointmentDTO = _mapper.Map<AppointmentDTO>(appointment);
-
-                var appointmentDetail = new AppointmentDetail
+                appointment.Status = 2;
+                ValidationResult validationResult = await _createAppointmentValidator.ValidateAsync(createAppointmentDTO);
+                if (!validationResult.IsValid)
                 {
-                    AppointmentId = appointment.Id,
-                    UserId = currentID.ToString()
-                };
-                await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-                await _unitOfWork.SaveChangeAsync();
-                response.Data = appointmentDTO;
-                response.isSuccess = true;
-                response.Message = "Appointment created successfully";
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
+                else
+                {
+
+                    await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+                    await _unitOfWork.SaveChangeAsync();
+
+                    var currentID = _claimsService.GetCurrentUserId;
+                    var appointmentDTO = _mapper.Map<AppointmentDTO>(appointment);
+
+                    var appointmentDetail = new AppointmentDetail
+                    {
+                        AppointmentId = appointment.Id,
+                        UserId = currentID.ToString()
+                    };
+                    await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
+                    await _unitOfWork.SaveChangeAsync();
+                    response.Data = appointmentDTO;
+                    response.isSuccess = true;
+                    response.Message = "Appointment created successfully";
+                }
             }
             catch (Exception ex)
             {
-     
+
                 response.Data = null;
                 response.isSuccess = false;
                 response.Message = $"An error occurred while creating the appointment: {ex.Message}";
@@ -81,13 +96,23 @@ namespace eFurnitureProject.Application.Services
                 if (existingAppointment != null)
                 {
                     var updateAppointment = _mapper.Map(appointmentDTO, existingAppointment);
-                    var saveAppointment = await _unitOfWork.SaveChangeAsync();
-                    if (saveAppointment > 0)
+                    ValidationResult validationResult = await _createAppointmentValidator.ValidateAsync(appointmentDTO);
+                    if (!validationResult.IsValid)
                     {
+                        response.isSuccess = false;
+                        response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                         return response;
                     }
+                    else
+                    {
+                        var saveAppointment = await _unitOfWork.SaveChangeAsync();
+                        if (saveAppointment > 0)
+                        {
+                            return response;
+                        }
 
 
+                    }
                 }
             }catch (Exception ex)
             {
@@ -116,53 +141,55 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<IEnumerable<AppointmentDTO>>> Filter(int page, String UserID, string AppointName, DateTime DateTime, String Email, int Status, int pageSize)
-        {
-            var response = new ApiResponse<IEnumerable<AppointmentDTO>>();
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserID, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize) 
+        { 
+
+        var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
 
             try
             {
-                IEnumerable<Appointment> appointments;
+                Pagination<AppoitmentDetailViewDTO> appointments;
 
                 if (string.IsNullOrEmpty(UserID) && string.IsNullOrEmpty(AppointName) && DateTime == default && string.IsNullOrEmpty(Email) && Status == 0)
                 {
-                    var pagination = await _unitOfWork.AppointmentRepository.ToPagination(page - 1, pageSize);
-                    response.Data = _mapper.Map<IEnumerable<AppointmentDTO>>(pagination.Items);
-                    response.isSuccess = true;
-                    response.Message = "Get all appointments successfully";
+                  
+                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page, pageSize);
+                    var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
+
+                    response.Data = result;
                     return response;
                 }
 
                 if (!string.IsNullOrEmpty(UserID))
                 {
-                    appointments =await _unitOfWork.AppointmentRepository.GetAppointmentsByUserIdAsync(UserID);
+                    appointments =await _unitOfWork.AppointmentRepository.GetAppointmentsByUserIdAsync(page, pageSize, UserID);
                 }
                 else if (!string.IsNullOrEmpty(AppointName))
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByNameAsync(AppointName);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByNameAsync(page, pageSize,AppointName);
                 }
                 else if (DateTime != default)
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(DateTime);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(page,pageSize,DateTime);
                 }
                 else if (!string.IsNullOrEmpty(Email))
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByEmailAsync(Email);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByEmailAsync(page, pageSize,Email);
                 }
                 else if (Status != 0)
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(Status);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(page, pageSize,Status);
                 }
                 else
                 {
-                    var pagination = await _unitOfWork.AppointmentRepository.ToPagination(page - 1, pageSize);
-                    response.Data = _mapper.Map<IEnumerable<AppointmentDTO>>(pagination.Items);
+                    var pagination = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page - 1, pageSize);
+                    response.Data = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(pagination);
                     response.isSuccess = true;
                     response.Message = "Get all appointments successfully";
                     return response;
                 }
 
-                var appointmentDTOs = _mapper.Map<IEnumerable<AppointmentDTO>>(appointments);
+                var appointmentDTOs = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointments);
                 response.Data = appointmentDTOs;
                 response.isSuccess = true;
                 response.Message = "Get all appointments successfully";

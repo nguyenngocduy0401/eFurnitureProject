@@ -27,7 +27,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _userManager = userManager;
         }
 
-        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentPaging(int pageIndex=1, int pageSize=10)
+        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentPaging(int pageIndex, int pageSize)
         {
             var query = _dbSet.Include(a => a.AppointmentDetail)
                      .ThenInclude(ad => ad.User)
@@ -71,47 +71,209 @@ namespace eFurnitureProject.Infrastructures.Repositories
         }
 
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByDateTimeAsync(DateTime dateTime)
+        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByDateTimeAsync(int pageIndex , int pageSize ,DateTime dateTime)
         {
-            var appointment = await _dbContext.Appointments.Where(u => u.Date ==dateTime).ToListAsync();
+           
+            DateTime startDateTime = dateTime.Date;
+            DateTime endDateTime = startDateTime.AddDays(1);
 
+         
+            var query = _dbSet.Include(a => a.AppointmentDetail)
+                              .ThenInclude(ad => ad.User)
+                              .Where(a => a.Date >= startDateTime && a.Date < endDateTime)
+                              .OrderByDescending(x => x.CreationDate)
+                              .AsNoTracking();
 
-            return appointment;
+            var itemCount = await query.CountAsync();
+            var items = await query.ToListAsync();
+
+            var customerUserIds = (await _userManager.GetUsersInRoleAsync("Customer")).Select(u => u.Id).ToList();
+
+            var staffUserIds = (await _userManager.GetUsersInRoleAsync("Staff")).Select(u => u.Id).ToList();
+
+            var appointmentDTOs = items.Select(appointment => new AppoitmentDetailViewDTO
+            {
+                Id = appointment.Id,
+                Name = appointment.Name,
+                Date = appointment.Date,
+                PhoneNumber = appointment.PhoneNumber,
+                Email = appointment.Email,
+                Status = appointment.Status,
+                Time = appointment.Time,
+                CustomerName = appointment.AppointmentDetail?.FirstOrDefault(ad => customerUserIds.Contains(ad.UserId))?.User?.UserName,
+                StaffName = appointment.AppointmentDetail?.Where(ad => staffUserIds.Contains(ad.UserId)).Select(ad => ad.User?.Name).ToList()
+            }).ToList();
+
+            var result = new Pagination<AppoitmentDetailViewDTO>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = appointmentDTOs,
+            };
+
+            return result;
         }
 
-        public async Task<IEnumerable <Appointment>> GetAppointmentsByEmailAsync(string email)
+        public async  Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByEmailAsync(int pageIndex, int pageSize, string email)
         {
-            var appointment = await _dbContext.Appointments.Where(u => u.Email == email).ToListAsync();
+            var query = _dbSet.Include(a => a.AppointmentDetail)
+                             .ThenInclude(ad => ad.User)
+                             .Where(p => p.Email.ToLower().Contains(email.ToLower()))
+                             .OrderByDescending(x => x.CreationDate)
+                             .AsNoTracking();
+
+            var itemCount = await query.CountAsync();
+            var items = await query.ToListAsync();
 
 
-            return appointment;
+            var customerUserIds = await _userManager.GetUsersInRoleAsync("Customer");
+            var customerUserId = customerUserIds.FirstOrDefault()?.Id;
+
+            var staffUserIds = await _userManager.GetUsersInRoleAsync("Staff");
+            var staffUserIdsList = staffUserIds.Select(user => user.Id).ToList();
+
+            var appointmentDTOs = items.Select(appointment => new AppoitmentDetailViewDTO
+            {
+                Id = appointment.Id,
+                Name = appointment.Name,
+                Date = appointment.Date,
+                PhoneNumber = appointment.PhoneNumber,
+                Email = appointment.Email,
+                Status = appointment.Status,
+                Time = appointment.Time,
+                CustomerName = appointment.AppointmentDetail?.FirstOrDefault(ad => ad.UserId == customerUserId)?.User?.UserName,
+                StaffName = appointment.AppointmentDetail?.Where(ad => staffUserIdsList.Contains(ad.UserId)).Select(ad => ad.User?.Name).ToList()
+            }).ToList();
+
+            var result = new Pagination<AppoitmentDetailViewDTO>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = appointmentDTOs,
+            };
+
+            return result;
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByNameAsync(string appointName)
+        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByNameAsync(int pageIndex, int pageSize, string appointName)
         {
-            var appointment = await _dbContext.Appointments.Where(u => u.Name == appointName).ToListAsync();
+            var query = _dbSet.Include(a => a.AppointmentDetail)
+                             .ThenInclude(ad => ad.User)
+                             .Where(p => p.Name.ToLower().Contains(appointName.ToLower()))
+                             .OrderByDescending(x => x.CreationDate)
+                             .AsNoTracking();
 
+            var itemCount = await query.CountAsync();
+            var items = await query.ToListAsync();
 
-            return appointment;
+            var customerUserIds = (await _userManager.GetUsersInRoleAsync("Customer")).Select(u => u.Id).ToList();
+
+            var staffUserIds = (await _userManager.GetUsersInRoleAsync("Staff")).Select(u => u.Id).ToList();
+
+            var appointmentDTOs = items.Select(appointment => new AppoitmentDetailViewDTO
+            {
+                Id = appointment.Id,
+                Name = appointment.Name,
+                Date = appointment.Date,
+                PhoneNumber = appointment.PhoneNumber,
+                Email = appointment.Email,
+                Status = appointment.Status,
+                Time = appointment.Time,
+                CustomerName = appointment.AppointmentDetail?.FirstOrDefault(ad => customerUserIds.Contains(ad.UserId))?.User?.UserName,
+                StaffName = appointment.AppointmentDetail?.Where(ad => staffUserIds.Contains(ad.UserId)).Select(ad => ad.User?.Name).ToList()
+            }).ToList();
+
+            var result = new Pagination<AppoitmentDetailViewDTO>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = appointmentDTOs,
+            };
+
+            return result;
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByStatusAsync(int status)
+        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByStatusAsync(int pageIndex, int pageSize, int status )
         {
-            var appointment = await _dbContext.Appointments.Where(u => u.Status == status).ToListAsync();
+            var query = _dbSet.Include(a => a.AppointmentDetail)
+                            .ThenInclude(ad => ad.User)
+                            .Where(p => p.Status == status)
+                            .OrderByDescending(x => x.CreationDate)
+                            .AsNoTracking();
 
+            var itemCount = await query.CountAsync();
+            var items = await query.ToListAsync();
 
-            return appointment;
+            var customerUserIds = (await _userManager.GetUsersInRoleAsync("Customer")).Select(u => u.Id).ToList();
+
+            var staffUserIds = (await _userManager.GetUsersInRoleAsync("Staff")).Select(u => u.Id).ToList();
+
+            var appointmentDTOs = items.Select(appointment => new AppoitmentDetailViewDTO
+            {
+                Id = appointment.Id,
+                Name = appointment.Name,
+                Date = appointment.Date,
+                PhoneNumber = appointment.PhoneNumber,
+                Email = appointment.Email,
+                Status = appointment.Status,
+                Time = appointment.Time,
+                CustomerName = appointment.AppointmentDetail?.FirstOrDefault(ad => customerUserIds.Contains(ad.UserId))?.User?.UserName,
+                StaffName = appointment.AppointmentDetail?.Where(ad => staffUserIds.Contains(ad.UserId)).Select(ad => ad.User?.Name).ToList()
+            }).ToList();
+
+            var result = new Pagination<AppoitmentDetailViewDTO>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = appointmentDTOs,
+            };
+
+            return result;
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByUserIdAsync(string userID)
-        {
-            var query = from appointmentDetail in _dbContext.AppointmentDetails
-                        join appointment in _dbContext.Appointments on appointmentDetail.AppointmentId equals appointment.Id
-                        where appointmentDetail.UserId == userID
-                        select appointment;
-            return await query.ToListAsync();
-        }
-        
+       
 
+        public async Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByUserIdAsync(int pageIndex, int pageSize, string userID)
+        {
+            var query = _dbSet.Include(a => a.AppointmentDetail)
+                            .ThenInclude(ad => ad.User)
+                             .Where(a => a.AppointmentDetail.Any(ad => ad.UserId == userID))
+                            .OrderByDescending(x => x.CreationDate)
+                            .AsNoTracking();
+
+            var itemCount = await query.CountAsync();
+            var items = await query.ToListAsync();
+
+            var customerUserIds = (await _userManager.GetUsersInRoleAsync("Customer")).Select(u => u.Id).ToList();
+
+            var staffUserIds = (await _userManager.GetUsersInRoleAsync("Staff")).Select(u => u.Id).ToList();
+
+            var appointmentDTOs = items.Select(appointment => new AppoitmentDetailViewDTO
+            {
+                Id = appointment.Id,
+                Name = appointment.Name,
+                Date = appointment.Date,
+                PhoneNumber = appointment.PhoneNumber,
+                Email = appointment.Email,
+                Status = appointment.Status,
+                Time = appointment.Time,
+                CustomerName = appointment.AppointmentDetail?.FirstOrDefault(ad => customerUserIds.Contains(ad.UserId))?.User?.UserName,
+                StaffName = appointment.AppointmentDetail?.Where(ad => staffUserIds.Contains(ad.UserId)).Select(ad => ad.User?.Name).ToList()
+            }).ToList();
+
+            var result = new Pagination<AppoitmentDetailViewDTO>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = appointmentDTOs,
+            };
+
+            return result;
+        }
     }
 }

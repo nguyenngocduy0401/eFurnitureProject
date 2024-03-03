@@ -1,10 +1,12 @@
 ﻿using eFurnitureProject.API.Services;
+using eFurnitureProject.API.Validator.AppointmentValidator;
 using eFurnitureProject.API.Validator.AuthenticationValidator;
 using eFurnitureProject.API.Validator.ContractValidator;
 using eFurnitureProject.API.Validator.ProductValidator;
 using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Services;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
@@ -77,6 +79,7 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<CreateContractDTO>, CreateContractViewModelValidation>();
             services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
             services.AddTransient<IValidator<CreateProductDTO>, CreateProductValidation>();
+            services.AddTransient<IValidator<CreateAppointmentDTO>,CreateAppointmentValidation>();
             #endregion
 
             return services;

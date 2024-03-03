@@ -13,10 +13,10 @@ namespace eFurnitureProject.Application.Repositories
     public interface IAppointmentRepository : IGenericRepository<Appointment>
     {
         Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentPaging(int pageIndex = 0, int pageSize = 10);
-        Task<IEnumerable<Appointment>> GetAppointmentsByDateTimeAsync(DateTime dateTime);
-        Task<IEnumerable<Appointment>> GetAppointmentsByEmailAsync(string email);
-        Task<IEnumerable<Appointment>> GetAppointmentsByNameAsync(string appointName);
-        Task<IEnumerable<Appointment>> GetAppointmentsByStatusAsync(int status);
-        Task<IEnumerable<Appointment>> GetAppointmentsByUserIdAsync(string userID);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByDateTimeAsync(int pageIndex, int pageSize, DateTime dateTime);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByEmailAsync(int pageIndex, int pageSize, string email);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByNameAsync(int pageIndex, int pageSize, string appointName);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByStatusAsync(int pageIndex, int pageSize,int status);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByUserIdAsync(int pageIndex, int pageSize, string userID);
        }
 }

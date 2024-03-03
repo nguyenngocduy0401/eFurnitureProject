@@ -1,5 +1,6 @@
 ﻿using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> FilterOrder(string UserID, Guid StatusId)
+        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> FilterOrder(string UserID, Guid StatusId, int pageIndex, int pageSize)
         {
             return await _service.GetOrderFilter(pageIndex, pageSize, UserID, StatusId);
         }

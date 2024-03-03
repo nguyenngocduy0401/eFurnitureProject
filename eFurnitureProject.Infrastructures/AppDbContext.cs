@@ -42,6 +42,7 @@ namespace eFurnitureProject.Infrastructures
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<VoucherDetail> VouchersDetails { get; set;}
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Response> Responses { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

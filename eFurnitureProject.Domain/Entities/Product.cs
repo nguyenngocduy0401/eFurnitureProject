@@ -14,6 +14,7 @@ namespace eFurnitureProject.Domain.Entities
         public string? Image { get; set; }
         public int InventoryQuantity { get; set; }
         public int Status { get; set; }
+        public Double price {  get; set; }
         [Column(Order = 2)]
         public Guid? CategoryId { get; set; }
         [ForeignKey("CategoryId")]

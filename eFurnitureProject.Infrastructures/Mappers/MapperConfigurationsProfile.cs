@@ -1,5 +1,4 @@
-using AutoMapper;
-using eFurnitureProject.Application.Commons;
+using AutoMapper;using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
@@ -22,21 +21,18 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateVoucherDTO, Voucher>();
             CreateMap<VoucherViewDTO, Voucher>();
             CreateMap<Voucher, VoucherViewDTO>();
-            CreateMap<Product,ProductDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
-<<<<<<< HEAD
-=======
             CreateMap<Appointment, AppointmentDetail>();
->>>>>>> main
             CreateMap<CreateContractDTO, Contract>();
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
-<<<<<<< HEAD
+
             CreateMap<CreateAppointmentDTO, Appointment>();
             CreateMap<AppointmentDetailDTO, AppointmentDetail>();
             CreateMap<Appointment, AppointmentDTO>();
@@ -47,14 +43,17 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateAppointmentDTO, AppointmentDetail>();
             CreateMap<User, AppointmentDetail>();
             CreateMap<AppointmentDetailDTO, User>();
-=======
+
             CreateMap <ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
             CreateMap<OrderDetail, OrderDetailViewDTO>();
             CreateMap<OrderDetailViewDTO, OrderDetail>();
             CreateMap<Transaction,TransactionViewDTO>();
             CreateMap<TransactionViewDTO, Transaction>();
->>>>>>> main
+
+
+            CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
+
         }
     }
 }

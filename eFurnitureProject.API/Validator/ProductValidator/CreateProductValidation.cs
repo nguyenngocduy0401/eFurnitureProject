@@ -16,13 +16,7 @@ namespace eFurnitureProject.API.Validator.ProductValidator
                     .NotEmpty().WithMessage("Description is required");
 
                 RuleFor(x => x.Image)
-                    .NotEmpty().WithMessage("Image is required");
-
-                RuleFor(x => x.InventoryQuantity)
-                    .NotEmpty().WithMessage("InventoryQuantity is required")
-                    .GreaterThan(0).WithMessage("InventoryQuantity must be greater than 0");
-
-                RuleFor(x => x.Status)
+                  
                     .NotEmpty().WithMessage("Status is required");
 
                 RuleFor(x => x.CategoryId)

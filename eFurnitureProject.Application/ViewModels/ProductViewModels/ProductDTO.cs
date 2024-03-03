@@ -14,6 +14,7 @@ namespace eFurnitureProject.Application.ViewModels.ProductDTO
         public string? Image { get; set; }
         public int InventoryQuantity { get; set; }
         public int Status { get; set; }
+        public double? Price { get; set; }
         public Guid? CategoryId { get; set; }
         public string? CategoryName { get; set; }
     }

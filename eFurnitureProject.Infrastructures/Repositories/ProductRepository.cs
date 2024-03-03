@@ -26,15 +26,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = context;
         }
 
-        public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        public string? Image { get; set; }
-        public int? InventoryQuantity { get; set; }
-        public int Status { get; set; }
-        public Guid? CategoryId { get; set; }
-        public string? CategoryName { get; set; }
-
+      
         public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryNameAsync(string categoryName)
         {
             var product = await _dbContext.Products
@@ -56,114 +48,137 @@ namespace eFurnitureProject.Infrastructures.Repositories
             return product;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetProductsByNameAsync(string productName)
+        public async Task<Pagination<ProductDTO>> GetProductsByNameAsync(string productName, int pageIndex, int pageSize)
         {
-            var product = await _dbContext.Products
-                            .Include(p => p.Category)
-                            .Where(p => p.Name == productName)
-                            .Select(p => new ProductDTO
-                            {
-                                Id = p.Id,
-                                Name = p.Name,
-                                Description = p.Description,
-                                Image = p.Image,
-                                InventoryQuantity = p.InventoryQuantity,
-                                Status = p.Status,
-                                CategoryId = p.Category.Id,
-                                CategoryName = p.Category.Name
-                            })
-                            .ToListAsync();
-
-            return product;
-        }
-        public async Task<IEnumerable<ProductDTO>> GetProductsByAmountAsync(int amount)
+            var products = await _dbContext.Products
+        .Include(p => p.Category)
+        .Where(p => p.Name.ToLower().Contains(productName.ToLower()))
+        .Select(p => new ProductDTO
         {
-            var product = await _dbContext.Products
-                            .Include(p => p.Category)
-                            .Where(p => p.InventoryQuantity == amount)
-                            .Select(p => new ProductDTO
-                            {
-                                Id = p.Id,
-                                Name = p.Name,
-                                Description = p.Description,
-                                Image = p.Image,
-                                InventoryQuantity = p.InventoryQuantity,
-                                Status = p.Status,
-                                CategoryId = p.Category.Id,
-                                CategoryName = p.Category.Name
-                            })
-                            .ToListAsync();
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Image = p.Image,
+            InventoryQuantity = p.InventoryQuantity,
+            Status = p.Status,
+            Price = p.Price,
+            CategoryId = p.Category.Id,
+            CategoryName = p.Category.Name
+        })
+        .ToListAsync();
 
-            return product;
-        }
+            var totalItems = products.Count;
 
-       
-     
+            var paginatedProducts = products.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
 
-      
-        public async Task<IEnumerable<ProductDTO>> GetAll(int page, List<Guid> categoryId, string ProductName, int amount, int pageSize )
-        {
-            IQueryable<Product> query = _dbContext.Products;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            // Apply filters
-            if (categoryId != null && categoryId.Any())
+            var pagination = new Pagination<ProductDTO>
             {
-                query = query.Where(p => categoryId.Contains(p.CategoryId.Value));
-            }
-            if (!string.IsNullOrEmpty(ProductName))
-            {
-                query = query.Where(p => p.Name.Contains(ProductName));
-            }
-            if (amount > 0)
-            {
-                query = query.Where(p => p.InventoryQuantity >= amount);
-            }
-            var result = await query.Join(
-           _dbContext.Categories,
-           product => product.CategoryId,
-           category => category.Id,
-           (product, category) => new ProductDTO
-           {
-               Id = product.Id,
-               Name = product.Name,
-               CategoryId = product.CategoryId,
-               CategoryName = category.Name,
-               InventoryQuantity = product.InventoryQuantity
-           })
-           .Skip((page - 1) * pageSize)
-           .Take(pageSize)
-           .ToListAsync();
-            return result;
+                Items = paginatedProducts,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+                 
+            };
 
+            return pagination;
         }
-        public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryIDAsync(List<Guid> categoryIds)
+        public async Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double minPrice, double maxPrice, int pageIndex, int pageSize)
         {
-            var product = await _dbContext.Products
-         .Include(p => p.Category)
-         .Where(p => categoryIds.Contains(p.CategoryId.GetValueOrDefault())) // Close the Contains method call here
-         .Select(p => new ProductDTO
-         {
-             Id = p.Id,
-             Name = p.Name,
-             Description = p.Description,
-             Image = p.Image,
-             InventoryQuantity = p.InventoryQuantity,
-             Status = p.Status,
-             CategoryId = p.Category.Id,
-             CategoryName = p.Category.Name
-         })
-         .ToListAsync();
 
-            return product;
+
+            IQueryable<Product> query = _dbContext.Products.Include(p => p.Category);
+
+            if (minPrice >= 0 && maxPrice >= 0 && minPrice <=maxPrice)
+            {
+                query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+            }
+            else if (minPrice >= 0)
+            {
+                query = query.Where(p => p.Price == minPrice);
+            }
+            else if (maxPrice >= 0)
+            {
+                query = query.Where(p => p.Price == maxPrice);
+            }
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            pageIndex = Math.Max(1, Math.Min(pageIndex, totalPages)); // Ensure pageIndex is within valid range
+
+            var paginatedProducts = await query
+                .Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Image = p.Image,
+                    InventoryQuantity = p.InventoryQuantity,
+                    Status = p.Status,Price=p.Price,
+                    CategoryId = p.Category.Id,
+                    CategoryName = p.Category.Name
+                })
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                Items = paginatedProducts,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+              
+            };
+
+            return pagination;
         }
 
+        
 
 
-      
 
-      
 
-       
+
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAsync(Guid categoryId, int pageIndex, int pageSize)
+        {
+           
+            var products = await _dbContext.Products
+      .Include(p => p.Category)
+      .Where(p => p.CategoryId == categoryId)
+      .Select(p => new ProductDTO
+      {
+          Id = p.Id,
+          Name = p.Name,
+          Description = p.Description,
+          Image = p.Image,
+          InventoryQuantity = p.InventoryQuantity,
+          Status = p.Status,
+          Price = p.Price,
+          CategoryId = p.Category.Id,
+          CategoryName = p.Category.Name
+      })
+      .ToListAsync();
+
+            var totalItems = products.Count;
+
+            var paginatedProducts = products.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                Items = paginatedProducts,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+
+            };
+
+            return pagination;
+        }
 
 
 
@@ -173,7 +188,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
            var query = (from product in _dbContext.Products
                                  join category in _dbContext.Categories
                                  on product.CategoryId equals category.Id
-                     where product.IsDeleted == false // san pham chua co xoa
+                     
                      select new ProductDTO
                                  {
                                      Id= product.Id,
@@ -182,7 +197,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
                                      Image = product.Image,
                                      InventoryQuantity = product.InventoryQuantity,
                                      Status = product.Status,
-                                     CategoryId = category.Id,
+                         Price = product.Price,
+                         CategoryId = category.Id,
                                      CategoryName = category.Name
                                  });
 
@@ -206,7 +222,47 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
                     return pagination;
                 }
+        public async Task<Pagination<ProductDTO>> ToPaginationProductNotDeleted(int pageIndex = 0, int pageSize = 10)
+        {
 
-      
+            var query = (from product in _dbContext.Products
+                         join category in _dbContext.Categories
+                         on product.CategoryId equals category.Id
+                         where product.IsDeleted == false // san pham chua co xoa
+                         select new ProductDTO
+                         {
+                             Id = product.Id,
+                             Name = product.Name,
+                             Description = product.Description,
+                             Image = product.Image,
+                             InventoryQuantity = product.InventoryQuantity,
+                             Status = product.Status,
+                             Price=product.Price,
+                             CategoryId = category.Id,
+                             CategoryName = category.Name
+                         });
+
+            var totalItemsCount = await query.CountAsync();
+
+
+            var products = await query
+                .OrderByDescending(p => p.InventoryQuantity)
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItemsCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+
     }
 }

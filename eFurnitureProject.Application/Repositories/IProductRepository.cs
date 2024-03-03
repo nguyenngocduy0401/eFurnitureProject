@@ -14,9 +14,11 @@ namespace eFurnitureProject.Application.Repositories
     {
       
         Task<IEnumerable<ProductDTO>> GetProductsByCategoryNameAsync(string categoryName);
-        Task<IEnumerable<ProductDTO>> GetProductsByNameAsync(string productName);
-        Task<IEnumerable<ProductDTO>> GetProductsByAmountAsync(int amount);
-        Task<IEnumerable<ProductDTO>> GetProductsByCategoryIDAsync(List<Guid> categoryIds);
+        Task<Pagination<ProductDTO>> GetProductsByNameAsync(string productName, int pageIndex, int pageSize);
+        Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double minPrice, double maxPrice, int pageIndex, int pageSize);
+
+        Task<Pagination<ProductDTO>> ToPaginationProductNotDeleted(int pageIndex = 0, int pageSize = 10);
+        Task<Pagination<ProductDTO>> GetProductsByCategoryIDAsync(Guid categoryIds, int pageIndex, int pageSize);
         Task<Pagination<ProductDTO>> ToPaginationProduct(int pageIndex = 0, int pageSize = 10);
        
 

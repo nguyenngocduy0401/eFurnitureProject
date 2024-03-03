@@ -11,6 +11,7 @@ namespace eFurnitureProject.Domain.Entities
     {
         public DateTime DateTime { get; set; }
         public int Price { get; set; }
+        //public int Paid { get; set; } = 0;
         public Guid? StatusId { get; set; }
         [ForeignKey("StatusId")]
         public StatusOrder? StatusOrder { get; set; }
@@ -20,7 +21,7 @@ namespace eFurnitureProject.Domain.Entities
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public User? User { get; set; }
-
+        
         public virtual ICollection<OrderDetail>? OrderDetail { get; set; }
 
 

@@ -15,7 +15,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
         {
             CreateMap<UserLoginDTO, User>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<UserRegisterDTO, User>().ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
+            CreateMap<UserRegisterDTO, User>()
+                .ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
             CreateMap<ProductViewDTO, Product>();
             CreateMap<CreateVoucherDTO, Voucher>();
             CreateMap<VoucherViewDTO, Voucher>();
@@ -30,7 +31,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
-            CreateMap<User, UserViewDTO>(); 
+            CreateMap<User, UserViewDTO>()
+                .ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.PasswordHash)); 
         }
     }
 }

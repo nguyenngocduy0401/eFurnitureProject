@@ -10,6 +10,8 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IUserService
     {
+        Task<ApiResponse<Pagination<UserViewDTO>>> ;
+        Task<ApiResponse<UserViewDTO>> FilterUser(string name);
         Task<ApiResponse<UserViewDTO>> GetUserByID(string userID);
         Task<ApiResponse<UserViewDTO>> GetUserInformationByLogin();
     }

@@ -35,6 +35,29 @@ namespace eFurnitureProject.Application.Services
             _userManager = userManager;
         }
 
+
+        public async Task<ApiResponse<IEnumerable<UserViewDTO>>> FilterUser()
+        {
+            var response = new ApiResponse<IEnumerable<UserViewDTO>>();
+            try
+            {
+                response.isSuccess = true;
+                response.Message = "Get information successful!";
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+
+        }
+
         [Authorize(Roles = AppRole.Admin)]
         public async Task<ApiResponse<UserViewDTO>> GetUserByID(string userID)
         {
@@ -46,12 +69,12 @@ namespace eFurnitureProject.Application.Services
                 if (user == null)
                 {
                     response.isSuccess = false;
-                    response.Message = "Get information successful!";
+                    response.Message = "Get information fail!";
                     return response;
                 }
                 response.Data = userData;
                 response.isSuccess = true;
-                response.Message = "Get information fail!";
+                response.Message = "Get information successful!";
             }
             catch (DbException ex)
             {
@@ -67,23 +90,23 @@ namespace eFurnitureProject.Application.Services
         }
 
         [Authorize()]
-        public Task<ApiResponse<UserViewDTO>> GetUserInformationByLogin()
+        public async Task<ApiResponse<UserViewDTO>> GetUserInformationByLogin()
         {
             var response = new ApiResponse<UserViewDTO>();
             try
             {
                 var userID = _claimsService.GetCurrentUserId;
-                var user = await _userManager.FindByIdAsync(userID);
+                var user = await _userManager.FindByIdAsync(userID.ToString());
                 var userData = _mapper.Map<UserViewDTO>(user);
                 if (user == null)
                 {
                     response.isSuccess = false;
-                    response.Message = "Get information successful!";
+                    response.Message = "Get information fail!";
                     return response;
                 }
                 response.Data = userData;
                 response.isSuccess = true;
-                response.Message = "Get information fail!";
+                response.Message = "Get information successful!";
             }
             catch (DbException ex)
             {

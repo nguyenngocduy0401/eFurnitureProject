@@ -12,8 +12,14 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
     {
         public DateTime DateTime { get; set; }
         public int Price { get; set; }
+        public Guid? StatusId { get; set; }
+        [ForeignKey("StatusId")]
         public StatusOrder? StatusOrder { get; set; }
+        public Guid? TransactionId { get; set; }
+        [ForeignKey("TransactionId")]
         public Transaction? Transaction { get; set; }
+        public string? UserId { get; set; }
+        [ForeignKey("UserId")]
         public User? User { get; set; }
     }
 }

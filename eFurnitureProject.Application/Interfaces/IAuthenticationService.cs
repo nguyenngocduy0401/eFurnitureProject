@@ -14,5 +14,6 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<UserRegisterDTO>> RegisterAsync(UserRegisterDTO userRegisterDTO);
         Task<ApiResponse<TokenRefreshDTO>> LoginAsync(UserLoginDTO userLoginDTO);
         Task<ApiResponse<TokenRefreshDTO>> RenewTokenAsync(TokenRefreshDTO tokenRefreshDTO);
+        Task<ApiResponse<string>> Logout(string refreshToken);
     }
 }

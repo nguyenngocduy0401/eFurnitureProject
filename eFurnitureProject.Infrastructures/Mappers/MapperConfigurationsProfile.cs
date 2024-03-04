@@ -7,6 +7,7 @@ using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -16,7 +17,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
         {
             CreateMap<UserLoginDTO, User>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<UserRegisterDTO, User>().ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
+            CreateMap<UserRegisterDTO, User>()
+                .ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
             CreateMap<ProductViewDTO, Product>();
             CreateMap<CreateVoucherDTO, Voucher>();
             CreateMap<VoucherViewDTO, Voucher>();
@@ -32,7 +34,6 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
-
             CreateMap<CreateAppointmentDTO, Appointment>();
             CreateMap<AppointmentDetailDTO, AppointmentDetail>();
             CreateMap<Appointment, AppointmentDTO>();
@@ -43,15 +44,13 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateAppointmentDTO, AppointmentDetail>();
             CreateMap<User, AppointmentDetail>();
             CreateMap<AppointmentDetailDTO, User>();
-
             CreateMap <ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
             CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
-         
-
-
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
-
+            CreateMap<User, UserDetailViewDTO>();
+            CreateMap<User, UserViewDTO>().ReverseMap();
+            CreateMap<CreateUserDTO, User>();
         }
     }
 }

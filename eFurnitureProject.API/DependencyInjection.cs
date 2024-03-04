@@ -3,6 +3,7 @@ using eFurnitureProject.API.Validator.AppointmentValidator;
 using eFurnitureProject.API.Validator.AuthenticationValidator;
 using eFurnitureProject.API.Validator.ContractValidator;
 using eFurnitureProject.API.Validator.ProductValidator;
+using eFurnitureProject.API.Validator.UserValidator;
 using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Services;
@@ -80,6 +81,8 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
             services.AddTransient<IValidator<CreateProductDTO>, CreateProductValidation>();
             services.AddTransient<IValidator<CreateAppointmentDTO>,CreateAppointmentValidation>();
+            services.AddTransient<IValidator<UserPasswordDTO>, ChangePasswordValidation>();
+            services.AddTransient<IValidator<UserUpdateDTO>, UpdateUserValidation>();
             #endregion
 
             return services;

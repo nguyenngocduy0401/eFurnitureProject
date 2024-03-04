@@ -49,8 +49,8 @@ namespace eFurnitureProject.Application.Services
                     userLoginDTO.UserName, userLoginDTO.Password, false, false);
                 if (result.Succeeded)
                 {
-                    var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPassword(
-                        userLoginDTO.UserName, userLoginDTO.Password);
+                    var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPassword
+                        (userLoginDTO.UserName, userLoginDTO.Password); 
                     var userRole = await _userManager.GetRolesAsync(user);
 
                     var refreshToken = GenerateJsonWebTokenString.GenerateRefreshToken();
@@ -105,7 +105,6 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<UserRegisterDTO>();
             try
             {
-                var user = _mapper.Map<User>(userRegisterDTO);
                 ValidationResult validationResult = await _validatorRegister.ValidateAsync(userRegisterDTO);
                 if (!validationResult.IsValid)
                 {
@@ -133,6 +132,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
+                    var user = _mapper.Map<User>(userRegisterDTO);
                     var identityResult = await _userManager.CreateAsync(user, user.PasswordHash);
                     if (identityResult.Succeeded == true)
                     {
@@ -181,8 +181,6 @@ namespace eFurnitureProject.Application.Services
             {
 
                 var tokenInVerification = jwtTokenHandler.ValidateToken(tokenRefreshDTO.AccessToken, tokenValidateParam, out var validatedToken);
-
-                //check 2: Check alg
                 if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
                     var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);

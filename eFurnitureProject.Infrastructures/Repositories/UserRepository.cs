@@ -1,4 +1,5 @@
-﻿using eFurnitureProject.Application.Interfaces;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -18,9 +19,9 @@ namespace eFurnitureProject.Infrastructures.Repositories
         private readonly ICurrentTime _currentTime;
         private readonly RoleManager<Role> _roleManager;
         private readonly IClaimsService _claimsService;
-        
+
         public UserRepository(AppDbContext context, ICurrentTime currentTime,
-            IClaimsService claimsService,UserManager<User> userManager,
+            IClaimsService claimsService, UserManager<User> userManager,
             RoleManager<Role> roleManager)
         {
             _dbContext = context;
@@ -29,12 +30,44 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _userManager = userManager;
             _roleManager = roleManager;
         }
+        
+        public async Task<Pagination<User>> GetUsersByFilter
+            (string search, string role, int pageIndex = 1, int pageSize = 10) 
+        {
+            var userList = _dbContext.Users
+            .Where(u =>
+            string.IsNullOrEmpty(search) ||
+            u.Name.Contains(search) ||
+            u.PhoneNumber.Contains(search) ||
+            u.Email.Contains(search));
+            if (!string.IsNullOrEmpty(role))
+            {
+                var usersInRole = await _userManager.GetUsersInRoleAsync(role);
+                var userIdsInRole = usersInRole.Select(u => u.Id);
+                userList = userList.Where(u => userIdsInRole.Contains(u.Id));
+            }
 
+            var itemCount = await userList.CountAsync();
+            var items = await userList
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .ToListAsync();
+
+            var result = new Pagination<User>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+            return result; 
+        }
+        
         public async Task AddAsync(User user)
         {
            await _dbContext.AddAsync(user);
         }
-
         public async Task<bool> CheckEmailNameExisted(string emailName) => 
             await _dbContext.Users.AnyAsync(u => u.Email == emailName);
 
@@ -53,6 +86,12 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 throw new Exception("Username or password is not correct!");
             }
             return user;
+        }
+
+        public async Task<List<string>> GetRolesByUserId(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return (List<string>)(user != null ? await _userManager.GetRolesAsync(user) : new List<string>());
         }
     }
 }

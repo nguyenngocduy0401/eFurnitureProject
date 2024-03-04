@@ -75,6 +75,7 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
             services.AddTransient<IValidator<UserPasswordDTO>, ChangePasswordValidation>();
             services.AddTransient<IValidator<UserUpdateDTO>, UpdateUserValidation>();
+            services.AddTransient<IValidator<CreateUserDTO>, CreateUserValidation>();
             #endregion
 
             return services;

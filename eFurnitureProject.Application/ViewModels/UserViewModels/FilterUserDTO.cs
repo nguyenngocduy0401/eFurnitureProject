@@ -8,5 +8,9 @@ namespace eFurnitureProject.Application.ViewModels.UserViewModels
 {
     public class FilterUserDTO
     {
+        public string? search { get; set; }
+        public int? role { get; set; }
+        public int pageIndex { get; set; } = 0;
+        public int pageSize { get; set; } = 10;
     }
 }

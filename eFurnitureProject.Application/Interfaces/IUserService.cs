@@ -10,9 +10,12 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<ApiResponse<Pagination<UserViewDTO>>> ;
-        Task<ApiResponse<UserViewDTO>> FilterUser(string name);
-        Task<ApiResponse<UserViewDTO>> GetUserByID(string userID);
+        Task<ApiResponse<Pagination<UserDetailViewDTO>>> GetUsersByFilter(FilterUserDTO filterUserDTO);
+        Task<ApiResponse<UserDetailViewDTO>> GetUserByID(string userID);
         Task<ApiResponse<UserViewDTO>> GetUserInformationByLogin();
+        Task<ApiResponse<string>> ChangePassword(UserPasswordDTO userPasswordDTO);
+        Task<ApiResponse<UserViewDTO>> UpdateUser(UserUpdateDTO userUpdateDTO);
+        Task<ApiResponse<string>> BanAndUnbanUser(string userID);
+        Task<ApiResponse<CreateUserDTO>> CreateUser(CreateUserDTO createUserDTO);
     }
 }

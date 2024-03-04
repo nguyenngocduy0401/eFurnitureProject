@@ -30,15 +30,22 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        public async Task<Pagination<User>> GetProductsByFilter
-            (string search, string role, DateTime setLockoutEndDate, int pageIndex = 1, int pageSize = 10) 
+        
+        public async Task<Pagination<User>> GetUsersByFilter
+            (string search, string role, int pageIndex = 1, int pageSize = 10) 
         {
             var userList = _dbContext.Users
-            .Where(u => (string.IsNullOrEmpty(search) ||
-                   u.Name.Contains(search) ||
-                   u.PhoneNumber.Contains(search) ||
-                   u.Email.Contains(search)) && _roleManager.Roles.Any(r => r.Name == role) &&
-                  (u.LockoutEnd == null || u.LockoutEnd <= setLockoutEndDate));
+            .Where(u =>
+            string.IsNullOrEmpty(search) ||
+            u.Name.Contains(search) ||
+            u.PhoneNumber.Contains(search) ||
+            u.Email.Contains(search));
+            if (!string.IsNullOrEmpty(role))
+            {
+                var usersInRole = await _userManager.GetUsersInRoleAsync(role);
+                var userIdsInRole = usersInRole.Select(u => u.Id);
+                userList = userList.Where(u => userIdsInRole.Contains(u.Id));
+            }
 
             var itemCount = await userList.CountAsync();
             var items = await userList
@@ -79,6 +86,12 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 throw new Exception("Username or password is not correct!");
             }
             return user;
+        }
+
+        public async Task<List<string>> GetRolesByUserId(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return (List<string>)(user != null ? await _userManager.GetRolesAsync(user) : new List<string>());
         }
     }
 }

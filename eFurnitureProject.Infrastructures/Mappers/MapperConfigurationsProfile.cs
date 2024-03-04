@@ -6,6 +6,7 @@ using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using Microsoft.AspNetCore.Identity;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -31,8 +32,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
-            CreateMap<User, UserViewDTO>()
-                .ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.PasswordHash)); 
+            CreateMap<User, UserDetailViewDTO>();
+            CreateMap<User, UserViewDTO>().ReverseMap();
+            CreateMap<CreateUserDTO, User>();
         }
     }
 }

@@ -29,7 +29,7 @@ namespace eFurnitureProject.Infrastructures.DataInitializer
 
                 if (userRole == null)
                 {
-                    var newUser = await _userManager.CreateAsync(new User { UserName = role, PasswordHash = role });
+                    var newUser = await _userManager.CreateAsync(new User { UserName = role }, role);
 
                     if (newUser.Succeeded)
                     {

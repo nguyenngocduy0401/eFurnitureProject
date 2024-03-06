@@ -20,7 +20,7 @@ namespace eFurnitureProject.Infrastructures.DataInitializer
         }
         public async Task RoleInitializeAsync()
         {
-                string[] roleNames = { AppRole.Admin, AppRole.Customer, AppRole.Staff, AppRole.DeliveryStaff };
+            string[] roleNames = { AppRole.Admin, AppRole.Customer, AppRole.Staff, AppRole.DeliveryStaff };
 
 
             IdentityResult roleResult;

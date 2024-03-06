@@ -8,7 +8,6 @@ namespace eFurnitureProject.Domain.Enums
 {
     public enum AppointmentStatus
     {
-      
         Processing = 1,
         Pending = 2,
         Completed = 3,

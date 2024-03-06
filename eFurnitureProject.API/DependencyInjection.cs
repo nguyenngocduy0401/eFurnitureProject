@@ -71,6 +71,7 @@ namespace eFurnitureProject.API
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<RoleInitializer>();
+            services.AddScoped<AccountInitializer>();
             services.AddHttpContextAccessor();
             services.AddHostedService<SetupIdentityDataSeeder>();
             services.AddControllers();

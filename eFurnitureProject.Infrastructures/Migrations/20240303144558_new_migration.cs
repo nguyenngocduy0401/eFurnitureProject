@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class newmigration : Migration
+    public partial class new_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -429,7 +429,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 columns: table => new
                 {
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

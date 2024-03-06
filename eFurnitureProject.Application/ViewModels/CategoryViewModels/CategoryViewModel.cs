@@ -10,8 +10,5 @@ namespace eFurnitureProject.Application.ViewModels.CategoryViewModels
     {
         public Guid _Id { get; set; }
         public string Name { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime? ModificationDate { get; set; }
-        public DateTime? DeletionDate { get; set; }
     }
 }

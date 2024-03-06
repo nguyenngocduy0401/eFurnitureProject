@@ -244,6 +244,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("CartId", "ProductId");
 
                     b.ToTable("CartDetails");

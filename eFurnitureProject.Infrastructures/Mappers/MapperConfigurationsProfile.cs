@@ -9,6 +9,7 @@ using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
 using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
+using eFurnitureProject.Application.ViewModels.CartViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -41,6 +42,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<CreateImportDetailDTO, ImportDetail>();
             CreateMap<UpdateImportDTO, Import>();
+            CreateMap<AddProductToCartDTO, CartDetail>();
+            CreateMap<Cart, CartDetailViewDTO>();
         }
     }
 }

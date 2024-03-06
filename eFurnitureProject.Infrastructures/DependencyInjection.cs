@@ -36,7 +36,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IVoucherService, VoucherService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IImportService, ImportService>();
-
+            services.AddScoped<ICartService, CartService>();
             #region Repository DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();

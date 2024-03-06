@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.Interfaces
 {
-    public interface IClaimsService
+    public interface ICartDetailService
     {
-        public Guid GetCurrentUserId { get; }
     }
 }

@@ -12,8 +12,8 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240229022542_new-migration")]
-    partial class newmigration
+    [Migration("20240303144558_new_migration")]
+    partial class new_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,6 +246,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("CartId", "ProductId");
 

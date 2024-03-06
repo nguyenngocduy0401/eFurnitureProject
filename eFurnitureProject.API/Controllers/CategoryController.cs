@@ -24,6 +24,6 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<CategoryViewModel>> SoftRemoveCategory(Guid categoryId) => await _categoryService.SoftRemoveCategoryAsync(categoryId);
 
         [HttpGet]
-        public async Task<ApiResponse<List<CategoryViewModel>>> GetAllCategory() => await _categoryService.GetAllCategoryAsync();
+        public async Task<ApiResponse<List<CategoryViewModel>>> GetCategories() => await _categoryService.GetAllCategoryAsync();
     }
 }

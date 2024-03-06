@@ -12,5 +12,19 @@ namespace eFurnitureProject.Infrastructures.Repositories
 {
     public class OrderDetailRepository : IOrderDetailRepository
     {
+        private readonly AppDbContext _dbContext;
+        private readonly ICurrentTime _timeService;
+        private readonly IClaimsService _claimsService;
+
+        public OrderDetailRepository(AppDbContext dbContext, ICurrentTime current, IClaimsService claimsService)
+        {
+            _dbContext = dbContext;
+            _timeService = current;
+            _claimsService = claimsService;
+        }
+        public async Task AddAsync(OrderDetail newOrderDetail)
+        {
+            await _dbContext.AddAsync(newOrderDetail);
+        }
     }
 }

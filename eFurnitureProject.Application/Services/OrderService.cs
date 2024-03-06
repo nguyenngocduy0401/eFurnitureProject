@@ -3,7 +3,10 @@ using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Domain.Entities;
+using eFurnitureProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,9 +22,9 @@ namespace eFurnitureProject.Application.Services
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) { 
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) {
             _mapper = mapper;
-            _unitOfWork = unitOfWork;  
+            _unitOfWork = unitOfWork;
             _claimsService = claimsService;
         }
 
@@ -74,7 +77,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    var viewItems = new Collection<OrderDetailViewDTO> ();
+                    var viewItems = new Collection<OrderDetailViewDTO>();
                     if (order.OrderDetail is null)
                     {
                         response.Data = viewItems;
@@ -85,7 +88,7 @@ namespace eFurnitureProject.Application.Services
                     {
                         foreach (var item in order.OrderDetail)
                         {
-                           var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
+                            var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
 
 
 
@@ -93,7 +96,7 @@ namespace eFurnitureProject.Application.Services
 
 
 
-                            if(item.Product is not null)
+                            if (item.Product is not null)
 
                             {
 
@@ -123,7 +126,7 @@ namespace eFurnitureProject.Application.Services
                             response.isSuccess = true;
                             response.Message = "No record found!";
                         }
-                    }          
+                    }
                 }
             }
             catch (Exception ex)
@@ -137,7 +140,7 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize,string UserID, Guid StatusId)
+        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilter(int pageIndex, int pageSize, string UserID, Guid StatusId)
         {
             FilterOrderDTO filterDTO = new FilterOrderDTO();
             filterDTO.UserId = UserID;
@@ -146,7 +149,7 @@ namespace eFurnitureProject.Application.Services
 
             try
             {
-                var result = await _unitOfWork.OrderRepository.GetOrderByFilter(pageIndex, pageSize,filterDTO);
+                var result = await _unitOfWork.OrderRepository.GetOrderByFilter(pageIndex, pageSize, filterDTO);
                 var viewItems = new List<OrderViewDTO>();
 
                 foreach (var order in result)
@@ -265,6 +268,7 @@ namespace eFurnitureProject.Application.Services
                         if (orderStatus is not null)
                         {
                             orderStatus.StatusCode = updateOrderStatusDTO.StatusCode;
+                            orderStatus.Name = CreateStatusOrder(updateOrderStatusDTO.StatusCode);
                         }
                         else
                         {
@@ -292,7 +296,7 @@ namespace eFurnitureProject.Application.Services
                     throw new Exception("Order not found!");
                 }
 
-                
+
 
             }
             catch (Exception ex)
@@ -305,6 +309,65 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
+        public async Task<ApiResponse<OrderViewDTO>> CreateNewOrder(CreateOrderDTO Draft)
+        {
+            var response = new ApiResponse<OrderViewDTO>();
+            var newStatusOrder = new StatusOrder();
+            newStatusOrder.StatusCode = 1;
+            newStatusOrder.Name = StatusOrderEnum.Awaiting.ToString();
+            var newOrder = new Order();
+            await _unitOfWork.OrderRepository.AddAsync(newOrder);
 
+            try
+            {
+                var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(Draft.TransactionId);
+                List<OrderDetail> Products = Draft.orderDetails.ToList();
+                if (transaction is null)
+                {
+                    throw new Exception("Create fail by not found transaction");
+                }
+                
+                foreach (var product in Products)
+                {
+                    var item = await _unitOfWork.ProductRepository.GetByIdAsync(product.ProductId);
+                    if (item is null)
+                    {
+                        throw new Exception("Product not found!");
+                    }
+                    else
+                    {
+                        var newOrderDetail = new OrderDetail();
+                        newOrderDetail.ProductId = item.Id;
+                        newOrderDetail.OrderId = newOrder.Id;
+                        newOrderDetail.Quantity = product.Quantity;
+                        newOrderDetail.Price = product.Price;
+                        await _unitOfWork.OrderDetailRepository.AddAsync(newOrderDetail);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data= null;
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
+
+        private string CreateStatusOrder(int code)
+        {
+            switch (code)
+            { 
+                case 1: return StatusOrderEnum.Awaiting.ToString();
+                case 2: return StatusOrderEnum.Delivering.ToString();
+                case 3: return StatusOrderEnum.Cancel.ToString();
+                case 4: return StatusOrderEnum.Success.ToString();
+                case 5: return StatusOrderEnum.Refuse.ToString();
+                default: return "";
+            }
+        }
     }
+
 }

@@ -41,5 +41,11 @@ namespace eFurnitureProject.API.Controllers
         {
             return await _service.UpdateVoucher(updateVoucherDTO);
         }
+        
+        [HttpGet]
+        public async Task<ApiResponse<int>> GetTotalPage(int pageSize)
+        {
+            return await _service.GetTotalPage(pageSize);
+        }
     }
 }

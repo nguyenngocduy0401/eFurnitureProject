@@ -35,5 +35,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 throw new NotImplementedException();
             }
         }
+
+        public Task<IEnumerable<object>> GetTotalPage(int pageSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

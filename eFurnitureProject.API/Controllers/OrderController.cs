@@ -45,5 +45,11 @@ namespace eFurnitureProject.API.Controllers
         {
             return await _service.GetOrderDetailById(pageIndex, pageSize, OrderId);
         }
+
+        //[HttpGet]
+        //public async Task<ApiResponse<int>> GetTotalAmountOrder()
+        //{
+        //    return await _service.GetTotalAmountOrder();
+        //}
     }
 }

@@ -13,6 +13,7 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<CreateVoucherDTO>> CreateVoucherAsync(CreateVoucherDTO createVoucherDTO);
         Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucher();
         Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucherPaging(int pageIndex, int pageSize);
+        Task<ApiResponse<int>> GetTotalPage(int pageSize);
         Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(UpdateVoucherDTO updateVoucherDTO);
     }
 }

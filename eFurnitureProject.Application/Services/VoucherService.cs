@@ -198,5 +198,52 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
+
+        public async Task<ApiResponse<int>> GetTotalPage(int pageSize)
+        {
+            var response = new ApiResponse<int>();
+
+            try
+            {
+                var result = await _unitOfWork.VoucherRepository.GetAllAsync();
+                //var viewItems = new List<VoucherViewDTO>();
+
+                //foreach (var voucher in result)
+                //{
+                //    viewItems.Add(_mapper.Map<VoucherViewDTO>(voucher));
+                //}
+
+                if (result.Count != 0)
+                {
+                    var pageCount = 0;
+                    if (result.Count % pageSize == 0)
+                    {
+                        pageCount = result.Count / pageSize;
+                    }
+                    else
+                    {
+                        pageCount = result.Count / pageSize;
+                        pageCount++;
+                    }
+                    response.Data = pageCount;
+                    response.isSuccess = true;
+                    response.Message = "Success!";
+                }
+                else
+                {
+                    response.Data = 0;
+                    response.isSuccess = true;
+                    response.Message = "No voucher found to create a page";
+                }
+            }
+            catch (Exception ex) 
+            {
+                response.Data = 0;
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
     }
 }

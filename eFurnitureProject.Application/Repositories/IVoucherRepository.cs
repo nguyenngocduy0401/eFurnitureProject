@@ -10,5 +10,6 @@ namespace eFurnitureProject.Application.Repositories
     public interface IVoucherRepository : IGenericRepository<Voucher>
     {
         Task<IEnumerable<Voucher>> Get(int pageIndex, int pageSize);
+        Task<IEnumerable<object>> GetTotalPage(int pageSize);
     }
 }

@@ -1,13 +1,15 @@
-using AutoMapper;using eFurnitureProject.Application.Commons;
+using AutoMapper;
+using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
-using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 using Microsoft.AspNetCore.Identity;
+using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -32,8 +34,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
-            CreateMap<OrderViewDTO, Order>();
-            CreateMap<Order, OrderViewDTO>();
+            CreateMap<OrderViewGetDTO, Order>();
+            CreateMap<Order, OrderViewGetDTO>();
             CreateMap<CreateAppointmentDTO, Appointment>();
             CreateMap<AppointmentDetailDTO, AppointmentDetail>();
             CreateMap<Appointment, AppointmentDTO>();
@@ -49,8 +51,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
             CreateMap<User, UserDetailViewDTO>();
-            CreateMap<User, UserViewDTO>().ReverseMap();
+            CreateMap<User, UserViewDTO>();
             CreateMap<CreateUserDTO, User>();
+            CreateMap<OrderDetail, OrderDetailViewDTO>();
         }
     }
 }

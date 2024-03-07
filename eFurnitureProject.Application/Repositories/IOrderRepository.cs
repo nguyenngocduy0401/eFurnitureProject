@@ -1,4 +1,4 @@
-﻿using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+﻿using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Domain.Entities;
 using System;
 using System.Collections.Generic;

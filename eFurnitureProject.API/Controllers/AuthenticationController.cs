@@ -32,9 +32,9 @@ namespace eFurnitureProject.API.Controllers
             return await _authenticationService.RenewTokenAsync(tokenRefreshDTO);
         }
         [HttpPost]
-        public async Task<ApiResponse<string>> Logout(string refreshToken)
+        public async Task<ApiResponse<string>> LogoutAsync(string refreshToken)
         {
-            return await _authenticationService.Logout(refreshToken);
+            return await _authenticationService.LogoutAsync(refreshToken);
         }
     }
 }

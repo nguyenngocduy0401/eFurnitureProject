@@ -49,7 +49,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             var itemCount = await userList.CountAsync();
             var items = await userList
-            .Skip(pageIndex * pageSize)
+            .Skip((pageIndex-1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
             .ToListAsync();

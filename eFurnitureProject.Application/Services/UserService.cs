@@ -236,19 +236,20 @@ namespace eFurnitureProject.Application.Services
                     user.PhoneNumber = userUpdateDTO.PhoneNumber;
                 }
                 if (userUpdateDTO.Gender != null) user.Gender = userUpdateDTO.Gender;
-                user.DateOfBird = userUpdateDTO.DateOfBird;
-                
+                if (userUpdateDTO.DateOfBird != null) user.DateOfBird = userUpdateDTO.DateOfBird;
+                if (userUpdateDTO.Address != null) user.Address = userUpdateDTO.Address;
+                if (userUpdateDTO.Name != null) user.Name = userUpdateDTO.Name;
                 var newUser = await _userManager.UpdateAsync(user);
-                var userData = _mapper.Map<UserViewDTO>(newUser);
-                if (newUser.Succeeded)
+                var userData = _mapper.Map<UserViewDTO>(user);
+                if (!newUser.Succeeded)
                 {
                     response.isSuccess = false;
-                    response.Message = "Change password fail!";
+                    response.Message = "Update information fail!";
                     return response;
                 }
                 response.Data = userData;
                 response.isSuccess = true;
-                response.Message = "Change password successful!";
+                response.Message = "Update information successful!";
             }
             catch (DbException ex)
             {
@@ -338,7 +339,7 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
                 var user = _mapper.Map<User>(createUserDTO);
-                var identityResult = await _userManager.CreateAsync(user, user.PasswordHash);
+                var identityResult = await _userManager.CreateAsync(user, createUserDTO.Password);
                 if (identityResult.Succeeded == true)
                 {
                     var role = GetRole.GetRoleName(createUserDTO.Role);

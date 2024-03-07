@@ -266,7 +266,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<string>> Logout(string refreshToken)
+        public async Task<ApiResponse<string>> LogoutAsync(string refreshToken)
         {
             var response = new ApiResponse<string>();
             try

@@ -11,10 +11,10 @@ namespace eFurnitureProject.Domain.Entities
     {
         public DateTime DateTime { get; set; }
         public int Price { get; set; }
-        //public int Paid { get; set; } = 0;
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }
+        public string? Name { get; set; }
         public Guid? StatusId { get; set; }
         [ForeignKey("StatusId")]
         public StatusOrder? StatusOrder { get; set; }

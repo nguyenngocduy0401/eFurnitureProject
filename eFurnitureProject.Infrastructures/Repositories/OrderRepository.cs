@@ -1,6 +1,6 @@
 ﻿using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
-using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -41,20 +41,20 @@ namespace eFurnitureProject.Infrastructures.Repositories
         {
             //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
 
-            try
-            {
-                var items = await _dbSet
-                    .Where(o => o.UserId == filter.UserId)
-                    .Where(o => o.StatusId == filter.StatusId)
-                    .ToListAsync();
-                return items;
-            }
-            catch (Exception)
-            {
+            /* try
+             {
+                 var items = await _dbSet
+                     .Where(o => o.UserId == filter.UserId)
+                     .Where(o => o.StatusId == filter.StatusId)
+                     .ToListAsync();
+                 return items;
+             }
+             catch (Exception)
+             {
 
-                throw new Exception();
-            }
-            //return null;
+                 throw new Exception();
+             }*/
+            return null;
         }
 
         public async Task<IEnumerable<Order>> GetOrderByFilter(int pageIndex, int pageSize, FilterOrderDTO filter)
@@ -63,7 +63,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             try
             {
-                var items = await _dbSet
+                /*var items = await _dbSet
                     .Where(o => o.UserId == filter.UserId)
                     .Where(o => o.StatusId == filter.StatusId)
                     .OrderByDescending(x => x.CreationDate)
@@ -71,7 +71,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
                     .Take(pageSize)
                     .AsNoTracking()
                     .ToListAsync();
-                return items;
+                return items;*/
+                return null;
             }
             catch (Exception)
             {

@@ -484,6 +484,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -565,6 +568,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -896,6 +902,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
@@ -917,6 +926,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("OrderProcessingId");
 
@@ -1336,6 +1347,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Transaction", b =>
                 {
+                    b.HasOne("eFurnitureProject.Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
                     b.HasOne("eFurnitureProject.Domain.Entities.OrderProcessing", "OrderProcessing")
                         .WithMany()
                         .HasForeignKey("OrderProcessingId");
@@ -1343,6 +1358,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Order");
 
                     b.Navigation("OrderProcessing");
 

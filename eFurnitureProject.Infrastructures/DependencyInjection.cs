@@ -36,7 +36,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<ITransactionService, TransactionService>();
-            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IUserService, UserService>();
             #endregion
 

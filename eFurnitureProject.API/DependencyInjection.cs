@@ -70,12 +70,16 @@ namespace eFurnitureProject.API
             services.AddSingleton<Stopwatch>();
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<RoleInitializer>();
-            services.AddScoped<AccountInitializer>();
             services.AddHttpContextAccessor();
             services.AddHostedService<SetupIdentityDataSeeder>();
             services.AddControllers();
             services.AddLogging();
+
+            #region Seed
+            services.AddScoped<RoleInitializer>();
+            services.AddScoped<AccountInitializer>();
+            services.AddScoped<StatusOrderInitializer>();
+            #endregion
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
             services.AddTransient<IValidator<CreateContractDTO>, CreateContractViewModelValidation>();

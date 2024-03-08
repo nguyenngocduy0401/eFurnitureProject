@@ -9,6 +9,6 @@ namespace eFurnitureProject.Application.ViewModels.StatusOrderViewModels
     public class StatusOrderViewDTO
     {
         public int StatusCode { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
     }
 }

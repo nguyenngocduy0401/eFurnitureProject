@@ -10,6 +10,7 @@ using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 using Microsoft.AspNetCore.Identity;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
+using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -55,7 +56,12 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateUserDTO, User>();
             CreateMap<OrderDetail, OrderDetailViewDTO>();
             CreateMap<Order, OrderViewDTO>();
-            CreateMap<Order, OrderViewForCustomerDTO>();
+            CreateMap<Order, OrderViewForCustomerDTO>()
+     .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
+     {
+         StatusCode = src.StatusOrder.StatusCode,
+         Name = src.StatusOrder.Name
+     }));
         }
     }
 }

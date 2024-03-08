@@ -1,4 +1,5 @@
-﻿using eFurnitureProject.Domain.Entities;
+﻿using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
+using eFurnitureProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,6 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewModels
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? Name { get; set; }
-        public StatusOrder? StatusOrder { get; set; }
+        public StatusOrderViewDTO? StatusOrderViewDTO { get; set; }
     }
 }

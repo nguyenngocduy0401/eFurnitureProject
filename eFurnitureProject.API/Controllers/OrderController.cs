@@ -20,7 +20,12 @@ namespace eFurnitureProject.API.Controllers
         {
             return await _service.GetOrderFilterAsync(filterOrderDTO);
         }
-        
+        [HttpGet]
+        public async Task<ApiResponse<Pagination<OrderViewForCustomerDTO>>> GetOrderFilterByLogin([FromQuery]FilterOrderByLoginDTO filterOrderByLoginDTO)
+        {
+            return await _service.GetOrderFilterByLoginAsync(filterOrderByLoginDTO);
+        }
+
         [HttpPost]
         public async Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatus([FromBody]UpdateOrderStatusDTO updateOrderStatusDTO)
         {

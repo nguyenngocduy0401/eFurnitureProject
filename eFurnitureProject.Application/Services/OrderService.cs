@@ -106,7 +106,6 @@ namespace eFurnitureProject.Application.Services
                 response.Data = result; 
                 response.isSuccess = true;
                 response.Message = "Successful!";
-                return response;
             }
             catch (DbException ex)
             {
@@ -136,6 +135,16 @@ namespace eFurnitureProject.Application.Services
                     (filterOrderByLogin.PageIndex, filterOrderByLogin.PageSize, 
                      filterOrderByLogin.StatusCode, filterOrderByLogin.FromTime, 
                      filterOrderByLogin.ToTime, userId);
+                if (listOrder == null)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Not found!";
+                    return response;
+                }
+                var result = _mapper.Map<Pagination<OrderViewForCustomerDTO>>(listOrder);
+                response.Data = result;
+                response.isSuccess = true;
+                response.Message = "Successful!";
             }
             catch (DbException ex)
             {

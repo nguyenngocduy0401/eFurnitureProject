@@ -5,6 +5,7 @@ using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -15,8 +16,13 @@ namespace eFurnitureProject.Infrastructures.Repositories
     public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly IClaimsService _claimsService;
+        private readonly ICurrentTime _currentTime;
         public OrderRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
+            _dbContext = context;
+            _currentTime = timeService;
+            _claimsService = claimsService;
         }
 
         public async Task<IEnumerable<Order>> Get(int pageIndex, int pageSize)

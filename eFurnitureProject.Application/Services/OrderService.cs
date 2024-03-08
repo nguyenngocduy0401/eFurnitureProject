@@ -141,7 +141,7 @@ namespace eFurnitureProject.Application.Services
 
         
 
-        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilterAsync(ViewModels.OrderViewModels.FilterOrderDTO filterOrderDTO)
+        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilterAsync(FilterOrderDTO filterOrderDTO)
         {
             var response = new ApiResponse<IEnumerable<OrderViewDTO>>();
             try 
@@ -189,16 +189,6 @@ namespace eFurnitureProject.Application.Services
                     else
                     {
                         viewItem.StatusCode = 0;
-                    }
-
-
-                    if (order.Transaction != null)
-                    {
-                        viewItem.Paid = order.Transaction.Amount;
-                    }
-                    else
-                    {
-                        viewItem.Paid = 0;
                     }
 
                     viewItems.Add(viewItem);

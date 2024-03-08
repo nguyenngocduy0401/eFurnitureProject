@@ -18,9 +18,7 @@ namespace eFurnitureProject.Domain.Entities
         public Guid? StatusId { get; set; }
         [ForeignKey("StatusId")]
         public StatusOrder? StatusOrder { get; set; }
-        public Guid? TransactionId { get; set; }
-        [ForeignKey("TransactionId")]
-        public Transaction? Transaction { get; set; }
+
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public User? User { get; set; }

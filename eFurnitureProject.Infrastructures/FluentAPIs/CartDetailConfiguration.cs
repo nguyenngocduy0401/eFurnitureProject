@@ -19,7 +19,7 @@ namespace eFurnitureProject.Infrastructures.FluentAPIs
                 .HasForeignKey(a => a.CartId);
             builder.HasOne(a => a.Product)
                 .WithMany(a => a.CartDetail)
-                .HasForeignKey(a => a.CartId);
+                .HasForeignKey(a => a.ProductId);
         }
     }
 }

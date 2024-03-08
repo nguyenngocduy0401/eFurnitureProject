@@ -15,6 +15,6 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResponse<CartDetailViewDTO>> AddProduct(AddProductToCartDTO product) => await _cartService.addProductAsysn(product);
+        //public async Task<ApiResponse<CartDetailViewDTO>> AddProduct(AddProductToCartDTO product) => await _cartService.addProductAsysn(product);
     }
 }

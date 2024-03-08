@@ -173,7 +173,7 @@ namespace eFurnitureProject.Application.Services
                 var userID = _claimsService.GetCurrentUserId;
                 var user = await _userManager.FindByIdAsync(userID.ToString());
                 var newUser = await _userManager.ChangePasswordAsync(user, userPasswordDTO.OldPassword, userPasswordDTO.NewPassword);
-                if (newUser.Succeeded)
+                if (!newUser.Succeeded)
                 {
                     response.isSuccess = false;
                     response.Message = "Change password fail!";

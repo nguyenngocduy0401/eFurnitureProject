@@ -24,7 +24,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
         {
             foreach (var importDetail in import.ImportDetail)
             {
-                import.TotalPrice += importDetail.Price;
+                import.TotalPrice += importDetail.Price * importDetail.Quantity;
                 import.TotalQuantity += importDetail.Quantity;
             }
             import.CreatedBy = _claimsService.GetCurrentUserId;

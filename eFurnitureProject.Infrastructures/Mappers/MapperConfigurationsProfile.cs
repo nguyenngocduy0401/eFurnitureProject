@@ -46,7 +46,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateAppointmentDTO, AppointmentDetail>();
             CreateMap<User, AppointmentDetail>();
             CreateMap<AppointmentDetailDTO, User>();
-            CreateMap <ProductViewDTO , Product>();
+            CreateMap<ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
             CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
@@ -54,6 +54,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<User, UserViewDTO>();
             CreateMap<CreateUserDTO, User>();
             CreateMap<OrderDetail, OrderDetailViewDTO>();
+            CreateMap<Order, OrderViewDTO>();
+            CreateMap<Order, OrderViewForCustomerDTO>();
         }
     }
 }

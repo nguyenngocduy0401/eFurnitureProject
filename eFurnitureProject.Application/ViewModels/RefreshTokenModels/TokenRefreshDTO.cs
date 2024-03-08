@@ -8,5 +8,8 @@ namespace eFurnitureProject.Application.ViewModels.RefreshTokenModels
 {
     public class TokenRefreshDTO
     {
+        public string RefreshToken { get; set; }
+
+        public string AccessToken { get; set; }
     }
 }

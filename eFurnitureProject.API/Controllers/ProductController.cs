@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.Net.Mime;
 using System.Net;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -19,38 +20,30 @@ namespace eFurnitureProject.API.Controllers
             _productService = productService;
         }
 
-        
-        [HttpGet("{page}")]
-        public async Task<IActionResult> GetProductsInPage(int page, int amount) {
-            var result = await _productService.GetProductsInPageAsync(page, amount);
-            return Ok(result);
-        }
-
         [HttpGet]
-        public async Task<IActionResult> FilterProduct(int page, int amount, string searchValue)
+        public async Task<ActionResult<ApiResponse<Pagination<ProductDTO>>>> FilterProducts2(
+          int page,
+         [FromQuery] Guid categoryId,
+         string? productName,
+           double minPrice, double maxPrice,
+         int pageSize)
         {
-            var result = await _productService.GetFilterProductsInPageAsync(page, amount, searchValue);
-            return Ok(result);
+            var response = await _productService.GetAll(page, categoryId, productName, minPrice, maxPrice, pageSize);
+            if (response.isSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> ProductDetail(Guid productId)
-        {
-            var result = await _productService.GetProductDetail(productId);
-            return Ok(result);
-        }
-
         [HttpPost]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        
         public async Task<IActionResult> CreatePoduct(CreateProductDTO createProductDTO)
         {
             try
             {
                 var result = await _productService.CreateProductByAdmin(createProductDTO);
                 dynamic reponseObject = new ExpandoObject();
-                reponseObject.StatusCode = 0;
+                reponseObject.StatusCode = 1;
                 reponseObject.Result = result;
                 if (result.isSuccess)
                 {
@@ -69,7 +62,7 @@ namespace eFurnitureProject.API.Controllers
             }
 
         }
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var result = await _productService.DeleteProduct(id);
@@ -85,13 +78,19 @@ namespace eFurnitureProject.API.Controllers
             var result = await _productService.getAllProduct();
             return Ok(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> ViewAllProductNotDeleted()
+        {
+            var result = await _productService.getAllProductNotdeleted();
+            return Ok(result);
+        }
+        [HttpGet]
         public async Task<IActionResult> ViewProductById(Guid id)
         {
             var result = await _productService.GetProductByID(id);
             return Ok(result);
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid id)
         {
             var result = await _productService.UpdateProductByAdmin(createProductDTO, id);
@@ -104,33 +103,9 @@ namespace eFurnitureProject.API.Controllers
             return BadRequest(result);
 
         }
-        [HttpGet("{name}")]
-        public async Task<IActionResult> SearchByName(string name)
-        {
-            var result = await _productService.SearchProductByNameAsync(name);
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize)=>  await _productService.CalculateTotalPages(totalItemsCount, pageSize);
+   
 
-            if (result.isSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
-        [HttpGet("{name}")]
-        public async Task<IActionResult> SearchByCategoryName(string name)
-        {
-            var result = await _productService.SearchProductByCategoryNameAsync(name);
-
-            if (result.isSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
     }
 }

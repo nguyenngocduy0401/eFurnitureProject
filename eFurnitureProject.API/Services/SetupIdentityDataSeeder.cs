@@ -14,9 +14,13 @@ namespace eFurnitureProject.API.Services
         {
             using (var scope = _serviceProvider.CreateScope())
             {
+                var statusOrderInitializer = scope.ServiceProvider.GetRequiredService<StatusOrderInitializer>();
                 var seeder = scope.ServiceProvider.GetRequiredService<RoleInitializer>();
-
                 await seeder.RoleInitializeAsync();
+                await statusOrderInitializer.StatusOrderInitializerAsync();
+
+                var accountInitializer = scope.ServiceProvider.GetRequiredService<AccountInitializer>();
+                await accountInitializer.AccountInitializeAsync();
             }
         }
 

@@ -16,7 +16,7 @@ namespace eFurnitureProject.Infrastructures.FluentAPIs
             builder.HasKey(x => new { x.CartId, x.ProductId });
             builder.HasOne(a => a.Cart)
                 .WithMany(a => a.CartDetails)
-                .HasForeignKey(a => a.CartId);
+                .HasForeignKey(a => a.CartId);  
             builder.HasOne(a => a.Product)
                 .WithMany(a => a.CartDetail)
                 .HasForeignKey(a => a.ProductId);

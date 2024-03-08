@@ -5,18 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eFurnitureProject.API.Controllers
 {
-    public class OrderDetailController : Controller
+    public class OrderDetailController : BaseController
     {
-        private readonly IOrderDetailService orderDetailService;
-
+        private readonly IOrderDetailService _orderDetailService;
         public OrderDetailController(IOrderDetailService orderDetailService)
         {
-            this.orderDetailService = orderDetailService;
-        }   
-
-        public ApiResponse<IEnumerable<OrderDetailViewDTO>> GetOrderDetailById(Guid OrderId)
-        {
-            return null;
+            _orderDetailService = orderDetailService;
         }
+        [HttpGet]
+        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailsByIdAsync(Guid orderId) =>
+            await _orderDetailService.GetOrderDetailsByIdAsync(orderId);
+            
     }
 }

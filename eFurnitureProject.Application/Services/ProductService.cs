@@ -1,17 +1,17 @@
-using AutoMapper;
+﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
-using eFurnitureProject.Domain.Entities;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.UserViewModels;
+using eFurnitureProject.Domain.Entities;
+using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -22,15 +22,19 @@ namespace eFurnitureProject.Application.Services
         private readonly ICurrentTime _currentTime;
         private readonly IClaimsService _claimsService;
         private readonly IMemoryCache _memoryCache;
-        private readonly IProductRepository _productRepository;
-        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, ICurrentTime currentTime, IClaimsService claimsService, IMemoryCache memoryCache,IProductRepository productRepository)
+        private readonly IValidator<CreateProductDTO> _createProductvalidator;
+       
+
+        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, ICurrentTime currentTime, IClaimsService claimsService, IMemoryCache memoryCache, IProductRepository productRepository,IValidator<CreateProductDTO> validatorCreateProduct)
         {
-            _productRepository = productRepository;
+            
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _currentTime = currentTime;
             _claimsService = claimsService;
             _memoryCache = memoryCache;
+            _createProductvalidator = validatorCreateProduct;
+         
         }
         public async Task<ApiResponse<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO)
         {
@@ -38,27 +42,37 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var product = _mapper.Map<Product>(createProductDTO);
-               
-                await _unitOfWork.ProductRepository.AddAsync(product);
-                var addSuccessfully = await _unitOfWork.SaveChangeAsync();
-                var productDTO = _mapper.Map<ProductDTO>(product);
-                response.Data = productDTO;
-                if (addSuccessfully > 0)
+                product.Status = 1;
+                ValidationResult validationResult = await _createProductvalidator.ValidateAsync(createProductDTO);
+                if (!validationResult.IsValid)
                 {
-
-                    response.Data = productDTO;
-                    response.isSuccess = true;
-                    response.Message = "Create new Product successfully";
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
+                }
+                else
+                {
+                    await _unitOfWork.ProductRepository.AddAsync(product);
+                    var addSuccessfully = await _unitOfWork.SaveChangeAsync();
+                    var productDTO = _mapper.Map<ProductDTO>(product);
+                    response.Data = productDTO;
+                    if (addSuccessfully > 0)
+                    {
+
+                        response.Data = productDTO;
+                        response.isSuccess = true;
+                        response.Message = "Create new Product successfully";
+                        return response;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Handle any exceptions
+            
                 response.isSuccess = false;
                 response.Message = ex.Message;
 
-                // If there's an inner exception, include its message as well
+             
                 if (ex.InnerException != null)
                 {
                     response.Message = ex.Message + "Inner Exception: " + ex.InnerException.Message;
@@ -67,15 +81,32 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-    
 
-        public async Task<ApiResponse<bool>> DeleteProduct(Guid productID)
+        public async Task<ApiResponse<int>> CalculateTotalPages(int totalItemsCount, int pageSize)
         {
-            var response = new  ApiResponse<bool>();
+            var response = new ApiResponse<int>();
+            try
+            {
+                int totalPages = totalItemsCount / pageSize;
+                if (totalItemsCount % pageSize != 0)
+                {
+                    totalPages++;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                 return response;
+            }
+        }
+            public async Task<ApiResponse<bool>> DeleteProduct(Guid productID)
+        {
+            var response = new ApiResponse<bool>();
             try
             {
                 var exist = await _unitOfWork.ProductRepository.GetByIdAsync(productID);
-                if(exist == null)
+                if (exist == null)
                 {
                     response.isSuccess = false;
                     response.Message = "Product does not exist";
@@ -110,43 +141,22 @@ namespace eFurnitureProject.Application.Services
 
         }
 
-        public async Task<ApiResponse<IEnumerable<ProductDTO>>> getAllProduct()
+        public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex = 0, int pageSize = 10)
         {
-            var response = new ApiResponse<IEnumerable<ProductDTO>>();
-            List<ProductDTO> productDTOs = new List<ProductDTO>();
-            try
-            {
-                List<Product> products = await _unitOfWork.ProductRepository.GetAllAsync();
-                foreach (var product in products)
-                {
-                    if (product.IsDeleted == false)
-                    {
-                        productDTOs.Add(_mapper.Map<ProductDTO>(product));
-
-                    }
-                }
-                if(productDTOs.Count > 0)
-                {
-                    response.Data = productDTOs;
-                    response.isSuccess = true;
-                    response.Message = $"Have {productDTOs.Count} product.";
-                    return response;
-                }
-                else
-                {
-                    response.isSuccess = false;
-                    response.Message = $"Have {productDTOs.Count} product.";
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.isSuccess = false;
-                response.Message = ex.Message;
-                return response;
-            }
+            var response = new ApiResponse<Pagination<ProductDTO>>();
+            var products = await _unitOfWork.ProductRepository.ToPaginationProduct(pageIndex,pageSize);
+            var result = _mapper.Map<Pagination<ProductDTO>>(products);
+            response.Data = result;
+            return response;
         }
-
+        public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProductNotdeleted(int pageIndex = 0, int pageSize = 10)
+        {
+            var response = new ApiResponse<Pagination<ProductDTO>>();
+            var products = await _unitOfWork.ProductRepository.ToPaginationProductNotDeleted(pageIndex, pageSize);
+            var result = _mapper.Map<Pagination<ProductDTO>>(products);
+            response.Data = result;
+            return response;
+        }
         public async Task<ApiResponse<ProductDTO>> GetProductByID(Guid id)
         {
             var response = new ApiResponse<ProductDTO>();
@@ -181,134 +191,92 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var existProduct = await _unitOfWork.ProductRepository.GetByIdAsync(productID);
-                if (existProduct != null) {
-                    var updateProduct = _mapper.Map(createProductDTO, existProduct);
-                    var saveProduct = await _unitOfWork.SaveChangeAsync();
-                    if (saveProduct > 0)
+                ValidationResult validationResult = await _createProductvalidator.ValidateAsync(createProductDTO);
+
+                if (!validationResult.IsValid)
+                {
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
+                else
+                {
+                    if (existProduct != null)
                     {
-                        response.isSuccess = true;
-                        response.Message = "Update product successfully";
-                        return response;
+                        var updateProduct = _mapper.Map(createProductDTO, existProduct);
+                        var saveProduct = await _unitOfWork.SaveChangeAsync();
+                        if (saveProduct > 0)
+                        {
+                            response.isSuccess = true;
+                            response.Message = "Update product successfully";
+                            return response;
+                        }
+                        else
+                        {
+                            response.isSuccess = false;
+                            response.Message = "Error";
+                            return response;
+                        }
                     }
                     else
                     {
                         response.isSuccess = false;
-                        response.Message = "Error";
+                        response.Message = "Product not found";
                         return response;
                     }
                 }
-                else
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, Guid CategoryID, string ProductName, double minPrice, double maxPrice, int pageSize)
+        {
+            var  response = new ApiResponse<Pagination<ProductDTO>>();
+          
+            try
+            {
+                Pagination<ProductDTO> products;
+
+                if (CategoryID == Guid.Empty && string.IsNullOrEmpty(ProductName) && minPrice<= 0 && maxPrice <= 0)
                 {
-                    response.isSuccess = false;
-                    response.Message = "Product not found";
+
+                   
+                    var product = await _unitOfWork.ProductRepository.ToPaginationProduct(page, pageSize);
+                    var result = _mapper.Map<Pagination<ProductDTO>>(product);
+                    response.Data = result;
                     return response;
                 }
-            }catch (Exception ex)
-            {
-                response.isSuccess = false;
-                response.Message = ex.Message;
-                return response;
-            }
-        }
-        public async Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByCategoryNameAsync(string name)
-        {
-            var response = new ApiResponse<IEnumerable<ProductDTO>>();
 
-            try
-            {
-                var products = await _productRepository.GetProductsByCategoryNameAsync(name);
-                var productDTOs = new List<ProductDTO>();
-                foreach (var product in products)
+                if (CategoryID !=Guid.Empty  )
                 {
-                    if (!product.IsDeleted)
-                    {
-                        productDTOs.Add(_mapper.Map<ProductDTO>(product));
-                    }
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID,page,pageSize);
                 }
-                if (productDTOs.Count != 0)
+                else if (!string.IsNullOrEmpty(ProductName))
                 {
-                    response.isSuccess = true;
-                    response.Message = "Product retrieved successfully";
-                    response.Data = productDTOs;
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName,page,pageSize);
+                }
+                else if (minPrice >= 0 || maxPrice >= 0)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByPriceAsync(minPrice,  maxPrice, page,pageSize);
                 }
                 else
                 {
-                    response.isSuccess = false;
-                    response.Message = " Not have Product";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.isSuccess = false;
-                response.Message = ex.Message;
-            }
-
-            return response;
-        }
-    
-
-        public async Task<ApiResponse<IEnumerable<ProductDTO>>> SearchProductByNameAsync(string name)
-        {
-            var response = new ApiResponse<IEnumerable<ProductDTO>>();
-            try
-            {
-                var products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(name);
-                var productDTOs = new List<ProductDTO>();
-                foreach (var product in products)
-                {
-                    if (!product.IsDeleted)
-                    {
-                        productDTOs.Add(_mapper.Map<ProductDTO>(product));
-                    }
-                }
-                if (productDTOs.Count != 0)
-                {
+                    var pagination = await _unitOfWork.ProductRepository.ToPaginationProduct(page - 1, pageSize);
+                    response.Data = _mapper.Map<Pagination<ProductDTO>>(pagination);
                     response.isSuccess = true;
-                    response.Message = "Product retrieved successfully";
-                    response.Data = productDTOs;
-                }
-                else
-                {
-                    response.isSuccess = false;
-                    response.Message = " Not have Product";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.isSuccess = false;
-                response.Message = ex.Message;
-            }
-
-            return response;
-        }
-    public async Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetFilterProductsInPageAsync(int page, int amount, string searchValue)
-        {
-            var response = new ApiResponse<IEnumerable<ProductViewDTO>>();
-
-            try
-            {
-                var result = await _unitOfWork.ProductRepository.GetAllAsync();
-
-                var productsDTO = new List<ProductViewDTO>();
-                foreach (var product in result)
-                {
-                    if (!product.IsDeleted)
-                    {
-                        productsDTO.Add(_mapper.Map<ProductViewDTO>(product));
-                    }
+                    response.Message = "Get all products successfully";
+                    return response;
                 }
 
-                if (productsDTO.Count != 0)
-                {
-                    response.Data = productsDTO;
-                    response.isSuccess = true;
-                    response.Message = "";
-                }
-                else
-                {
-                    response.isSuccess = true;
-                    response.Message = "No record match have found!";
-                }
+                var productDTOs = _mapper.Map<Pagination<ProductDTO>>(products);
+                response.Data = productDTOs;
+                response.isSuccess = true;
+                response.Message = "Get all products successfully";
             }
             catch (Exception ex)
             {
@@ -317,90 +285,13 @@ namespace eFurnitureProject.Application.Services
                 response.Message = ex.Message;
                 return response;
             }
-
             return response;
         }
 
-        public async Task<ApiResponse<ProductViewDTO>> GetProductDetail(Guid productId)
-        {
-            var response = new ApiResponse<ProductViewDTO>();
 
-            try
-            {
-                var result = await _unitOfWork.ProductRepository.GetByIdAsync(productId);
-                var productDTO = _mapper.Map<ProductViewDTO>(result);
-                if (result != null)
-                { 
-                    response.isSuccess = true;
-                    response.Data = productDTO;
-                    response.Message = "";
-                }
-                else
-                {
-                    response.isSuccess = true;
-                    response.Message = "Id has not existed";
-                }
-                
-                //foreach (var product in result)
-                //{
-                //    if (!product.IsDeleted)
-                //    {
-                //        productsDTO.Add(_mapper.Map<ProductViewDTO>(product));
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
-                //throw new NotImplementedException();
-                Console.WriteLine(ex.ToString());
-                response.isSuccess = false;
-                response.Message = ex.Message;
-                return response;
-            }
-            return response;
-            
-        }
 
-        public async Task<ApiResponse<IEnumerable<ProductViewDTO>>> GetProductsInPageAsync(int page, int amount)
-        {
-            var response = new ApiResponse<IEnumerable<ProductViewDTO>>();
-
-            try
-            {
-                //var result = await _unitOfWork.ProductRepository.GetAllAsync();
-                var result = await _unitOfWork.ProductRepository.GetProductPaging(page, amount);
-
-                var productsDTO = new List<ProductViewDTO>();
-                foreach (var product in result)
-                {
-                    if (!product.IsDeleted)
-                    {
-                        productsDTO.Add(_mapper.Map<ProductViewDTO>(product));
-                    }
-                }
-
-                if (productsDTO.Count != 0)
-                {
-                    //throw new Exception("Loi khong xac dinh");
-                    response.Data = productsDTO;
-                    response.isSuccess = true;
-                    response.Message = "";
-                }
-                else
-                {
-                    response.isSuccess = true;
-                    response.Message = "No results found";
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                response.isSuccess= false;
-                response.Message = ex.Message;
-                return response;
-            }
-            return response;
-        }
 
     }
 }
+
+    

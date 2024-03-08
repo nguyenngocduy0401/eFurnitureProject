@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using eFurnitureProject.Application;
 using eFurnitureProject.Infrastructures.DataInitializer;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
+using FluentValidation;
 
 namespace eFurnitureProject.Infrastructures
 {
@@ -30,11 +32,16 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            #endregion
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IVoucherService, VoucherService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IUserService, UserService>();
+            #endregion
+
             services.AddScoped<IImportService, ImportService>();
             services.AddScoped<ICartService, CartService>();
             #region Repository DI
@@ -62,9 +69,11 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IVoucherRepository, VoucherRepository>();
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
+         
 
             services.Configure<IdentityOptions>(options =>
             {

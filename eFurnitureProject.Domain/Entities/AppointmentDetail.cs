@@ -13,10 +13,12 @@ namespace eFurnitureProject.Domain.Entities
     {
         [Column(Order = 1)]
         public Guid AppointmentId { get; set; }
+        [ForeignKey("AppointmentId")]
         public Appointment? Appointment { get; set; }
         [Column(Order = 2)]
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public User? User { get; set; } 
+        public  bool IsDeleted { get; set; }
     }
 }

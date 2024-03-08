@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
+namespace eFurnitureProject.Application.ViewModels.OrderViewModels
 {
     public class UpdateOrderStatusDTO
     {

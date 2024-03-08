@@ -1,14 +1,19 @@
 ﻿using eFurnitureProject.API.Services;
+using eFurnitureProject.API.Validator.AppointmentValidator;
 using eFurnitureProject.API.Validator.AuthenticationValidator;
 using eFurnitureProject.API.Validator.CategoryValidator;
 using eFurnitureProject.API.Validator.ContractValidator;
+using eFurnitureProject.API.Validator.ProductValidator;
+using eFurnitureProject.API.Validator.UserValidator;
 using eFurnitureProject.API.Validator.ImportValidator;
 using eFurnitureProject.API.Validator.InventoryValidator;
 using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Services;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
@@ -30,7 +35,7 @@ namespace eFurnitureProject.API
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "eFurniture API", Version = "v1" });
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "eFurnitureAPI", Version = "v1" });
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -71,13 +76,25 @@ namespace eFurnitureProject.API
             services.AddSingleton<Stopwatch>();
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<RoleInitializer>();
             services.AddHttpContextAccessor();
             services.AddHostedService<SetupIdentityDataSeeder>();
+            services.AddControllers();
+            services.AddLogging();
+
+            #region Seed
+            services.AddScoped<RoleInitializer>();
+            services.AddScoped<AccountInitializer>();
+            services.AddScoped<StatusOrderInitializer>();
+            #endregion
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
             services.AddTransient<IValidator<CreateContractDTO>, CreateContractViewModelValidation>();
             services.AddTransient<IValidator<UpdateContractDTO>, UpdateContractValidation>();
+            services.AddTransient<IValidator<CreateProductDTO>, CreateProductValidation>();
+            services.AddTransient<IValidator<CreateAppointmentDTO>,CreateAppointmentValidation>();
+            services.AddTransient<IValidator<UserPasswordDTO>, ChangePasswordValidation>();
+            services.AddTransient<IValidator<UserUpdateDTO>, UpdateUserValidation>();
+            services.AddTransient<IValidator<CreateUserDTO>, CreateUserValidation>();
             services.AddTransient<IValidator<CreateCategoryViewModel>, CreateCategoryViewModelValidation>();
             services.AddTransient<IValidator<CreateImportDTO>, CreateImportValidation>();
             services.AddTransient<IValidator<CreateImportDetailDTO>, CreateImportDetailValidation>();

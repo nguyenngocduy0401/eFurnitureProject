@@ -15,11 +15,13 @@ namespace eFurnitureProject.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IClaimsService _claimsService;
 
-        public VoucherService(IUnitOfWork unitOfWork, IMapper mapper)
+        public VoucherService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _claimsService = claimsService;
         }
 
         public async Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucher()
@@ -75,6 +77,7 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var voucher = _mapper.Map<Voucher>(createVoucherDTO);
+                voucher.CreatedBy = _claimsService.GetCurrentUserId;
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
                 await _unitOfWork.SaveChangeAsync();
                 _unitOfWork.VoucherRepository.Update(voucher);
@@ -114,13 +117,24 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
+
                     //voucher.StartDate = updateVoucherDTO.StartDate;
                     //voucher.EndDate = updateVoucherDTO.EndDate;
                     //voucher.Percent = updateVoucherDTO.Percent;
                     voucher.IsDeleted = updateVoucherDTO.IsDeleted;
-                    voucher.DeletionDate = updateVoucherDTO.DeletionDate;
-                    voucher.DeleteBy = updateVoucherDTO.DeleteBy;
-                    voucher.ModificationBy = updateVoucherDTO.ModificationBy;
+                    if (updateVoucherDTO.IsDeleted)
+                    {
+                        voucher.DeletionDate = DateTime.Now;
+                        voucher.DeleteBy = _claimsService.GetCurrentUserId;
+                    }
+                    else
+                    {
+                        voucher.DeletionDate = null;
+                        voucher.DeleteBy = null;
+                    }
+                    //voucher.DeletionDate = updateVoucherDTO.DeletionDate;
+                    //voucher.DeleteBy = updateVoucherDTO.DeleteBy;
+                    voucher.ModificationBy = _claimsService.GetCurrentUserId;
                     voucher.ModificationDate = DateTime.Now;
 
                     int update = await _unitOfWork.SaveChangeAsync();

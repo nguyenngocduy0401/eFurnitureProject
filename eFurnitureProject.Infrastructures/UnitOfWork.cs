@@ -35,8 +35,21 @@ namespace eFurnitureProject.Infrastructures
         private readonly IUserRepository _userRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly IVoucherDetailRepository _voucherDetailRepository;
-        public UnitOfWork(AppDbContext dbContext, IAppointmentRepository appointmentRepository, IAppointmentDetailRepository appointmentDetailRepository, ICartDetailRepository cartDetailRepository, ICartRepository cartRepository, ICategoryRepository categoryRepository, IContractRepository contractRepository, IFeedbackRepository feedbackRepository, IImportRepository importRepository, IImportDetailRepository importDetailRepository, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IOrderProcessingRepository orderProcessingRepository, IOrderProcessingDetailRepository orderProcessingDetailRepository, IProductRepository productRepository, IRoleRepository roleRepository, IStatusOrderProcessingRepository statusOrderProcessingRepository, IStatusOrderRepository statusOrderRepository, ITransactionRepository transactionRepository, IUserRepository userRepository, IVoucherRepository voucherRepository, IVoucherDetailRepository voucherDetailRepository)
-        {
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        public UnitOfWork(AppDbContext dbContext, IAppointmentRepository appointmentRepository,
+            IAppointmentDetailRepository appointmentDetailRepository, ICartDetailRepository cartDetailRepository,
+            ICartRepository cartRepository, ICategoryRepository categoryRepository,
+            IContractRepository contractRepository, IFeedbackRepository feedbackRepository, 
+            IImportRepository importRepository, IImportDetailRepository importDetailRepository, 
+            IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, 
+            IOrderProcessingRepository orderProcessingRepository, IOrderProcessingDetailRepository orderProcessingDetailRepository, 
+            IProductRepository productRepository, IRoleRepository roleRepository, IStatusOrderProcessingRepository statusOrderProcessingRepository, 
+            IStatusOrderRepository statusOrderRepository, ITransactionRepository transactionRepository, 
+            IUserRepository userRepository, IVoucherRepository voucherRepository, 
+            IVoucherDetailRepository voucherDetailRepository, IRefreshTokenRepository refreshTokenRepository)
+        {   
+            _refreshTokenRepository = refreshTokenRepository;
+            _appointmentRepository = appointmentRepository;
             _dbContext = dbContext;
             _appointmentRepository = appointmentRepository;
             _appointmentDetailRepository = appointmentDetailRepository;
@@ -60,6 +73,7 @@ namespace eFurnitureProject.Infrastructures
             _voucherRepository = voucherRepository;
             _voucherDetailRepository = voucherDetailRepository;
         }
+        public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository;
         public IAppointmentRepository AppointmentRepository => _appointmentRepository;
         public IAppointmentDetailRepository AppointmentDetailRepository => _appointmentDetailRepository;
         public ICartRepository ICartRepository => _cartRepository;

@@ -17,7 +17,9 @@ namespace eFurnitureProject.Domain.Entities
         public int Amount { get; set; }
         public int Status { get; set; }
         public string TypeOrder { get; set; }
-
+        public Guid? OrderId{ get; set; }
+        [ForeignKey("OrderId")]
+        public Order? Order { get; set; }
         public Guid? OrderProcessingId { get; set; }
         [ForeignKey("OrderProcessingId")]
         public OrderProcessing? OrderProcessing { get; set; }

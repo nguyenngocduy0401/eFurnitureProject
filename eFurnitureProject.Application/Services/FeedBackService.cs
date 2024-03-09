@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +57,16 @@ namespace eFurnitureProject.Application.Services
             }
 
             return response;
+        }
+        public async Task<ApiResponse<Pagination<FeedBackViewDTO>>> GetFeedBackJWT(int pageIndex, int PageSize)
+        {
+            var response = new ApiResponse<Pagination<FeedBackViewDTO>>();
+            try
+            {
+                var userCurrentID = _claimsService.GetCurrentUserId;
+                var feedbacks = await _unitOfWork.FeedbackRepository.ToPagination(pageIndex, PageSize);
+                      var result = _mapper.Map<Pagination<FeedBackViewDTO>>(feedbacks);
+            }
         }
     }
 }

@@ -9,10 +9,11 @@ using System.Net.Mime;
 using System.Net;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eFurnitureProject.API.Controllers
 {
-    public class ProductController:BaseController
+    public class ProductController : BaseController
     {
         private readonly IProductService _productService;
         public ProductController(IProductService productService)
@@ -25,18 +26,19 @@ namespace eFurnitureProject.API.Controllers
           int page,
          [FromQuery] Guid categoryId,
          string? productName,
-           double minPrice, double maxPrice,
+           double? minPrice, double? maxPrice,
          int pageSize)
         {
-            var response = await _productService.GetAll(page, categoryId, productName, minPrice, maxPrice, pageSize);
+            var response = await _productService.GetAll(page , categoryId, productName, minPrice, maxPrice, pageSize );
             if (response.isSuccess)
             {
                 return Ok(response);
             }
             return BadRequest(response);
         }
+        [Authorize(Roles = AppRole.Admin)]
         [HttpPost]
-        
+
         public async Task<IActionResult> CreatePoduct(CreateProductDTO createProductDTO)
         {
             try
@@ -62,6 +64,7 @@ namespace eFurnitureProject.API.Controllers
             }
 
         }
+        [Authorize(Roles = AppRole.Admin)]
         [HttpDelete]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
@@ -85,11 +88,12 @@ namespace eFurnitureProject.API.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> ViewProductById(Guid id)
+        public async Task<IActionResult> GetProductById(Guid id)
         {
             var result = await _productService.GetProductByID(id);
             return Ok(result);
         }
+        [Authorize(Roles = AppRole.Admin)]
         [HttpPut]
         public async Task<IActionResult> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid id)
         {
@@ -104,8 +108,11 @@ namespace eFurnitureProject.API.Controllers
 
         }
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize)=>  await _productService.CalculateTotalPages(totalItemsCount, pageSize);
-   
+        public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize) => await _productService.CalculateTotalPages(totalItemsCount, pageSize);
+        [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
+        [HttpPut]
+        public async Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity) =>
+       await _productService.UpdateQuantityProduct(productID, quantity);
 
     }
 }

@@ -22,19 +22,15 @@ namespace eFurnitureProject.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<Pagination<ProductDTO>>>> FilterProducts2(
+        public async Task<ApiResponse<Pagination<ProductDTO>>> FilterProducts2(
           int page,
-         [FromQuery] Guid categoryId,
+         [FromQuery] String categoryId,
          string? productName,
            double? minPrice, double? maxPrice,
          int pageSize)
         {
-            var response = await _productService.GetAll(page , categoryId, productName, minPrice, maxPrice, pageSize );
-            if (response.isSuccess)
-            {
-                return Ok(response);
-            }
-            return BadRequest(response);
+           return await _productService.GetAll(page , categoryId, productName, minPrice, maxPrice, pageSize );
+           
         }
        [Authorize(Roles = AppRole.Admin)]
         [HttpPost]

@@ -211,7 +211,7 @@ namespace eFurnitureProject.Application.Services
             }
         }
 
-        public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, Guid CategoryID, string ProductName, double? minPrice, double? maxPrice, int pageSize)
+        public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, String CategoryID, string ProductName, double? minPrice, double? maxPrice, int pageSize)
         {
             var response = new ApiResponse<Pagination<ProductDTO>>();
 
@@ -219,7 +219,7 @@ namespace eFurnitureProject.Application.Services
             {
                 Pagination<ProductDTO> products;
                 var cateId = CategoryID.ToString();
-                if (CategoryID == Guid.Empty && string.IsNullOrEmpty(ProductName) && minPrice <= 0 && maxPrice <= 0)
+                if (CategoryID is null && string.IsNullOrEmpty(ProductName) && minPrice <= 0 && maxPrice <= 0)
                 {
 
 
@@ -229,15 +229,15 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
 
-                if (CategoryID != Guid.Empty)
+                if (CategoryID is null)
                 {
                     products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(cateId, page, pageSize);
                 }
-                else if (!string.IsNullOrEmpty(ProductName))
+                if (!string.IsNullOrEmpty(ProductName))
                 {
                     products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName, page, pageSize);
                 }
-                else if (minPrice >= 0 || maxPrice >= 0)
+                if (minPrice >= 0 || maxPrice >= 0)
                 {
                     products = await _unitOfWork.ProductRepository.GetProductsByPriceAsync(minPrice, maxPrice, page, pageSize);
                 }

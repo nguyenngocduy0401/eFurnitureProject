@@ -11,7 +11,7 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IProductService
     {
-        Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, Guid CategoryID, string ProductName, double? minPrice, double? maxPrice, int pageSize);
+        Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, string CategoryID, string ProductName, double? minPrice, double? maxPrice, int pageSize);
         Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex = 0, int pageSize = 10);
         Task<ApiResponse<IEnumerable<ProductDTO>>> GetProductByID(Guid id);
         Task<ApiResponse<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO);

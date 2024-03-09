@@ -9,6 +9,7 @@ using System.Net.Mime;
 using System.Net;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -35,6 +36,7 @@ namespace eFurnitureProject.API.Controllers
             }
             return BadRequest(response);
         }
+        [Authorize(Roles = AppRole.Admin)]
         [HttpPost]
 
         public async Task<IActionResult> CreatePoduct(CreateProductDTO createProductDTO)
@@ -62,6 +64,7 @@ namespace eFurnitureProject.API.Controllers
             }
 
         }
+        [Authorize(Roles = AppRole.Admin)]
         [HttpDelete]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
@@ -90,6 +93,7 @@ namespace eFurnitureProject.API.Controllers
             var result = await _productService.GetProductByID(id);
             return Ok(result);
         }
+        [Authorize(Roles = AppRole.Admin)]
         [HttpPut]
         public async Task<IActionResult> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid id)
         {
@@ -105,7 +109,7 @@ namespace eFurnitureProject.API.Controllers
         }
         [HttpGet]
         public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize) => await _productService.CalculateTotalPages(totalItemsCount, pageSize);
-
+        [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpPut]
         public async Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity) =>
        await _productService.UpdateQuantityProduct(productID, quantity);

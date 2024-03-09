@@ -15,29 +15,26 @@ namespace eFurnitureProject.API.Controllers
         {
             _service = service;
         }
+        [HttpGet]
+        public async Task<ApiResponse<Pagination<OrderViewDTO>>> GetOrderByFilter ([FromQuery]FilterOrderDTO filterOrderDTO)
+        {
+            return await _service.GetOrderFilterAsync(filterOrderDTO);
+        }
+        [HttpGet]
+        public async Task<ApiResponse<Pagination<OrderViewForCustomerDTO>>> GetOrderFilterByLogin([FromQuery]FilterOrderByLoginDTO filterOrderByLoginDTO)
+        {
+            return await _service.GetOrderFilterByLoginAsync(filterOrderByLoginDTO);
+        }
 
         [HttpPost]
         public async Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatus([FromBody]UpdateOrderStatusDTO updateOrderStatusDTO)
         {
             return await _service.UpdateOrderStatusAsync(updateOrderStatusDTO);
         }
-
         [HttpGet]
-        public async Task<ApiResponse<IEnumerable<OrderViewGetDTO>>> GetAllOrder()
+        public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderById(Guid orderId)
         {
-            return await _service.GetAllOrder();
-        }
-
-        [HttpGet]
-        public async Task<ApiResponse<IEnumerable<OrderViewGetDTO>>> GetOrderPaging(int pageIndex, int pageSize)
-        {
-            return await _service.GetOrderPaging(pageIndex, pageSize);
-        }
-
-        [HttpGet]
-        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(int pageIndex,int pageSize, Guid OrderId)
-        {
-            return await _service.GetOrderDetailById(pageIndex, pageSize, OrderId);
+            return await _service.GetOrderByIdAsync(orderId);
         }
     }
 }

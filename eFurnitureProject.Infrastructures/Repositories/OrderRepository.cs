@@ -1,4 +1,5 @@
-﻿using eFurnitureProject.Application.Interfaces;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Domain.Entities;
@@ -25,91 +26,66 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<IEnumerable<Order>> Get(int pageIndex, int pageSize)
+
+        public async Task<Pagination<Order>> GetOrderByFilter(int pageIndex,
+            int pageSize, int? status, DateTime? fromTime, DateTime? toTime,
+            string? search)
         {
-            try
-            {
-                var items = await _dbSet.OrderByDescending(x => x.CreationDate)
-                                    .Skip(pageIndex * pageSize)
+            var itemList = _dbSet
+            .Where(x => (!fromTime.HasValue || x.CreationDate >= fromTime) &&
+            (!toTime.HasValue  || x.CreationDate <= toTime.Value) &&
+                        (string.IsNullOrEmpty(search) ||
+                        x.Name.Contains(search) ||
+                        x.PhoneNumber.Contains(search) ||
+                        x.Email.Contains(search)))
+            .Include(x => x.StatusOrder)
+            .Where(x => status == null || x.StatusOrder.StatusCode == status);
+
+            var items = await itemList.
+                OrderByDescending(x => x.CreationDate)
+                                    .Skip((pageIndex-1) * pageSize)
                                     .Take(pageSize)
                                     .AsNoTracking()
                                     .ToListAsync();
-                return items;
-            }
-            catch (Exception)
-            {
 
-                throw new NotImplementedException();
-            }
+            var itemCount = await itemList.CountAsync();
+            var result = new Pagination<Order>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+            return result;
         }
 
-        public async Task<IEnumerable<Order>> GetOrderByFilter(FilterOrderDTO filter)
+        public async Task<Pagination<Order>> GetOrderFilterByLogin(int pageIndex, 
+            int pageSize, int? status, DateTime? fromTime, DateTime? toTime,
+            string? userId)
         {
-            //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
+            var itemList = _dbSet
+            .Where(x => x.UserId == userId &&
+            (!fromTime.HasValue || x.CreationDate >= fromTime) &&
+            (!toTime.HasValue || x.CreationDate <= toTime.Value))
+            .Include(x => x.StatusOrder)
+            .Where(x => status == null || x.StatusOrder.StatusCode == status);
 
-            /* try
-             {
-                 var items = await _dbSet
-                     .Where(o => o.UserId == filter.UserId)
-                     .Where(o => o.StatusId == filter.StatusId)
-                     .ToListAsync();
-                 return items;
-             }
-             catch (Exception)
-             {
+            var items = await itemList.
+                OrderByDescending(x => x.CreationDate)
+                                    .Skip((pageIndex - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
 
-                 throw new Exception();
-             }*/
-            return null;
-        }
-
-        public async Task<IEnumerable<Order>> GetOrderByFilter(int pageIndex, int pageSize, FilterOrderDTO filter)
-        {
-            //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
-
-            try
+            var itemCount = await itemList.CountAsync();
+            var result = new Pagination<Order>()
             {
-                /*var items = await _dbSet
-                    .Where(o => o.UserId == filter.UserId)
-                    .Where(o => o.StatusId == filter.StatusId)
-                    .OrderByDescending(x => x.CreationDate)
-                    .Skip(pageIndex * pageSize)
-                    .Take(pageSize)
-                    .AsNoTracking()
-                    .ToListAsync();
-                return items;*/
-                return null;
-            }
-            catch (Exception)
-            {
-
-                throw new Exception();
-            }
-            //return null;
-        }
-
-
-        public async Task<IEnumerable<Order>> GetOrderByStatus(int pageIndex, int pageSize, Guid statusId)
-        {
-            //Expression<Func<Order, bool>> order = new Expression<Func<Order, bool>>;
-
-            try
-            {
-                var items = await _dbSet
-                    .Where(o => o.StatusId == statusId)
-                    .OrderByDescending(x => x.CreationDate)
-                    .Skip(pageIndex * pageSize)
-                    .Take(pageSize)
-                    .AsNoTracking()
-                    .ToListAsync();
-                return items;
-            }
-            catch (Exception)
-            {
-
-                throw new Exception();
-            }
-            //return null;
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+            return result;
         }
     }
 }

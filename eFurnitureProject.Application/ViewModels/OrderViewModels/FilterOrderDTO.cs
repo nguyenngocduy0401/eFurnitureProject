@@ -10,11 +10,9 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewModels
     {
         public DateTime? FromTime { get; set; }
         public DateTime? ToTime { get; set; }
-        public string? Email { get; set; }
-        public string? Name { get; set; }
-        public string? PhoneNumber { get; set; }
-        public int? Status { get; set; }
-        public int PageSize { get; set; }
-        public int PageIndex { get; set; }
+        public string? Search { get; set; }
+        public int? StatusCode { get; set; }
+        public int PageSize { get; set; } = 10;
+        public int PageIndex { get; set; } = 1;
     }
 }

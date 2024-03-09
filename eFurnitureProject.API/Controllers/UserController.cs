@@ -27,15 +27,15 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<UserViewDTO>> GetUserInformationByLogin() =>
             await _userService.GetUserInformationByLogin();
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         public async Task<ApiResponse<string>> ChangePassword(UserPasswordDTO userPasswordDTO) =>
             await _userService.ChangePassword(userPasswordDTO);
         [Authorize]
-        [HttpPost]
+        [HttpPut]
         public async Task<ApiResponse<UserViewDTO>> UpdateUser(UserUpdateDTO userUpdateDTO) =>
             await _userService.UpdateUser(userUpdateDTO);
         [Authorize(Roles = AppRole.Admin)]
-        [HttpPost]
+        [HttpPut]
         public async Task<ApiResponse<string>> BanAndUnbanUser(string userID) =>
             await _userService.BanAndUnbanUser(userID);
         [Authorize(Roles = AppRole.Admin)]

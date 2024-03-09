@@ -17,7 +17,6 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewModels
         public string? Name { get; set; }
         public Guid? StatusId { get; set; }
         public StatusOrder? StatusOrder { get; set; }
-        public Guid? TransactionId { get; set; }
         public string? UserId { get; set; }
 
     }

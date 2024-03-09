@@ -14,6 +14,7 @@ using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 using eFurnitureProject.Application.ViewModels.CartViewModels;
+using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -50,7 +51,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateAppointmentDTO, AppointmentDetail>();
             CreateMap<User, AppointmentDetail>();
             CreateMap<AppointmentDetailDTO, User>();
-            CreateMap <ProductViewDTO , Product>();
+            CreateMap<ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
             CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
@@ -58,6 +59,13 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<User, UserViewDTO>();
             CreateMap<CreateUserDTO, User>();
             CreateMap<OrderDetail, OrderDetailViewDTO>();
+            CreateMap<Order, OrderViewDTO>();
+            CreateMap<Order, OrderViewForCustomerDTO>()
+     .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
+     {
+         StatusCode = src.StatusOrder.StatusCode,
+         Name = src.StatusOrder.Name
+     }));
             CreateMap<CreateCategoryViewModel, Category>();
             CreateMap<Category, CategoryViewModel>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));

@@ -5,6 +5,7 @@ using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,7 +22,8 @@ namespace eFurnitureProject.Application.Services
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) { 
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) 
+        { 
             _mapper = mapper;
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
@@ -64,88 +66,13 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<IEnumerable<OrderDetailViewDTO>>> GetOrderDetailById(int pageIndex, int pageSize, Guid orderId)
+        public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
-            var response = new ApiResponse<IEnumerable<OrderDetailViewDTO>>();
+            var response = new ApiResponse<OrderDetailViewDTO>();
             try
             {
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
-                if (order is null)
-                {
-                    throw new Exception("Order has not existed!");
-                }
-                else
-                {
-                    var viewItems = new Collection<OrderDetailViewDTO> ();
-                    if (order.OrderDetail is null)
-                    {
-                        response.Data = viewItems;
-                        response.isSuccess = true;
-                        response.Message = "No product in order";
-                    }
-                    else
-                    {
-                        foreach (var item in order.OrderDetail)
-                        {
-                           var viewItem = _mapper.Map<OrderDetailViewDTO>(item);
-
-
-
-                            viewItem.Product = _mapper.Map<ProductViewDTO>(item.Product);
-
-
-
-                            if(item.Product is not null)
-
-                            {
-
-                                if (item.Product.Category is not null)
-
-                                {
-
-                                    viewItem.Product.CategoryName = item.Product.Category.Name;
-
-                                }
-
-                            }
-
-
-
-                            viewItems.Add(viewItem);
-                        }
-                        if (viewItems.Count != 0)
-                        {
-                            response.Data = viewItems;
-                            response.isSuccess = true;
-                            response.Message = "Success";
-                        }
-                        else
-                        {
-                            response.Data = viewItems;
-                            response.isSuccess = true;
-                            response.Message = "No record found!";
-                        }
-                    }          
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                response.Data = null;
-                response.isSuccess = false;
-                response.Message = ex.Message;
-                return response;
-            }
-            return response;
-        }
-
-        
-
-        public async Task<ApiResponse<IEnumerable<OrderViewDTO>>> GetOrderFilterAsync(FilterOrderDTO filterOrderDTO)
-        {
-            var response = new ApiResponse<IEnumerable<OrderViewDTO>>();
-            try 
-            {
+                
             }
             catch (DbException ex)
             {
@@ -159,61 +86,76 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        
 
-        public async Task<ApiResponse<IEnumerable<OrderViewGetDTO>>> GetOrderPaging(int pageIndex, int pageSize)
+        public async Task<ApiResponse<Pagination<OrderViewDTO>>> GetOrderFilterAsync(FilterOrderDTO filterOrderDTO)
         {
-            var response = new ApiResponse<IEnumerable<OrderViewGetDTO>>();
-
-            try
+            var response = new ApiResponse<Pagination<OrderViewDTO>>();
+            try 
             {
-                var result = await _unitOfWork.OrderRepository.Get(pageIndex, pageSize);
-                var viewItems = new List<OrderViewGetDTO>();
-
-                foreach (var order in result)
-                {
-                    var viewItem = _mapper.Map<OrderViewGetDTO>(order);
-                    if (order.User != null)
-                    {
-                        viewItem.Name = order.User.Name;
-                    }
-                    else
-                    {
-                        viewItem.Name = "Guest";
-                    }
-
-                    if (order.StatusOrder != null)
-                    {
-                        viewItem.StatusCode = order.StatusOrder.StatusCode;
-                    }
-                    else
-                    {
-                        viewItem.StatusCode = 0;
-                    }
-
-                    viewItems.Add(viewItem);
-                }
-
-                if (viewItems.Count != 0)
-                {
-                    response.Data = viewItems;
+                var listOrder = await _unitOfWork.OrderRepository.GetOrderByFilter
+                    (filterOrderDTO.PageIndex, filterOrderDTO.PageSize,
+                     filterOrderDTO.StatusCode, filterOrderDTO.FromTime,
+                     filterOrderDTO.ToTime, filterOrderDTO.Search);
+                if (listOrder == null) 
+                {   
                     response.isSuccess = true;
-                    response.Message = "Success!";
+                    response.Message = "Not found!";
+                    return response;
                 }
-                else
-                {
-                    response.Data = null;
-                    response.isSuccess = true;
-                    response.Message = "No reocrd!";
-                }
+                var result = _mapper.Map<Pagination<OrderViewDTO>>(listOrder);
+                response.Data = result; 
+                response.isSuccess = true;
+                response.Message = "Successful!";
             }
-            catch (Exception ex)
+            catch (DbException ex)
             {
-                response.Data = null;
                 response.isSuccess = false;
                 response.Message = ex.Message;
             }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
 
+        public async Task<ApiResponse<Pagination<OrderViewForCustomerDTO>>> GetOrderFilterByLoginAsync(FilterOrderByLoginDTO filterOrderByLogin)
+        {
+            var response = new ApiResponse<Pagination<OrderViewForCustomerDTO>>();
+            try
+            {
+                var userId = _claimsService.GetCurrentUserId.ToString();
+                if (userId == null) 
+                {
+                    response.isSuccess = false;
+                    response.Message = "login first!";
+                }
+                var listOrder = await _unitOfWork.OrderRepository.GetOrderFilterByLogin
+                    (filterOrderByLogin.PageIndex, filterOrderByLogin.PageSize, 
+                     filterOrderByLogin.StatusCode, filterOrderByLogin.FromTime, 
+                     filterOrderByLogin.ToTime, userId);
+                if (listOrder == null)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Not found!";
+                    return response;
+                }
+                var result = _mapper.Map<Pagination<OrderViewForCustomerDTO>>(listOrder);
+                response.Data = result;
+                response.isSuccess = true;
+                response.Message = "Successful!";
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
             return response;
         }
 

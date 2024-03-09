@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IFeedbackRepository : IGenericRepository<Feedback>
     {
+        Task<bool> CheckProduct(Guid productId);
     }
 }

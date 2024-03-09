@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eFurnitureProject.API.Controllers
 {
-    public class ProductController:BaseController
+    public class ProductController : BaseController
     {
         private readonly IProductService _productService;
         public ProductController(IProductService productService)
@@ -25,10 +25,10 @@ namespace eFurnitureProject.API.Controllers
           int page,
          [FromQuery] Guid categoryId,
          string? productName,
-           double minPrice, double maxPrice,
+           double? minPrice, double? maxPrice,
          int pageSize)
         {
-            var response = await _productService.GetAll(page, categoryId, productName, minPrice, maxPrice, pageSize);
+            var response = await _productService.GetAll(page , categoryId, productName, minPrice, maxPrice, pageSize );
             if (response.isSuccess)
             {
                 return Ok(response);
@@ -36,7 +36,7 @@ namespace eFurnitureProject.API.Controllers
             return BadRequest(response);
         }
         [HttpPost]
-        
+
         public async Task<IActionResult> CreatePoduct(CreateProductDTO createProductDTO)
         {
             try
@@ -85,7 +85,7 @@ namespace eFurnitureProject.API.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> ViewProductById(Guid id)
+        public async Task<IActionResult> GetProductById(Guid id)
         {
             var result = await _productService.GetProductByID(id);
             return Ok(result);
@@ -104,8 +104,11 @@ namespace eFurnitureProject.API.Controllers
 
         }
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize)=>  await _productService.CalculateTotalPages(totalItemsCount, pageSize);
-   
+        public async Task<ActionResult<ApiResponse<int>>> GetTotalPages(int totalItemsCount, int pageSize) => await _productService.CalculateTotalPages(totalItemsCount, pageSize);
+
+        [HttpPut]
+        public async Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity) =>
+       await _productService.UpdateQuantityProduct(productID, quantity);
 
     }
 }

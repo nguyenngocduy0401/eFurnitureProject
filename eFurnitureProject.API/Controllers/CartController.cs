@@ -14,7 +14,7 @@ namespace eFurnitureProject.API.Controllers
             this._cartService = cartService;
         }
 
-        [HttpPost]
+        //[HttpPost]
         //public async Task<ApiResponse<CartDetailViewDTO>> AddProduct(AddProductToCartDTO product) => await _cartService.addProductAsysn(product);
     }
 }

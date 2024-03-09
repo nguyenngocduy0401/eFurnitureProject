@@ -1,5 +1,6 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
@@ -10,6 +11,9 @@ using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 using Microsoft.AspNetCore.Identity;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
+using eFurnitureProject.Application.ViewModels.ImportViewModels;
+using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
+using eFurnitureProject.Application.ViewModels.CartViewModels;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
@@ -62,6 +66,18 @@ namespace eFurnitureProject.Infrastructures.Mappers
          StatusCode = src.StatusOrder.StatusCode,
          Name = src.StatusOrder.Name
      }));
+            CreateMap<CreateCategoryViewModel, Category>();
+            CreateMap<Category, CategoryViewModel>()
+                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
+            CreateMap<OrderViewDTO, Order>();
+            CreateMap<Order, OrderViewDTO>();
+            CreateMap<CreateImportDTO, Import>();
+            CreateMap<Import, ImportViewDTO>()
+                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
+            CreateMap<CreateImportDetailDTO, ImportDetail>();
+            CreateMap<UpdateImportDTO, Import>();
+            CreateMap<AddProductToCartDTO, CartDetail>();
+            CreateMap<Cart, CartDetailViewDTO>();
         }
     }
 }

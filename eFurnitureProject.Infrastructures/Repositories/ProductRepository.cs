@@ -15,6 +15,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly ICurrentTime _timeService;
+        private readonly IClaimsService _claimsService;
 
         public ProductRepository(
             AppDbContext context,
@@ -24,6 +26,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
             : base(context, timeService, claimsService)
         {
             _dbContext = context;
+            _timeService = timeService;
+            _claimsService = claimsService;
         }
 
       
@@ -84,9 +88,28 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             return pagination;
         }
-        public async Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double minPrice, double maxPrice, int pageIndex, int pageSize)
+        public async Task<IEnumerable<ProductDTO>> GetProductsByIDAsync(Guid productId)
         {
-
+            var products = await _dbContext.Products
+        .Include(p => p.Category)
+         .Where(p => p.Id == productId)
+        .Select(p => new ProductDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Image = p.Image,
+            InventoryQuantity = p.InventoryQuantity,
+            Status = p.Status,
+            Price = p.Price,
+            CategoryId = p.Category.Id,
+            CategoryName = p.Category.Name
+        })
+        .ToListAsync();
+            return products;
+        }
+        public async Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double? minPrice, double? maxPrice, int pageIndex, int pageSize)
+        {
 
             IQueryable<Product> query = _dbContext.Products.Include(p => p.Category);
 
@@ -264,5 +287,19 @@ namespace eFurnitureProject.Infrastructures.Repositories
         }
 
 
+
+        public async void IncreaseQuantityProductFromImport(ICollection<ImportDetail> importDetails)
+        {
+            List<Product> products = new List<Product>();
+            foreach (var importDetail in importDetails)
+            {
+                var product = await _dbContext.Products.FirstAsync(x => x.Id == importDetail.ProductId);
+                product.InventoryQuantity += importDetail.Quantity;
+                product.ModificationDate = _timeService.GetCurrentTime();
+                product.ModificationBy = _claimsService.GetCurrentUserId;
+                products.Add(product);
+            }
+            _dbSet.UpdateRange(products);
+        }
     }
 }

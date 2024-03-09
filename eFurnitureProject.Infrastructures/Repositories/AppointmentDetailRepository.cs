@@ -28,18 +28,36 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
 
             var appointmentDetails = await _dbContext.AppointmentDetails
-         .Where(ad => ad.AppointmentId == appointmentId) // Lọc theo AppointmentId
-         .Join(_dbContext.UserRoles.Where(ur => ur.RoleId == "3"), // Join với bảng UserRoles để kiểm tra RoleId
-               ad => ad.UserId,
-               ur => ur.UserId,
-               (ad, ur) => ad) // Chỉ lấy AppointmentDetails có UserId có RoleId = 3
-         .ToListAsync();
+                .Where(ad => ad.AppointmentId == appointmentId) // Lọc theo AppointmentId
+                .Join(_dbContext.UserRoles // Tham gia với bảng UserRoles
+                    .Join(_dbContext.Roles // Tham gia với bảng Roles
+                        .Where(r => r.Name == "Staff"), // Lọc các Roles có tên là "Staff"
+                        ur => ur.RoleId,
+                        r => r.Id,
+                        (ur, r) => ur),
+                    ad => ad.UserId,
+                    ur => ur.UserId,
+                    (ad, ur) => ad) 
+                .ToListAsync();
 
-            appointmentDetails.ForEach(ad => ad.IsDeleted = true); // Gán IsDeleted = true cho các AppointmentDetail phù hợp
+            foreach (var ad in appointmentDetails)
+            {
+                ad.IsDeleted = true; // Gán IsDeleted = true cho các AppointmentDetail phù hợp
+            }
 
             await _dbContext.SaveChangesAsync();
 
-
+        }
+        public async Task UpdateAsync(AppointmentDetail appointmentDetail)
+        {
+            _dbContext.Entry(appointmentDetail).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task<List<AppointmentDetail>> GetByAppointmentIdAsync(Guid appointmentId)
+        {
+            return await _dbContext.AppointmentDetails
+                .Where(ad => ad.AppointmentId == appointmentId)
+                .ToListAsync();
         }
     }
 }

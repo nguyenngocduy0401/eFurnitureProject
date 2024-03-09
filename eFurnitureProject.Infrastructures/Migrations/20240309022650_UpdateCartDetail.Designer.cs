@@ -12,8 +12,8 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240306152819_updateOrder")]
-    partial class updateOrder
+    [Migration("20240309022650_UpdateCartDetail")]
+    partial class UpdateCartDetail
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -250,7 +250,12 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("CartId", "ProductId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartDetails");
                 });
@@ -417,10 +422,17 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -499,17 +511,12 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid?>("StatusId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("TransactionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StatusId");
-
-                    b.HasIndex("TransactionId");
 
                     b.HasIndex("UserId");
 
@@ -1181,7 +1188,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasOne("eFurnitureProject.Domain.Entities.Product", "Product")
                         .WithMany("CartDetail")
-                        .HasForeignKey("CartId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1241,17 +1248,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .WithMany()
                         .HasForeignKey("StatusId");
 
-                    b.HasOne("eFurnitureProject.Domain.Entities.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionId");
-
                     b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
                         .WithMany("Order")
                         .HasForeignKey("UserId");
 
                     b.Navigation("StatusOrder");
-
-                    b.Navigation("Transaction");
 
                     b.Navigation("User");
                 });

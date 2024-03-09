@@ -21,6 +21,8 @@ namespace eFurnitureProject.Application.Repositories
         void SoftRemoveRange(List<TEntity> entities);
 
         Task<Pagination<TEntity>> ToPagination(int pageNumber = 0, int pageSize = 10);
+        Task<Pagination<TEntity>> ToPaginationIsNotDelete(int pageNumber = 0, int pageSize = 10);
+        Task<List<TEntity>> GetAllIsNotDeleteAsync();
     }
 }
 

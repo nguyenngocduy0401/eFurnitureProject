@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using FluentValidation;
 using FluentValidation.Results;
+using System.Data.Common;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -50,37 +51,23 @@ namespace eFurnitureProject.Application.Services
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
                 }
-                else
-                {
-                    await _unitOfWork.ProductRepository.AddAsync(product);
-                    var addSuccessfully = await _unitOfWork.SaveChangeAsync();
-                    var productDTO = _mapper.Map<ProductDTO>(product);
-                    response.Data = productDTO;
-                    if (addSuccessfully > 0)
-                    {
-
-                        response.Data = productDTO;
-                        response.isSuccess = true;
-                        response.Message = "Create new Product successfully";
-                        return response;
-                    }
-                }
+                await _unitOfWork.ProductRepository.AddAsync(product);
+                var isSuccess = await _unitOfWork.SaveChangeAsync();
+                return response;
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-
                 response.isSuccess = false;
                 response.Message = ex.Message;
-
-
-                if (ex.InnerException != null)
-                {
-                    response.Message = ex.Message + "Inner Exception: " + ex.InnerException.Message;
-                }
             }
-
             return response;
         }
+    
 
         public async Task<ApiResponse<int>> CalculateTotalPages(int totalItemsCount, int pageSize)
         {
@@ -119,18 +106,8 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
                 _unitOfWork.ProductRepository.SoftRemove(exist);
-                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                if (isSuccess)
-                {
-                    response.isSuccess = true;
-                    response.Message = "Product Deleted Successfully";
-
-                }
-                else
-                {
-                    response.isSuccess = false;
-                    response.Message = "Error deleting Product";
-                }
+                var isSuccess = await _unitOfWork.SaveChangeAsync();
+              return response;  
             }
             catch (Exception ex)
             {
@@ -141,7 +118,7 @@ namespace eFurnitureProject.Application.Services
 
         }
 
-        public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex = 0, int pageSize = 10)
+        public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex , int pageSize )
         {
             var response = new ApiResponse<Pagination<ProductDTO>>();
             var products = await _unitOfWork.ProductRepository.ToPaginationProduct(pageIndex, pageSize);

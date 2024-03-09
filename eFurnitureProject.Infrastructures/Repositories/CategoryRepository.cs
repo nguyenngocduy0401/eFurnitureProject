@@ -19,6 +19,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = context;
         }
 
-        public Task<bool> CheckCategoryNameExisted(string name) => _dbContext.Categories.AnyAsync(u => u.Name == name);
+        public Task<bool> CheckCategoryNameExisted(string name) => _dbContext.Categories.AnyAsync(u => u.Name == name && u.IsDeleted != true);
+
+        public Task<bool> CheckCategoryNameExisted(Guid categoryId, string name) => _dbContext.Categories.AnyAsync(u => u.Name == name && u.Id != categoryId && u.IsDeleted != true);
     }
 }

@@ -65,7 +65,7 @@ namespace eFurnitureProject.Application.Services
             var categories = await _unitOfWork.CategoryRepository.GetAllIsNotDeleteAsync();
             var result = _mapper.Map<List<CategoryViewModel>>(categories);
             response.Data = result;
-            response.Message = $"Have {result.Count} product.";
+            response.Message = $"Have {result.Count} category.";
             return response;
         }
 
@@ -103,7 +103,7 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<CategoryViewModel>> UpdateCategoryAsync(Guid categoryId, CreateCategoryViewModel updateCategory)
         {
             var response = new ApiResponse<CategoryViewModel>();
-            var isExisted = await _unitOfWork.CategoryRepository.CheckCategoryNameExisted(updateCategory.Name);
+            var isExisted = await _unitOfWork.CategoryRepository.CheckCategoryNameExisted(categoryId, updateCategory.Name);
             if (isExisted)
             {
                 response.isSuccess = false;

@@ -11,7 +11,6 @@ using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
 using Microsoft.AspNetCore.Identity;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
-using eFurnitureProject.Application.ViewModels.OrderViewDTO;
 using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 using eFurnitureProject.Application.ViewModels.CartViewModels;

@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IImportRepository : IGenericRepository<Import>
     {
+        Task AddWithDetailAsync(Import import);
     }
 }

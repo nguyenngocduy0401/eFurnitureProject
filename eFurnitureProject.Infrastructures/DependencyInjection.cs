@@ -31,6 +31,8 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IContractService, ContractService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IVoucherService, VoucherService>();
             services.AddScoped<IOrderService, OrderService>();
@@ -40,6 +42,8 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IUserService, UserService>();
             #endregion
 
+            services.AddScoped<IImportService, ImportService>();
+            services.AddScoped<ICartService, CartService>();
             #region Repository DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();

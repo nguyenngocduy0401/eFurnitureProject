@@ -1,15 +1,21 @@
 ﻿using eFurnitureProject.API.Services;
 using eFurnitureProject.API.Validator.AppointmentValidator;
 using eFurnitureProject.API.Validator.AuthenticationValidator;
+using eFurnitureProject.API.Validator.CategoryValidator;
 using eFurnitureProject.API.Validator.ContractValidator;
 using eFurnitureProject.API.Validator.ProductValidator;
 using eFurnitureProject.API.Validator.UserValidator;
+using eFurnitureProject.API.Validator.ImportValidator;
+using eFurnitureProject.API.Validator.InventoryValidator;
 using eFurnitureProject.Application;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Services;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
+using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
+using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Infrastructures;
@@ -89,6 +95,11 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<UserPasswordDTO>, ChangePasswordValidation>();
             services.AddTransient<IValidator<UserUpdateDTO>, UpdateUserValidation>();
             services.AddTransient<IValidator<CreateUserDTO>, CreateUserValidation>();
+            services.AddTransient<IValidator<CreateCategoryViewModel>, CreateCategoryViewModelValidation>();
+            services.AddTransient<IValidator<CreateImportDTO>, CreateImportValidation>();
+            services.AddTransient<IValidator<CreateImportDetailDTO>, CreateImportDetailValidation>();
+            services.AddTransient<IValidator<UpdateImportDTO>, UpdateImportValidation>();
+
             #endregion
 
             return services;

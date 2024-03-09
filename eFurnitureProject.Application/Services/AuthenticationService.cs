@@ -140,6 +140,12 @@ namespace eFurnitureProject.Application.Services
                             await _roleManager.CreateAsync(new Role { Name = AppRole.Customer });
                         }
                         await _userManager.AddToRoleAsync(user, AppRole.Customer);
+                        var cart = new Cart()
+                        {
+                            UserId = user.Id
+                        };
+                        await _unitOfWork.CartRepository.AddAsync(cart);
+                        await _unitOfWork.SaveChangeAsync();
                         response.Data = userRegisterDTO;
                         response.isSuccess = true;
                         response.Message = "Register is successful!";

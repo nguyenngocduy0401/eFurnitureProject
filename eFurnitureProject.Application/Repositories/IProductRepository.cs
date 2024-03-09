@@ -20,8 +20,8 @@ namespace eFurnitureProject.Application.Repositories
         Task<Pagination<ProductDTO>> ToPaginationProductNotDeleted(int pageIndex = 0, int pageSize = 10);
         Task<Pagination<ProductDTO>> GetProductsByCategoryIDAsync(Guid categoryIds, int pageIndex, int pageSize);
         Task<Pagination<ProductDTO>> ToPaginationProduct(int pageIndex = 0, int pageSize = 10);
-       
 
 
+        void IncreaseQuantityProductFromImport(ICollection<ImportDetail> importDetails);
     }
 }

@@ -1,6 +1,9 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,dotnetcore
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,dotnetcore
+<<<<<<< HEAD
+
+=======
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -16,6 +19,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+>>>>>>> main
 ### DotnetCore ###
 # .NET Core build folders
 bin/
@@ -427,3 +431,7 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,dotnetcore
+<<<<<<< HEAD
+CoverageReport/
+=======
+>>>>>>> main

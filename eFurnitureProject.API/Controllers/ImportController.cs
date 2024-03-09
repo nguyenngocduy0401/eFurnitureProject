@@ -1,10 +1,12 @@
 ﻿using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.ImportViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eFurnitureProject.API.Controllers
 {
+    [Authorize(Roles = AppRole.Admin + "," + AppRole.Staff)]
     public class ImportController : BaseController
     {
         private readonly IImportService _importService;

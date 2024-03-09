@@ -73,7 +73,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Order, OrderViewDTO>();
             CreateMap<CreateImportDTO, Import>();
             CreateMap<Import, ImportViewDTO>()
-                 .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
+                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
             CreateMap<CreateImportDetailDTO, ImportDetail>();
             CreateMap<UpdateImportDTO, Import>();
             CreateMap<AddProductToCartDTO, CartDetail>();

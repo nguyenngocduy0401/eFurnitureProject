@@ -68,7 +68,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
      }));
             CreateMap<CreateCategoryViewModel, Category>();
             CreateMap<Category, CategoryViewModel>()
-                 .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
+                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
             CreateMap<OrderViewDTO, Order>();
             CreateMap<Order, OrderViewDTO>();
             CreateMap<CreateImportDTO, Import>();

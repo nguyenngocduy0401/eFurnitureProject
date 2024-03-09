@@ -78,12 +78,12 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<CategoryViewModel>> SoftRemoveCategoryAsync(Guid categoryId)
+        public async Task<ApiResponse<CategoryViewModel>> SoftRemoveCategoryAsync(string categoryId)
         {
             var response = new ApiResponse<CategoryViewModel>();
             try
             {
-                var existingCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryId);
+                var existingCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(Guid.Parse(categoryId));
                 _unitOfWork.CategoryRepository.SoftRemove(existingCategory);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                 if (isSuccess == true)
@@ -100,10 +100,11 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<CategoryViewModel>> UpdateCategoryAsync(Guid categoryId, CreateCategoryViewModel updateCategory)
+        public async Task<ApiResponse<CategoryViewModel>> UpdateCategoryAsync(string categoryId, CreateCategoryViewModel updateCategory)
         {
             var response = new ApiResponse<CategoryViewModel>();
-            var isExisted = await _unitOfWork.CategoryRepository.CheckCategoryNameExisted(categoryId, updateCategory.Name);
+            var categoryGuidId = Guid.Parse(categoryId);
+            var isExisted = await _unitOfWork.CategoryRepository.CheckCategoryNameExisted(categoryGuidId, updateCategory.Name);
             if (isExisted)
             {
                 response.isSuccess = false;
@@ -112,7 +113,7 @@ namespace eFurnitureProject.Application.Services
             }
             try
             {
-                var existingCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryId);
+                var existingCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryGuidId);
                 ValidationResult validationResult = await _validatorCategory.ValidateAsync(updateCategory);
                 if (validationResult.IsValid == false)
                 {

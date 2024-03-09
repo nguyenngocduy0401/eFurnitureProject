@@ -18,10 +18,10 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<CategoryViewModel>> CreateCategory(CreateCategoryViewModel createCategoryViewModel) => await _categoryService.CreateCategoryAsync(createCategoryViewModel);
 
         [HttpPut]
-        public async Task<ApiResponse<CategoryViewModel>> UpdateCategory(Guid categoryId, CreateCategoryViewModel updateCategory) => await _categoryService.UpdateCategoryAsync(categoryId, updateCategory);
+        public async Task<ApiResponse<CategoryViewModel>> UpdateCategory(string categoryId, CreateCategoryViewModel updateCategory) => await _categoryService.UpdateCategoryAsync(categoryId, updateCategory);
 
         [HttpPut]
-        public async Task<ApiResponse<CategoryViewModel>> SoftRemoveCategory(Guid categoryId) => await _categoryService.SoftRemoveCategoryAsync(categoryId);
+        public async Task<ApiResponse<CategoryViewModel>> SoftRemoveCategory(string categoryId) => await _categoryService.SoftRemoveCategoryAsync(categoryId);
 
         [HttpGet]
         public async Task<ApiResponse<List<CategoryViewModel>>> GetCategories() => await _categoryService.GetAllCategoryAsync();

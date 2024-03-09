@@ -165,12 +165,12 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
 
 
-        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAsync(Guid categoryId, int pageIndex, int pageSize)
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAsync(string categoryId, int pageIndex, int pageSize)
         {
            
             var products = await _dbContext.Products
       .Include(p => p.Category)
-      .Where(p => p.CategoryId == categoryId)
+      .Where(p => p.CategoryId.ToString() == categoryId)
       .Select(p => new ProductDTO
       {
           Id = p.Id,

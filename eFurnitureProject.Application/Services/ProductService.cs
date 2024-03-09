@@ -218,7 +218,7 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 Pagination<ProductDTO> products;
-
+                var cateId = CategoryID.ToString();
                 if (CategoryID == Guid.Empty && string.IsNullOrEmpty(ProductName) && minPrice <= 0 && maxPrice <= 0)
                 {
 
@@ -231,7 +231,7 @@ namespace eFurnitureProject.Application.Services
 
                 if (CategoryID != Guid.Empty)
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID, page, pageSize);
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(cateId, page, pageSize);
                 }
                 else if (!string.IsNullOrEmpty(ProductName))
                 {

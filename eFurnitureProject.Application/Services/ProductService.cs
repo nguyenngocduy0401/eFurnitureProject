@@ -8,9 +8,6 @@ using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using FluentValidation;
 using FluentValidation.Results;
 using System.Data.Common;
 
@@ -134,9 +131,9 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<IEnumerable<ProductDTO>>> GetProductByID(Guid id)
+        public async Task<ApiResponse<ProductDTO>> GetProductByID(string id)
         {
-            var response = new ApiResponse<IEnumerable<ProductDTO>>();
+            var response = new ApiResponse<ProductDTO>();
             try
             {
                 var product = await _unitOfWork.ProductRepository.GetProductsByIDAsync(id);
@@ -147,7 +144,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    var productDTO = _mapper.Map<IEnumerable<ProductDTO>>(product);
+                    var productDTO = _mapper.Map<ProductDTO>(product);
                     response.isSuccess = true;
                     response.Data = productDTO;
                     response.Message = "Find product successfully";
@@ -218,8 +215,8 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 Pagination<ProductDTO> products;
-                var cateId = CategoryID.ToString();
-                if (CategoryID is null && string.IsNullOrEmpty(ProductName) && minPrice <= 0 && maxPrice <= 0)
+                
+                if (string.IsNullOrEmpty(CategoryID) && string.IsNullOrEmpty(ProductName) && minPrice <= 0 && maxPrice <= 0)
                 {
 
 
@@ -228,23 +225,76 @@ namespace eFurnitureProject.Application.Services
                     response.Data = result;
                     return response;
                 }
-
-                if (CategoryID is null)
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName)&& minPrice.HasValue && minPrice >= 0 && !maxPrice.HasValue)
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(cateId, page, pageSize);
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIdAndNameAndMinPriceAsync(CategoryID, ProductName, minPrice, page, pageSize);
                 }
-                if (!string.IsNullOrEmpty(ProductName))
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName) && maxPrice.HasValue && maxPrice >= 0 && !minPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIdAndNameAndMaxPriceAsync(CategoryID, ProductName, maxPrice, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName) && maxPrice.HasValue && maxPrice >= 0 && minPrice.HasValue && minPrice >= 0 && minPrice <= maxPrice)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIdAndNameAndMinAndMaxPriceAsync(CategoryID, ProductName, minPrice, maxPrice, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndNameAsync(CategoryID, ProductName, page, pageSize);
+                }
+               else  if (!string.IsNullOrEmpty(CategoryID)&&string.IsNullOrEmpty(ProductName)&&!minPrice.HasValue &&!maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID) && !minPrice.HasValue && !maxPrice.HasValue)
                 {
                     products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName, page, pageSize);
                 }
-                if (minPrice >= 0 || maxPrice >= 0)
+               else if (minPrice.HasValue && maxPrice.HasValue&& minPrice >= 0 && maxPrice >= 0 && minPrice<=maxPrice&& string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID))
                 {
                     products = await _unitOfWork.ProductRepository.GetProductsByPriceAsync(minPrice, maxPrice, page, pageSize);
                 }
+               else  if (!string.IsNullOrEmpty(CategoryID) && minPrice.HasValue && minPrice >= 0 && string.IsNullOrEmpty(ProductName)&&!maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndMinPriceAsync(CategoryID, minPrice.Value, page, pageSize);
+                }
+                
+                else if (!string.IsNullOrEmpty(CategoryID) && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(ProductName) && !minPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndMaxPriceAsync(CategoryID, maxPrice.Value, page, pageSize);
+                }
+
+                else if (!string.IsNullOrEmpty(CategoryID) && minPrice.HasValue && minPrice >= 0 && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(ProductName))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndPriceRangeAsync(CategoryID, minPrice.Value, maxPrice.Value, page, pageSize);
+                }
+            
+                else if (!string.IsNullOrEmpty(ProductName) && minPrice.HasValue && minPrice >= 0 && string.IsNullOrEmpty(CategoryID) && !maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAndMinPriceAsync(ProductName, minPrice.Value, page, pageSize);
+                }
+         
+                else if (!string.IsNullOrEmpty(ProductName) && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(CategoryID) && !minPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAndMaxPriceAsync(ProductName, maxPrice.Value, page, pageSize);
+                }
+           
+                else if (!string.IsNullOrEmpty(ProductName) && minPrice.HasValue && minPrice >= 0 && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAndPriceRangeAsync(ProductName, minPrice.Value, maxPrice.Value, page, pageSize);
+                }
+        
+                else if (minPrice.HasValue && minPrice >= 0 && !maxPrice.HasValue && string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByMinPriceAsync(minPrice.Value, page, pageSize);
+                }
+       
+                else if (maxPrice.HasValue && maxPrice >= 0 &&!minPrice.HasValue && string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByMaxPriceAsync(maxPrice.Value, page, pageSize);
+                }
                 else
                 {
-                    var pagination = await _unitOfWork.ProductRepository.ToPaginationProduct(page - 1, pageSize);
-                    response.Data = _mapper.Map<Pagination<ProductDTO>>(pagination);
+                    
                     response.isSuccess = true;
                     response.Message = "Get all products successfully";
                     return response;

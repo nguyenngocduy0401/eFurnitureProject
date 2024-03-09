@@ -88,11 +88,11 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             return pagination;
         }
-        public async Task<IEnumerable<ProductDTO>> GetProductsByIDAsync(Guid productId)
+        public async Task<ProductDTO> GetProductsByIDAsync(string productId)
         {
             var products = await _dbContext.Products
         .Include(p => p.Category)
-         .Where(p => p.Id == productId)
+         .Where(p => p.Id.ToString() == productId)
         .Select(p => new ProductDTO
         {
             Id = p.Id,
@@ -105,7 +105,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             CategoryId = p.Category.Id,
             CategoryName = p.Category.Name
         })
-        .ToListAsync();
+        .FirstOrDefaultAsync();
             return products;
         }
         public async Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double? minPrice, double? maxPrice, int pageIndex, int pageSize)
@@ -203,7 +203,43 @@ namespace eFurnitureProject.Infrastructures.Repositories
             return pagination;
         }
 
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndNameAsync(String categoryId, string productName, int pageIndex,int pageSize)
+        {
 
+            var products = await _dbContext.Products
+      .Include(p => p.Category)
+      .Where(p => p.CategoryId.ToString() == categoryId && p.Name.ToLower().Contains(productName.ToLower()))
+      .Select(p => new ProductDTO
+      {
+          Id = p.Id,
+          Name = p.Name,
+          Description = p.Description,
+          Image = p.Image,
+          InventoryQuantity = p.InventoryQuantity,
+          Status = p.Status,
+          Price = p.Price,
+          CategoryId = p.Category.Id,
+          CategoryName = p.Category.Name
+      })
+      .ToListAsync();
+
+            var totalItems = products.Count;
+
+            var paginatedProducts = products.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                Items = paginatedProducts,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+
+            };
+
+            return pagination;
+        }
 
         public async Task<Pagination<ProductDTO>> ToPaginationProduct(int pageIndex = 0, int pageSize = 10)
         {
@@ -300,6 +336,416 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 products.Add(product);
             }
             _dbSet.UpdateRange(products);
+        }
+//---------------------------------------------filter--------------------------------------------------------
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndMaxPriceAsync(string categoryID, double value, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+    .Include(p => p.Category)
+    .Where(p => p.CategoryId.ToString() == categoryID && p.Price <= value)
+    .Select(p => new ProductDTO
+    {
+        Id = p.Id,
+        Name = p.Name,
+        Description = p.Description,
+        Image = p.Image,
+        InventoryQuantity = p.InventoryQuantity,
+        Status = p.Status,
+        Price = p.Price,
+        CategoryId = p.Category.Id,
+        CategoryName = p.Category.Name
+    })
+    .ToListAsync();
+
+            var totalItems = products.Count;
+
+            var paginatedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                Items = paginatedProducts,
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndMinPriceAsync(string categoryID, double value, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+         .Where(p => p.CategoryId.ToString() == categoryID && p.Price >= value)
+         .OrderBy(p => p.Name) 
+         .Skip((page - 1) * pageSize)
+         .Take(pageSize)
+         .Select(p => new ProductDTO
+         {
+             Id = p.Id,
+             Name = p.Name,
+             Description = p.Description,
+             Image = p.Image,
+             InventoryQuantity = p.InventoryQuantity,
+             Status = p.Status,
+             Price = p.Price,
+             CategoryId = p.Category.Id,
+             CategoryName = p.Category.Name
+         })
+         .ToListAsync();
+
+         
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.CategoryId.ToString() == categoryID && p.Price >= value);
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndPriceRangeAsync(string categoryID, double value1, double value2, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+         .Where(p => p.CategoryId.ToString() == categoryID && p.Price >= value1 && p.Price <= value2)
+         .OrderBy(p => p.Name) 
+         .Skip((page - 1) * pageSize)
+         .Take(pageSize)
+         .Select(p => new ProductDTO
+         {
+             Id = p.Id,
+             Name = p.Name,
+             Description = p.Description,
+             Image = p.Image,
+             InventoryQuantity = p.InventoryQuantity,
+             Status = p.Status,
+             Price = p.Price,
+             CategoryId = p.Category.Id,
+             CategoryName = p.Category.Name
+         })
+         .ToListAsync();
+
+     
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.CategoryId.ToString() == categoryID && p.Price >= value1 && p.Price <= value2);
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByNameAndMinPriceAsync(string productName, double value, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+        .Where(p => p.Name.Contains(productName) && p.Price >= value && p.Price >= value)
+        .OrderBy(p => p.Name) 
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(p => new ProductDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Image = p.Image,
+            InventoryQuantity = p.InventoryQuantity,
+            Status = p.Status,
+            Price = p.Price,
+            CategoryId = p.Category.Id,
+            CategoryName = p.Category.Name
+        })
+        .ToListAsync();
+
+            
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.Name.Contains(productName) && p.Price >= value);
+
+            
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByNameAndMaxPriceAsync(string productName, double value, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+         .Where(p => p.Name.Contains(productName) && p.Price >= value && p.Price <= value)
+         .OrderBy(p => p.Name)
+         .Skip((page - 1) * pageSize)
+         .Take(pageSize)
+         .Select(p => new ProductDTO
+         {
+             Id = p.Id,
+             Name = p.Name,
+             Description = p.Description,
+             Image = p.Image,
+             InventoryQuantity = p.InventoryQuantity,
+             Status = p.Status,
+             Price = p.Price,
+             CategoryId = p.Category.Id,
+             CategoryName = p.Category.Name
+         })
+         .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.Name.Contains(productName) && p.Price >= value && p.Price <= value);
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByNameAndPriceRangeAsync(string productName, double value1, double value2, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+        .Where(p => p.Name.Contains(productName) && p.Price >= value1 && p.Price<=value2)
+        .OrderBy(p => p.Name)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(p => new ProductDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Image = p.Image,
+            InventoryQuantity = p.InventoryQuantity,
+            Status = p.Status,
+            Price = p.Price,
+            CategoryId = p.Category.Id,
+            CategoryName = p.Category.Name
+        })
+        .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.Name.Contains(productName) && p.Price >= value1 && p.Price <= value2);
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByMinPriceAsync(double value, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+        .Where(p=> p.Price >= value)
+        .OrderBy(p => p.Name)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(p => new ProductDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Image = p.Image,
+            InventoryQuantity = p.InventoryQuantity,
+            Status = p.Status,
+            Price = p.Price,
+            CategoryId = p.Category.Id,
+            CategoryName = p.Category.Name
+        })
+        .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p=> p.Price>=value);
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByMaxPriceAsync(double value, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+      .Where(p => p.Price <= value)
+      .OrderBy(p => p.Name)
+      .Skip((page - 1) * pageSize)
+      .Take(pageSize)
+      .Select(p => new ProductDTO
+      {
+          Id = p.Id,
+          Name = p.Name,
+          Description = p.Description,
+          Image = p.Image,
+          InventoryQuantity = p.InventoryQuantity,
+          Status = p.Status,
+          Price = p.Price,
+          CategoryId = p.Category.Id,
+          CategoryName = p.Category.Name
+      })
+      .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.Price <= value);
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIdAndNameAndMinPriceAsync(string categoryID, string productName, double? minPrice, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+     .Where(p => p.CategoryId.ToString() == categoryID && p.Name.Contains(productName) && (minPrice == null || p.Price >= minPrice))
+     .OrderBy(p => p.Name)
+     .Skip((page - 1) * pageSize)
+     .Take(pageSize)
+     .Select(p => new ProductDTO
+     {
+         Id = p.Id,
+         Name = p.Name,
+         Description = p.Description,
+         Image = p.Image,
+         InventoryQuantity = p.InventoryQuantity,
+         Status = p.Status,
+         Price = p.Price,
+         CategoryId = p.Category.Id,
+         CategoryName = p.Category.Name
+     })
+     .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.CategoryId.ToString() == categoryID && p.Name.Contains(productName) && (minPrice == null || p.Price >= minPrice));
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIdAndNameAndMaxPriceAsync(string categoryID, string productName, double? maxPrice, int page, int pageSize)
+        {
+
+            var products = await _dbContext.Products
+                .Where(p => p.CategoryId.ToString() == categoryID && p.Name.Contains(productName) && (maxPrice == null || p.Price <= maxPrice))
+                .OrderBy(p => p.Name)
+     .Skip((page - 1) * pageSize)
+     .Take(pageSize)
+     .Select(p => new ProductDTO
+     {
+         Id = p.Id,
+         Name = p.Name,
+         Description = p.Description,
+         Image = p.Image,
+         InventoryQuantity = p.InventoryQuantity,
+         Status = p.Status,
+         Price = p.Price,
+         CategoryId = p.Category.Id,
+         CategoryName = p.Category.Name
+     })
+     .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.CategoryId.ToString() == categoryID && p.Name.Contains(productName) && (maxPrice == null || p.Price >= maxPrice));
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
+        }
+    
+
+        public async Task<Pagination<ProductDTO>> GetProductsByCategoryIdAndNameAndMinAndMaxPriceAsync(string categoryID, string productName, double? minPrice, double? maxPrice, int page, int pageSize)
+        {
+            var products = await _dbContext.Products
+                 .Where(p => p.CategoryId.ToString() == categoryID && p.Name.Contains(productName) &&
+            ((minPrice == null || p.Price >= minPrice) && (maxPrice == null || p.Price <= maxPrice)))
+                 .OrderBy(p => p.Name)
+      .Skip((page - 1) * pageSize)
+      .Take(pageSize)
+      .Select(p => new ProductDTO
+      {
+          Id = p.Id,
+          Name = p.Name,
+          Description = p.Description,
+          Image = p.Image,
+          InventoryQuantity = p.InventoryQuantity,
+          Status = p.Status,
+          Price = p.Price,
+          CategoryId = p.Category.Id,
+          CategoryName = p.Category.Name
+      })
+      .ToListAsync();
+
+
+            var totalCount = await _dbContext.Products
+                .CountAsync(p => p.CategoryId.ToString() == categoryID && p.Name.Contains(productName) &&
+            ((minPrice == null || p.Price >= minPrice) && (maxPrice == null || p.Price <= maxPrice)));
+                
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = page,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount,
+                Items = products
+            };
+
+            return pagination;
         }
     }
 }

@@ -24,35 +24,17 @@ namespace eFurnitureProject.API.Controllers
          _appointmentService = appointmentService;
         
         }
-      //  [Authorize(Roles = "CUSTOMER")]
+        [Authorize(Roles = AppRole.Customer)]
         [HttpPost]
      
-        public async Task<IActionResult> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)
-        {
-         var response = await _appointmentService.CreateAppointment(createAppointmentDTO);
+        public async Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)=> await _appointmentService.CreateAppointment(createAppointmentDTO);
 
-            if (response.isSuccess)
-            {
-                return Ok(response);
-            }
-            else
-            {
-                return BadRequest(response);
-            }
-        }
+
+        [Authorize(Roles = AppRole.Customer)]
         [HttpPost]
-        public async Task<IActionResult> UpdateAppointmentByCustomer(CreateAppointmentDTO createAppointmentDTO , Guid id)
-        {
-            var result = await _appointmentService.UpdateAppointmentByCustomer(id, createAppointmentDTO);
+        public async Task<ApiResponse<AppointmentDTO>> UpdateAppointmentByCustomer(Guid ID, CreateAppointmentDTO appointmentDTO) =>    
+            await _appointmentService.UpdateAppointmentByCustomer(ID, appointmentDTO);
 
-            if (result.isSuccess)
-            {
-
-                return Ok(result);
-            }
-            return BadRequest(result);
-
-        }
         [HttpGet]
         public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentPaging(int page, int pageSize) => await _appointmentService.GetAppointmentPaging(page, pageSize);
       
@@ -63,19 +45,16 @@ namespace eFurnitureProject.API.Controllers
             
            return await _appointmentService.Filter(filterAppointment,date,status);
         }
+        [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpPost]
         public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds) => await _appointmentService.PickStaffForAppointment(appointmentId,  staffIds);
+       
         [HttpPost]
         public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)=> await _appointmentService.UpdateAppointmentStatus(appointmentId, newStatus);
+        [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpDelete]
-        public async Task<IActionResult> DeletetAppointment(Guid id)
-        {
-            var result = await _appointmentService.DeleteAppointment(id);
-            if (result.isSuccess)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        public async Task<ApiResponse<bool>> DeleteAppointment(Guid ID)=> await _appointmentService.DeleteAppointment(ID);
+        [HttpGet]
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentByJWT(int pageIndex, int pageSize) => await _appointmentService.GetAppointmentByJWT(pageIndex, pageSize);
     }
 }

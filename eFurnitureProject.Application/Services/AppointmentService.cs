@@ -74,9 +74,7 @@ namespace eFurnitureProject.Application.Services
                     };
                     await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
                     await _unitOfWork.SaveChangeAsync();
-                    response.Data = appointmentDTO;
-                    response.isSuccess = true;
-                    response.Message = "Appointment created successfully";
+                    return response;
                 }
             }
             catch (Exception ex)
@@ -136,25 +134,21 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
         public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(FilterAppointmentDTO filterAppointment,DateTime date,int status) 
-        { 
+        {
 
-        var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
+            var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
 
             try
             {
                 Pagination<AppoitmentDetailViewDTO> appointments;
+
                 if (string.IsNullOrEmpty(filterAppointment.search) && date == default && status == 0)
                 {
-                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
-                    var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
-
-                    response.Data = result;
-                    return response;
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
                 }
-                else if (filterAppointment.search is not null){
-
-                    var pagination = await _unitOfWork.AppointmentRepository.GetAppointmentByFilter
-                    (filterAppointment.search, filterAppointment.pageIndex, filterAppointment.pageSize);
+                else if (!string.IsNullOrEmpty(filterAppointment.search))
+                {
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByFilter(filterAppointment.search, filterAppointment.pageIndex, filterAppointment.pageSize);
                 }
                 else if (date != default)
                 {
@@ -164,27 +158,26 @@ namespace eFurnitureProject.Application.Services
                 {
                     appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(filterAppointment.pageIndex, filterAppointment.pageSize, status);
                 }
-                
                 else
-                    {
-                        var pagination = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
-                        response.Data = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(pagination);
-                        response.isSuccess = true;
-                        response.Message = "Get all appointments successfully";
-                        return response;
-                    }
+                {
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
+                }
 
-               
+                var appointmentsDTO = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointments);
+                response.Data = appointmentsDTO;
+                response.isSuccess = true;
+                response.Message = "Get all appointments successfully";
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                return response;
             }
+
             return response;
         }
+    
        
         public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
         {
@@ -222,8 +215,7 @@ namespace eFurnitureProject.Application.Services
                     }
                     await _unitOfWork.SaveChangeAsync();
                 }
-                response.isSuccess = true;
-                response.Message = "Picked staff successfully";
+               
             }
             catch (Exception ex)
             {
@@ -248,9 +240,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 appointment.Status = (int)newStatus;
                 await _unitOfWork.SaveChangeAsync();
-                response.Data = true;
-                response.Message = "Appointment status updated successfully";
-            }
+                }
             catch (Exception ex)
             {
                 response.Data = false;
@@ -279,17 +269,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 _unitOfWork.AppointmentRepository.SoftRemove(exist);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                if (isSuccess)
-                {
-                    response.isSuccess = true;
-                    response.Message = "Product Deleted Successfully";
-
-                }
-                else
-                {
-                    response.isSuccess = false;
-                    response.Message = "Error deleting Product";
-                }
+               
             }
             catch (Exception ex)
             {
@@ -299,7 +279,17 @@ namespace eFurnitureProject.Application.Services
             return response;
 
         }
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentByJWT(int pageIndex,int pageSize)
+        {
+            var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
+            var currentUserID = _claimsService.GetCurrentUserId.ToString();
+            var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentsByUserID(pageIndex, pageSize,currentUserID);
+            var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
+            response.Data = result;
+            return response;
+        }
     }
-    } 
+    }
+    
 
 

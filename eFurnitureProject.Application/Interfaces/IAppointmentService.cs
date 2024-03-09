@@ -19,5 +19,6 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds);
         Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus);
         Task<ApiResponse<bool>> DeleteAppointment(Guid ID);
+        Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentByJWT(int pageIndex, int pageSize);
     }
 }

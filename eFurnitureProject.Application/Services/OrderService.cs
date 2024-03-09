@@ -159,11 +159,49 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public Task<ApiResponse<UpdateOrderStatusDTO>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
+        public async Task<ApiResponse<string>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
         {
-            // can phai hoi lai nghiep vu
+            var response = new ApiResponse<string>();
+            try
+            {
+                var newStatus = await _unitOfWork.StatusOrderRepository.GetGuidByStatusCode(updateOrderStatusDTO.StatusCode);
+                var newOrder = await _unitOfWork.OrderRepository.GetByIdAsync(updateOrderStatusDTO.Id);
+                if (newOrder == null) 
+                {
+                    response.isSuccess = false;
+                    response.Message = "Not found order!";
+                    return response;
+                }
 
-            throw new NotImplementedException();
+                var oldStatus = await _unitOfWork.StatusOrderRepository.GetByIdAsync((Guid)newOrder.StatusId);
+                if (updateOrderStatusDTO.StatusCode <= oldStatus.StatusCode) 
+                {
+                    response.isSuccess = false;
+                    response.Message = "Invalid state!";
+                    return response;
+                }
+                newOrder.StatusId = newStatus.Id;
+                _unitOfWork.OrderRepository.Update(newOrder);
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (!isSuccess)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Update fail!";
+                }
+                response.isSuccess = true;
+                response.Message = "Successful!";
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
 

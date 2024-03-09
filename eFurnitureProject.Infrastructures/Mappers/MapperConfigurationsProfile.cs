@@ -61,12 +61,12 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<OrderDetail, OrderDetailViewDTO>();
             CreateMap<Order, OrderViewDTO>();
             CreateMap<Order, OrderViewForCustomerDTO>()
-     .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
-     {
-         StatusCode = src.StatusOrder.StatusCode,
-         Name = src.StatusOrder.Name
-     }));
-            CreateMap<CreateCategoryViewModel, Category>();
+                 .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
+                 {
+                     StatusCode = src.StatusOrder.StatusCode,
+                     Name = src.StatusOrder.Name
+                 }));
+                        CreateMap<CreateCategoryViewModel, Category>();
             CreateMap<Category, CategoryViewModel>()
                  .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
             CreateMap<OrderViewDTO, Order>();
@@ -78,6 +78,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<UpdateImportDTO, Import>();
             CreateMap<AddProductToCartDTO, CartDetail>();
             CreateMap<Cart, CartDetailViewDTO>();
+            CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
         }
     }
 }

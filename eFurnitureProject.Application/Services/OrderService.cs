@@ -4,6 +4,7 @@ using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -27,43 +28,6 @@ namespace eFurnitureProject.Application.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
-        }
-
-        public async Task<ApiResponse<IEnumerable<OrderViewGetDTO>>> GetAllOrder()
-        {
-            var response = new ApiResponse<IEnumerable<OrderViewGetDTO>>();
-
-            try
-            {
-                var result = await _unitOfWork.OrderRepository.GetAllAsync();
-                var viewItems = new List<OrderViewGetDTO>();
-
-                foreach (var order in result)
-                {
-                    viewItems.Add(_mapper.Map<OrderViewGetDTO>(order));
-                }
-
-                if (viewItems.Count != 0)
-                {
-                    response.Data = viewItems;
-                    response.isSuccess = true;
-                    response.Message = "Success!";
-                }
-                else
-                {
-                    response.Data = null;
-                    response.isSuccess = true;
-                    response.Message = "No reocrd!";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Data = null;
-                response.isSuccess = false;
-                response.Message = ex.Message;
-            }
-
-            return response;
         }
 
         public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
@@ -159,6 +123,35 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
+        public async Task<ApiResponse<StatusDetailOrderViewDTO>> GetOrderStatusByOrderId(Guid orderId)
+        {
+            var response = new ApiResponse<StatusDetailOrderViewDTO>();
+            try
+            {
+                var statusDetail = await _unitOfWork.OrderRepository.GetStatusOrderByOrderId(orderId);
+                if (statusDetail == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Not found!";
+                }
+                var result = _mapper.Map<StatusDetailOrderViewDTO>(statusDetail);
+                response.Data = result;
+                response.isSuccess = true;
+                response.Message = "Get status successfully!";
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
         public async Task<ApiResponse<string>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO)
         {
             var response = new ApiResponse<string>();
@@ -202,8 +195,6 @@ namespace eFurnitureProject.Application.Services
                 response.Message = ex.Message;
             }
             return response;
-        }
-
-
+        }   
     }
 }

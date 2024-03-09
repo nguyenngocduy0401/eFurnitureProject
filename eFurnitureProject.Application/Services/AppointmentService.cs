@@ -20,6 +20,9 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using eFurnitureProject.Application.Utils;
+using eFurnitureProject.Application.ViewModels.UserViewModels;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -132,7 +135,7 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserName, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize) 
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(FilterAppointmentDTO filterAppointment,DateTime date,int status) 
         { 
 
         var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
@@ -140,51 +143,38 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 Pagination<AppoitmentDetailViewDTO> appointments;
-
-                if (string.IsNullOrEmpty(UserName) && string.IsNullOrEmpty(AppointName) && DateTime == default && string.IsNullOrEmpty(Email) && Status == 0)
+                if (string.IsNullOrEmpty(filterAppointment.search) && date == default && status == 0)
                 {
-                  
-                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page, pageSize);
+                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
                     var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
 
                     response.Data = result;
                     return response;
                 }
+                else if (filterAppointment.search is not null){
 
-                if (!string.IsNullOrEmpty(UserName))
-                {
-                    appointments =await _unitOfWork.AppointmentRepository.GetAppointmentsByUserName(page, pageSize, UserName);
+                    var pagination = await _unitOfWork.AppointmentRepository.GetAppointmentByFilter
+                    (filterAppointment.search, filterAppointment.pageIndex, filterAppointment.pageSize);
                 }
-                else if (!string.IsNullOrEmpty(AppointName))
+                else if (date != default)
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByNameAsync(page, pageSize,AppointName);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(filterAppointment.pageIndex, filterAppointment.pageSize, date);
                 }
-                else if (DateTime != default)
+                else if (status != 0)
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(page,pageSize,DateTime);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(filterAppointment.pageIndex, filterAppointment.pageSize, status);
                 }
-                else if (!string.IsNullOrEmpty(Email))
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByEmailAsync(page, pageSize,Email);
-                }
-                else if (Status != 0)
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(page, pageSize,Status);
-                }
+                
                 else
-                {
-                    var pagination = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page - 1, pageSize);
-                    response.Data = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(pagination);
-                    response.isSuccess = true;
-                    response.Message = "Get all appointments successfully";
-                    return response;
-                }
+                    {
+                        var pagination = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
+                        response.Data = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(pagination);
+                        response.isSuccess = true;
+                        response.Message = "Get all appointments successfully";
+                        return response;
+                    }
 
-                var appointmentDTOs = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointments);
-                response.Data = appointmentDTOs;
-                response.isSuccess = true;
-                response.Message = "Get all appointments successfully";
-                return response;
+               
             }
             catch (Exception ex)
             {

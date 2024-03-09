@@ -54,18 +54,14 @@ namespace eFurnitureProject.API.Controllers
 
         }
         [HttpGet]
-<<<<<<< HEAD
         public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentPaging(int page, int pageSize) => await _appointmentService.GetAppointmentPaging(page, pageSize);
       
-=======
-        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentPaging(int page=1, int pageSize=10) => await _appointmentService.GetAppointmentPaging(page, pageSize);
-              
->>>>>>> main
+
         [HttpGet]
-        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserID, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize)
+        public async  Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter([FromQuery] FilterAppointmentDTO filterAppointment, DateTime date, int status)
         {
             
-           return await _appointmentService.Filter(page, UserID, AppointName, DateTime, Email, Status, pageSize);
+           return await _appointmentService.Filter(filterAppointment,date,status);
         }
         [HttpPost]
         public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds) => await _appointmentService.PickStaffForAppointment(appointmentId,  staffIds);

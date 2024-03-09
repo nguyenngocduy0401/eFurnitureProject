@@ -1,5 +1,7 @@
-﻿using eFurnitureProject.Application.Interfaces;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +41,38 @@ namespace eFurnitureProject.Infrastructures.Repositories
                .AnyAsync();
 
             return isProductInStatus4;
+        }
+      public async   Task<Pagination<FeedBackViewDTO>> GetFeedBacksByUserID(int pageIndex, int pageSize, string userID)
+        {
+            var feedbackList = await _dbContext.Feedback
+        .Where(f => f.UserId == userID)
+        .OrderByDescending(f => f.CreationDate)
+        .Skip(pageIndex * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+            var totalCount = await _dbContext.Feedback
+                .Where(f => f.UserId == userID)
+                .CountAsync();
+
+            var feedbackViewList = feedbackList.Select(f => new FeedBackViewDTO
+            {
+                UserId = f.UserId,
+                Details = f.Details,
+                Title = f.Title,
+                ProductId = f.ProductId,
+                ProductName = f.ProductName
+            }).ToList();
+
+            var pagination = new Pagination<FeedBackViewDTO>
+            {
+                Items = feedbackViewList,
+                TotalItems = totalCount,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+
+            return pagination;
         }
     }
 }

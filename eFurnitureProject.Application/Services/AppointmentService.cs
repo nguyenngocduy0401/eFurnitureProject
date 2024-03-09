@@ -122,16 +122,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<Pagination<AppointmentDTO>>> GetAppointmentPagingNotDelete(int page , int amout)
-        {
-            var response = new ApiResponse<Pagination<AppointmentDTO>>();
-           var appointment =await  _unitOfWork.AppointmentRepository.GetAppointmentPaging(page, amout);
-            var result = _mapper.Map<Pagination<AppointmentDTO>>(appointment);
-            
-          response.Data = result;
-            return response;
-        }
-
+      
         public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentPaging(int page, int amout)
         {
             var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
@@ -141,7 +132,7 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserID, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize) 
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(int page, String? UserName, string? AppointName, DateTime DateTime, String? Email, int Status, int pageSize) 
         { 
 
         var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
@@ -150,19 +141,19 @@ namespace eFurnitureProject.Application.Services
             {
                 Pagination<AppoitmentDetailViewDTO> appointments;
 
-                if (string.IsNullOrEmpty(UserID) && string.IsNullOrEmpty(AppointName) && DateTime == default && string.IsNullOrEmpty(Email) && Status == 0)
+                if (string.IsNullOrEmpty(UserName) && string.IsNullOrEmpty(AppointName) && DateTime == default && string.IsNullOrEmpty(Email) && Status == 0)
                 {
                   
-                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page=0, pageSize=10);
+                    var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(page, pageSize);
                     var result = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointment);
 
                     response.Data = result;
                     return response;
                 }
 
-                if (!string.IsNullOrEmpty(UserID))
+                if (!string.IsNullOrEmpty(UserName))
                 {
-                    appointments =await _unitOfWork.AppointmentRepository.GetAppointmentsByUserIdAsync(page, pageSize, UserID);
+                    appointments =await _unitOfWork.AppointmentRepository.GetAppointmentsByUserName(page, pageSize, UserName);
                 }
                 else if (!string.IsNullOrEmpty(AppointName))
                 {
@@ -216,18 +207,29 @@ namespace eFurnitureProject.Application.Services
                     response.Message = "Appointment not found";
                     return response;
                 }
+                var existingAppointmentDetails = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentIdAsync(appointmentId);
 
                 await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentId);
                 foreach (var id in staffIds)
                 {
-                    var appointmentDetail = new AppointmentDetail
+                    var existingAppointmentDetail = existingAppointmentDetails.FirstOrDefault(ad => ad.UserId == id.ToString());
+
+                  if (existingAppointmentDetail != null)
                     {
-                        AppointmentId = appointment.Id,
-                        UserId = id.ToString()
-                    };
+                        existingAppointmentDetail.IsDeleted = false;
+                        await _unitOfWork.AppointmentDetailRepository.UpdateAsync(existingAppointmentDetail);
+                    }
+                  
+                    else
+                    {
+                        var appointmentDetail = new AppointmentDetail
+                        {
+                            AppointmentId = appointment.Id,
+                            UserId = id.ToString()
+                        };
 
-                    await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-
+                        await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
+                    }
                     await _unitOfWork.SaveChangeAsync();
                 }
                 response.isSuccess = true;

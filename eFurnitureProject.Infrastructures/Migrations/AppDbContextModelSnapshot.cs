@@ -639,11 +639,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<double>("price")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

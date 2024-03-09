@@ -84,9 +84,28 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             return pagination;
         }
-        public async Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double minPrice, double maxPrice, int pageIndex, int pageSize)
+        public async Task<IEnumerable<ProductDTO>> GetProductsByIDAsync(Guid productId)
         {
-
+            var products = await _dbContext.Products
+        .Include(p => p.Category)
+         .Where(p => p.Id == productId)
+        .Select(p => new ProductDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Image = p.Image,
+            InventoryQuantity = p.InventoryQuantity,
+            Status = p.Status,
+            Price = p.Price,
+            CategoryId = p.Category.Id,
+            CategoryName = p.Category.Name
+        })
+        .ToListAsync();
+            return products;
+        }
+        public async Task<Pagination<ProductDTO>> GetProductsByPriceAsync(double? minPrice, double? maxPrice, int pageIndex, int pageSize)
+        {
 
             IQueryable<Product> query = _dbContext.Products.Include(p => p.Category);
 

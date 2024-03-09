@@ -17,7 +17,7 @@ namespace eFurnitureProject.Application.Commons
                 var temp = TotalItemsCount / PageSize;
                 if (TotalItemsCount % PageSize == 0)
                 {
-                    return temp;
+                    return temp+1;
                 }
                 return temp + 1;
             }
@@ -28,7 +28,7 @@ namespace eFurnitureProject.Application.Commons
         /// page number start from 0
         /// </summary>
         public bool Next => PageIndex + 1 < TotalPagesCount;
-        public bool Previous => PageIndex > 0;
+        public bool Previous => PageIndex > 1;
         public ICollection<T> Items { get; set; }
     }
 }

@@ -1,19 +1,18 @@
-﻿using eFurnitureProject.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
+namespace eFurnitureProject.Application.ViewModels.OrderViewModels
 {
     public class FilterOrderDTO
     {
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public Guid? StatusId { get; set; }
-        public Guid? TransactionId { get; set; }
-        public string? UserId { get; set; }
+        public DateTime? FromTime { get; set; }
+        public DateTime? ToTime { get; set; }
+        public string? Search { get; set; }
+        public int? StatusCode { get; set; }
+        public int PageSize { get; set; } = 10;
+        public int PageIndex { get; set; } = 1;
     }
 }

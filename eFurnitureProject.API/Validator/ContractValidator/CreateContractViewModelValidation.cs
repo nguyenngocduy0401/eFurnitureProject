@@ -13,7 +13,6 @@ namespace eFurnitureProject.API.Validator.ContractValidator
                 .WithMessage("Description length must not exceed 255 characters");
             RuleFor(x => x.Value).NotEmpty().GreaterThan(0)
                 .WithMessage("Value must greater than 0");
-            RuleFor(x => x.Status).NotEmpty();
         }
     }
 }

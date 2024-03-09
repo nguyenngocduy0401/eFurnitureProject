@@ -39,15 +39,12 @@ namespace eFurnitureProject.Application.Services
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
                 }
-                else
+                await _unitOfWork.ContractRepository.AddAsync(contractObj);
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (isSuccess == true)
                 {
-                    await _unitOfWork.ContractRepository.AddAsync(contractObj);
-                    var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                    if (isSuccess == true)
-                    {
-                        response.Data = _mapper.Map<ContractViewDTO>(contractObj);
-                        response.Message = "Create contract is successful!";
-                    }
+                    response.Data = _mapper.Map<ContractViewDTO>(contractObj);
+                    response.Message = "Create contract is successful!";
                 }
             }
             catch (DbException ex)
@@ -88,7 +85,7 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<Pagination<ContractViewDTO>>> GetContractPagingAsync(int pageIndex = 0, int pageSize = 10)
         {
             var response = new ApiResponse<Pagination<ContractViewDTO>>();
-            var contracts = await _unitOfWork.ContractRepository.ToPagination(pageIndex, pageSize);
+            var contracts = await _unitOfWork.ContractRepository.ToPaginationIsNotDelete(pageIndex, pageSize);
             var result = _mapper.Map<Pagination<ContractViewDTO>>(contracts);
             response.Data = result;
             return response;
@@ -108,19 +105,16 @@ namespace eFurnitureProject.Application.Services
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
                 }
-                else
+                existingContract.Title = contractObj.Title;
+                existingContract.Description = contractObj.Description;
+                existingContract.Value = contractObj.Value;
+                existingContract.Status = contractObj.Status;
+                _unitOfWork.ContractRepository.Update(existingContract);
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (isSuccess == true)
                 {
-                    existingContract.Title = contractObj.Title;
-                    existingContract.Description = contractObj.Description;
-                    existingContract.Value = contractObj.Value;
-                    existingContract.Status = contractObj.Status;
-                    _unitOfWork.ContractRepository.Update(existingContract);
-                    var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                    if (isSuccess == true)
-                    {
-                        response.Data = _mapper.Map<ContractViewDTO>(existingContract);
-                        response.Message = "Update contract is successful!";
-                    }
+                    response.Data = _mapper.Map<ContractViewDTO>(existingContract);
+                    response.Message = "Update contract is successful!";
                 }
             }
             catch (Exception ex)

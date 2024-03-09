@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IStatusOrderRepository : IGenericRepository<StatusOrder>
     {
+        Task<bool> CheckStatusOrderExisted(string name);
     }
 }

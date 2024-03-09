@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface ICartDetailRepository 
     {
+        Task AddProductInCartAsync(CartDetail cartDetail);
     }
 }

@@ -1,12 +1,20 @@
-using AutoMapper;using eFurnitureProject.Application.Commons;
+using AutoMapper;
+using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
-using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
+using Microsoft.AspNetCore.Identity;
+using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
+using eFurnitureProject.Application.ViewModels.ImportViewModels;
+using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
+using eFurnitureProject.Application.ViewModels.CartViewModels;
+using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -16,7 +24,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
         {
             CreateMap<UserLoginDTO, User>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<UserRegisterDTO, User>().ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
+            CreateMap<UserRegisterDTO, User>()
+                .ForMember(dest => dest.PasswordHash, src => src.MapFrom(x => x.Password));
             CreateMap<ProductViewDTO, Product>();
             CreateMap<CreateVoucherDTO, Voucher>();
             CreateMap<VoucherViewDTO, Voucher>();
@@ -30,9 +39,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
-            CreateMap<OrderViewDTO, Order>();
-            CreateMap<Order, OrderViewDTO>();
-
+            CreateMap<OrderViewGetDTO, Order>();
+            CreateMap<Order, OrderViewGetDTO>();
             CreateMap<CreateAppointmentDTO, Appointment>();
             CreateMap<AppointmentDetailDTO, AppointmentDetail>();
             CreateMap<Appointment, AppointmentDTO>();
@@ -43,15 +51,33 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateAppointmentDTO, AppointmentDetail>();
             CreateMap<User, AppointmentDetail>();
             CreateMap<AppointmentDetailDTO, User>();
-
-            CreateMap <ProductViewDTO , Product>();
+            CreateMap<ProductViewDTO , Product>();
             CreateMap<Product,ProductViewDTO>();
             CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
-         
-
-
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
-
+            CreateMap<User, UserDetailViewDTO>();
+            CreateMap<User, UserViewDTO>();
+            CreateMap<CreateUserDTO, User>();
+            CreateMap<OrderDetail, OrderDetailViewDTO>();
+            CreateMap<Order, OrderViewDTO>();
+            CreateMap<Order, OrderViewForCustomerDTO>()
+     .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
+     {
+         StatusCode = src.StatusOrder.StatusCode,
+         Name = src.StatusOrder.Name
+     }));
+            CreateMap<CreateCategoryViewModel, Category>();
+            CreateMap<Category, CategoryViewModel>()
+                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
+            CreateMap<OrderViewDTO, Order>();
+            CreateMap<Order, OrderViewDTO>();
+            CreateMap<CreateImportDTO, Import>();
+            CreateMap<Import, ImportViewDTO>()
+                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
+            CreateMap<CreateImportDetailDTO, ImportDetail>();
+            CreateMap<UpdateImportDTO, Import>();
+            CreateMap<AddProductToCartDTO, CartDetail>();
+            CreateMap<Cart, CartDetailViewDTO>();
         }
     }
 }

@@ -15,6 +15,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly ICurrentTime _timeService;
+        private readonly IClaimsService _claimsService;
 
         public ProductRepository(
             AppDbContext context,
@@ -24,6 +26,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
             : base(context, timeService, claimsService)
         {
             _dbContext = context;
+            _timeService = timeService;
+            _claimsService = claimsService;
         }
 
       
@@ -283,5 +287,19 @@ namespace eFurnitureProject.Infrastructures.Repositories
         }
 
 
+
+        public async void IncreaseQuantityProductFromImport(ICollection<ImportDetail> importDetails)
+        {
+            List<Product> products = new List<Product>();
+            foreach (var importDetail in importDetails)
+            {
+                var product = await _dbContext.Products.FirstAsync(x => x.Id == importDetail.ProductId);
+                product.InventoryQuantity += importDetail.Quantity;
+                product.ModificationDate = _timeService.GetCurrentTime();
+                product.ModificationBy = _claimsService.GetCurrentUserId;
+                products.Add(product);
+            }
+            _dbSet.UpdateRange(products);
+        }
     }
 }

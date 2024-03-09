@@ -13,7 +13,7 @@ namespace eFurnitureProject.Domain.Entities
         public string Title { get; set; }
         public string? Description { get; set; }
         public int Value { get; set; }
-        public int Status { get; set; }
+        public int Status { get; set; } = 1;
         public Guid? OrderProcessingId { get; set; }
         [ForeignKey("OrderProcessingId")]
         public OrderProcessing? OrderProcessing { get; set; }   

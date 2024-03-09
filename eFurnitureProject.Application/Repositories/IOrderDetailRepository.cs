@@ -1,4 +1,5 @@
-﻿using eFurnitureProject.Domain.Entities;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IOrderDetailRepository
     {
+        Task<IEnumerable<OrderDetail>> GetOrderDetailsByIdAsync(Guid Id);
     }
 }

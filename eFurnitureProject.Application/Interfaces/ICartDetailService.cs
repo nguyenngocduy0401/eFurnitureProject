@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Application.ViewModels.UserViewModels
+namespace eFurnitureProject.Application.Interfaces
 {
-    public class UserManagementUpdateDTO
+    public interface ICartDetailService
     {
     }
 }

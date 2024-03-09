@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Application.ViewModels.UserViewModels
+namespace eFurnitureProject.Domain.Enums
 {
-    public class UserCreateDTO
+    internal class OrderProcessing
     {
     }
 }

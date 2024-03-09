@@ -14,6 +14,6 @@ namespace eFurnitureProject.Application.ViewModels.OrderDetailViewModels
         public int Price { get; set; }
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
-        public ProductViewDTO Product { get; set; }
+        public ProductViewDTO? Product { get; set; }
     }
 }

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Application.ViewModels.OrderViewDTO
+namespace eFurnitureProject.Application.ViewModels.OrderViewModels
 {
     public class UpdateOrderStatusDTO
     {
         public Guid Id { get; set; }
-        public Guid StatusId { get; set; }
+        public int StatusCode { get; set; }
     }
 }

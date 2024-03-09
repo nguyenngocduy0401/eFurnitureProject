@@ -15,7 +15,7 @@ using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace eFurnitureProject.Application.Services
 {
-    
+
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -49,8 +49,8 @@ namespace eFurnitureProject.Application.Services
                     userLoginDTO.UserName, userLoginDTO.Password, false, false);
                 if (result.Succeeded)
                 {
-                    var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPassword(
-                        userLoginDTO.UserName, userLoginDTO.Password);
+                    var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPassword
+                        (userLoginDTO.UserName, userLoginDTO.Password);
                     var userRole = await _userManager.GetRolesAsync(user);
 
                     var refreshToken = GenerateJsonWebTokenString.GenerateRefreshToken();
@@ -99,13 +99,11 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-
         public async Task<ApiResponse<UserRegisterDTO>> RegisterAsync(UserRegisterDTO userRegisterDTO)
         {
             var response = new ApiResponse<UserRegisterDTO>();
             try
             {
-                var user = _mapper.Map<User>(userRegisterDTO);
                 ValidationResult validationResult = await _validatorRegister.ValidateAsync(userRegisterDTO);
                 if (!validationResult.IsValid)
                 {
@@ -133,6 +131,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
+                    var user = _mapper.Map<User>(userRegisterDTO);
                     var identityResult = await _userManager.CreateAsync(user, user.PasswordHash);
                     if (identityResult.Succeeded == true)
                     {
@@ -141,10 +140,16 @@ namespace eFurnitureProject.Application.Services
                             await _roleManager.CreateAsync(new Role { Name = AppRole.Customer });
                         }
                         await _userManager.AddToRoleAsync(user, AppRole.Customer);
+                        var cart = new Cart()
+                        {
+                            UserId = user.Id
+                        };
+                        await _unitOfWork.CartRepository.AddAsync(cart);
+                        await _unitOfWork.SaveChangeAsync();
                         response.Data = userRegisterDTO;
                         response.isSuccess = true;
                         response.Message = "Register is successful!";
-                        
+
                     }
                 }
             }
@@ -181,8 +186,6 @@ namespace eFurnitureProject.Application.Services
             {
 
                 var tokenInVerification = jwtTokenHandler.ValidateToken(tokenRefreshDTO.AccessToken, tokenValidateParam, out var validatedToken);
-
-                //check 2: Check alg
                 if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
                     var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
@@ -259,6 +262,40 @@ namespace eFurnitureProject.Application.Services
                 response.Data = token;
                 response.isSuccess = true;
                 response.Message = "Refresh Successful!";
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+
+            }
+            return response;
+        }
+        public async Task<ApiResponse<string>> LogoutAsync(string refreshToken)
+        {
+            var response = new ApiResponse<string>();
+            try
+            {
+                var storedToken = await _unitOfWork.RefreshTokenRepository.GetRefreshTokenByTokenAsync(refreshToken);
+                if (storedToken == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Refresh token does not exist";
+                    return response;
+                }
+                if (storedToken.IsRevoked || storedToken.IsUsed)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Refresh token has been revoked";
+                    return response;
+                }
+                storedToken.IsRevoked = true;
+                storedToken.IsUsed = true;
+                _unitOfWork.RefreshTokenRepository.UpdateRefreshToken(storedToken);
+                await _unitOfWork.SaveChangeAsync();
+                response.isSuccess = true;
+                response.Message = "Logout Successful!";
             }
             catch (Exception ex)
             {

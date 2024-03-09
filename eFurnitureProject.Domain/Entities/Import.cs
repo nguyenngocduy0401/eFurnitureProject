@@ -8,9 +8,11 @@ namespace eFurnitureProject.Domain.Entities
 {
     public class Import : BaseEntity
     {
-        public double Price { get; set; }
-        public int Status { get; set; }
+        public string Name { get; set; }
+        public double TotalPrice { get; set; }
+        public int Status { get; set; } = 1;
+        public int TotalQuantity { get; set; }
 
-        public virtual ICollection<ImportDetail>? ImportDetail { get; set; }
+        public ICollection<ImportDetail>? ImportDetail { get; set; }
     }
 }

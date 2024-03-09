@@ -269,6 +269,46 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
+        public async Task<ApiResponse<bool>> DeleteAppointment(Guid ID)
+        {
+            var response = new ApiResponse<bool>();
+            try
+            {
+                var exist = await _unitOfWork.AppointmentRepository.GetByIdAsync(ID);
+                if (exist == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Product does not exist";
+                    return response;
+                }
+                if (exist.IsDeleted)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Product is already deleted";
+                    return response;
+                }
+                _unitOfWork.AppointmentRepository.SoftRemove(exist);
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (isSuccess)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Product Deleted Successfully";
+
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    response.Message = "Error deleting Product";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+
+        }
     }
     } 
 

@@ -1,4 +1,5 @@
-﻿using eFurnitureProject.Application.ViewModels.OrderViewDTO;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,12 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IOrderRepository : IGenericRepository<Order>
     {
-        Task<IEnumerable<Order>> Get(int pageIndex, int pageSize);
-        Task<IEnumerable<Order>> GetOrderByFilter(int pageIndex, int pageSize, FilterOrderDTO filter);
+        Task<Pagination<Order>> GetOrderByFilter(int pageIndex, 
+            int pageSize, int? status, DateTime? fromTime, DateTime? toTime, 
+            string? search);
+
+        Task<Pagination<Order>> GetOrderFilterByLogin(int pageIndex,
+            int pageSize, int? status, DateTime? fromTime, DateTime? toTime,
+            string? userId);
     }
 }

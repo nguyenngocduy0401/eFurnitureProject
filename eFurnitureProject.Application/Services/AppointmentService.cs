@@ -177,14 +177,14 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-    
-       
-        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
+
+
+      /*  public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
         {
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-               var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
                 if (appointment == null)
                 {
                     response.Message = "Appointment not found";
@@ -197,12 +197,12 @@ namespace eFurnitureProject.Application.Services
                 {
                     var existingAppointmentDetail = existingAppointmentDetails.FirstOrDefault(ad => ad.UserId == id.ToString());
 
-                  if (existingAppointmentDetail != null)
+                    if (existingAppointmentDetail != null)
                     {
                         existingAppointmentDetail.IsDeleted = false;
                         await _unitOfWork.AppointmentDetailRepository.UpdateAsync(existingAppointmentDetail);
                     }
-                  
+
                     else
                     {
                         var appointmentDetail = new AppointmentDetail
@@ -215,7 +215,7 @@ namespace eFurnitureProject.Application.Services
                     }
                     await _unitOfWork.SaveChangeAsync();
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -224,7 +224,7 @@ namespace eFurnitureProject.Application.Services
             }
 
             return response;
-        }
+        }*/
         public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)
         {
 
@@ -288,8 +288,103 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
+        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
+        {
+            var response = new ApiResponse<AppointmentDTO>();
+            try
+            {
+                // Lấy thông tin cuộc hẹn
+                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                if (appointment == null)
+                {
+                    response.Message = "Appointment not found";
+                    return response;
+                }
+
+            
+                if (appointment.Status != (int)AppointmentStatus.Processing && appointment.Status != (int)AppointmentStatus.Pending)
+                {
+                    response.Message = "Cannot pick staff for appointment: Appointment status is not Processing or Pending";
+                    return response;
+                }
+
+                // Kiểm tra xem staffIDs có rỗng không
+                if (staffIds == null || !staffIds.Any())
+                {
+                    response.Message = "No staff selected for appointment";
+                    return response;
+                }
+
+                // Lấy thông tin chi tiết cuộc hẹn
+                var existingDetails = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentIdAsync(appointmentId);
+
+                // Kiểm tra xung đột thời gian cho từng nhân viên đã chọn
+                foreach (var detail in existingDetails)
+                {
+                    if (IsTimeConflict(detail, existingDetails))
+                    {
+                        response.Message = "Schedule conflict: One of the selected staff has a schedule conflict";
+                        return response;
+                    }
+                }
+
+                // Thêm các chi tiết cuộc hẹn mới cho từng nhân viên đã chọn
+                foreach (var staffId in staffIds)
+                {
+                    var existingDetail = existingDetails.FirstOrDefault(d => d.UserId == staffId);
+
+                    if (existingDetail != null)
+                    {
+                        existingDetail.IsDeleted = false;
+                        await _unitOfWork.AppointmentDetailRepository.UpdateAsync(existingDetail);
+                    }
+                    else
+                    {
+                        var newDetail = new AppointmentDetail
+                        {
+                            AppointmentId = appointmentId,
+                            UserId = staffId
+                        };
+                        await _unitOfWork.AppointmentDetailRepository.AddAsync(newDetail);
+                    }
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await _unitOfWork.SaveChangeAsync();
+
+                response.isSuccess = true;
+                response.Message = "Staff picked for appointment successfully";
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = $"Error picking staff: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        private bool IsTimeConflict(AppointmentDetail appointmentDetail, IEnumerable<AppointmentDetail> existingDetails)
+        {
+            // Lấy danh sách các chi tiết cuộc hẹn khác có cùng UserId
+            var conflictingDetails = existingDetails.Where(ad => ad.UserId == appointmentDetail.UserId && ad.IsDeleted == false);
+
+            // Kiểm tra xem có trùng giờ với các cuộc hẹn khác hoặc cách ít nhất 5 giờ không
+            foreach (var detail in conflictingDetails)
+            {
+                var timeDiff = Math.Abs((detail.Appointment.Date - appointmentDetail.Appointment.Date).TotalHours);
+
+                if (timeDiff < 5)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
     }
+    
     
 
 

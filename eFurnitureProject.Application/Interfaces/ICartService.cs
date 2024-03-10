@@ -11,6 +11,10 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface ICartService
     {
-        Task<ApiResponse<CartDetailViewDTO>> addProductAsysn(AddProductToCartDTO productDTO);
+        Task<ApiResponse<string>> addProductAsync(AddProductToCartDTO productDTO);
+        Task<ApiResponse<List<CartDetailViewDTO>>> GetItemsInCartAsync();
+        Task<ApiResponse<string>> DeleteProductInCartAsync(string productId);
+        Task<ApiResponse<string>> IncreaseProductInCartAsync(string productId);
+        Task<ApiResponse<string>> DecreaseProductIncartAsync(string productId);
     }
 }

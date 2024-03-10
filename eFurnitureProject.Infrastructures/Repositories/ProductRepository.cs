@@ -30,7 +30,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _claimsService = claimsService;
         }
 
-      
+
         public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryNameAsync(string categoryName)
         {
             var product = await _dbContext.Products
@@ -44,7 +44,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
                                 Image = p.Image,
                                 InventoryQuantity = p.InventoryQuantity,
                                 Status = p.Status,
-                                CategoryId=p.Category.Id,
+                                CategoryId = p.Category.Id,
                                 CategoryName = p.Category.Name
                             })
                             .ToListAsync();
@@ -83,7 +83,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalItemsCount = totalItems,
-                 
+
             };
 
             return pagination;
@@ -113,7 +113,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             IQueryable<Product> query = _dbContext.Products.Include(p => p.Category);
 
-            if (minPrice >= 0 && maxPrice >= 0 && minPrice <=maxPrice)
+            if (minPrice >= 0 && maxPrice >= 0 && minPrice <= maxPrice)
             {
                 query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
             }
@@ -139,7 +139,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
                     Description = p.Description,
                     Image = p.Image,
                     InventoryQuantity = p.InventoryQuantity,
-                    Status = p.Status,Price=p.Price,
+                    Status = p.Status,
+                    Price = p.Price,
                     CategoryId = p.Category.Id,
                     CategoryName = p.Category.Name
                 })
@@ -153,13 +154,13 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalItemsCount = totalItems,
-              
+
             };
 
             return pagination;
         }
 
-        
+
 
 
 
@@ -167,7 +168,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAsync(string categoryId, int pageIndex, int pageSize)
         {
-           
+
             var products = await _dbContext.Products
       .Include(p => p.Category)
       .Where(p => p.CategoryId.ToString() == categoryId)
@@ -243,44 +244,44 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         public async Task<Pagination<ProductDTO>> ToPaginationProduct(int pageIndex = 0, int pageSize = 10)
         {
-            
-           var query = (from product in _dbContext.Products
-                                 join category in _dbContext.Categories
-                                 on product.CategoryId equals category.Id
-                     
-                     select new ProductDTO
-                                 {
-                                     Id= product.Id,
-                                     Name = product.Name,
-                                     Description = product.Description,
-                                     Image = product.Image,
-                                     InventoryQuantity = product.InventoryQuantity,
-                                     Status = product.Status,
-                         Price = product.Price,
-                         CategoryId = category.Id,
-                                     CategoryName = category.Name
-                                 });
 
-                    var totalItemsCount = await query.CountAsync();
+            var query = (from product in _dbContext.Products
+                         join category in _dbContext.Categories
+                         on product.CategoryId equals category.Id
 
-                   
-                    var products = await query
-                        .OrderByDescending(p => p. InventoryQuantity) 
-                        .Skip(pageIndex * pageSize) 
-                        .Take(pageSize) 
-                        .ToListAsync();
+                         select new ProductDTO
+                         {
+                             Id = product.Id,
+                             Name = product.Name,
+                             Description = product.Description,
+                             Image = product.Image,
+                             InventoryQuantity = product.InventoryQuantity,
+                             Status = product.Status,
+                             Price = product.Price,
+                             CategoryId = category.Id,
+                             CategoryName = category.Name
+                         });
 
-                    
-                    var pagination = new Pagination<ProductDTO>
-                    {
-                        PageIndex = pageIndex,
-                        PageSize = pageSize,
-                        TotalItemsCount = totalItemsCount,
-                        Items = products
-                    };
+            var totalItemsCount = await query.CountAsync();
 
-                    return pagination;
-                }
+
+            var products = await query
+                .OrderByDescending(p => p.InventoryQuantity)
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+
+            var pagination = new Pagination<ProductDTO>
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItemsCount,
+                Items = products
+            };
+
+            return pagination;
+        }
         public async Task<Pagination<ProductDTO>> ToPaginationProductNotDeleted(int pageIndex = 0, int pageSize = 10)
         {
 
@@ -296,7 +297,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
                              Image = product.Image,
                              InventoryQuantity = product.InventoryQuantity,
                              Status = product.Status,
-                             Price=product.Price,
+                             Price = product.Price,
                              CategoryId = category.Id,
                              CategoryName = category.Name
                          });
@@ -337,6 +338,9 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
             _dbSet.UpdateRange(products);
         }
+        public async Task<int> GetQuantityByIdAsync(Guid productId) => await _dbContext.Products.Where(x => x.Id == productId)
+                                                                                                .Select(x => x.InventoryQuantity)
+                                                                                                .FirstAsync();
 //---------------------------------------------filter--------------------------------------------------------
         public async Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndMaxPriceAsync(string categoryID, double value, int page, int pageSize)
         {

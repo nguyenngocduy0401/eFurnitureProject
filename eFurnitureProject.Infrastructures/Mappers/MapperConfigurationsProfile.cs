@@ -31,8 +31,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<VoucherViewDTO, Voucher>();
             CreateMap<Voucher, VoucherViewDTO>();
             CreateMap<Product, ProductDTO>().ReverseMap();
-            CreateMap<ProductDTO,CreateProductDTO>().ReverseMap();
-            CreateMap<Product,CreateProductDTO>();
+            CreateMap<ProductDTO, CreateProductDTO>().ReverseMap();
+            CreateMap<Product, CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
             CreateMap<Appointment, AppointmentDetail>();
             CreateMap<CreateContractDTO, Contract>();
@@ -51,9 +51,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateAppointmentDTO, AppointmentDetail>();
             CreateMap<User, AppointmentDetail>();
             CreateMap<AppointmentDetailDTO, User>();
-            CreateMap<ProductViewDTO , Product>();
-            CreateMap<Product,ProductViewDTO>();
-            CreateMap<AppointmentDetail,CreateAppointmentDetailDTO>();
+            CreateMap<ProductViewDTO, Product>();
+            CreateMap<Product, ProductViewDTO>();
+            CreateMap<AppointmentDetail, CreateAppointmentDetailDTO>();
             CreateMap<Pagination<ProductDTO>, IEnumerable<ProductDTO>>();
             CreateMap<User, UserDetailViewDTO>();
             CreateMap<User, UserViewDTO>();
@@ -77,7 +77,10 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateImportDetailDTO, ImportDetail>();
             CreateMap<UpdateImportDTO, Import>();
             CreateMap<AddProductToCartDTO, CartDetail>();
-            CreateMap<Cart, CartDetailViewDTO>();
+            CreateMap<CartDetail, CartDetailViewDTO>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
             CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
         }
     }

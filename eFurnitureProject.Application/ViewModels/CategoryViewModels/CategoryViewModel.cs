@@ -8,7 +8,7 @@ namespace eFurnitureProject.Application.ViewModels.CategoryViewModels
 {
     public class CategoryViewModel
     {
-        public Guid _Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
     }
 }

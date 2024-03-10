@@ -12,7 +12,6 @@ namespace eFurnitureProject.Application.ViewModels.AppointmentViewModel
         public DateTime Date { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        
         public int Time { get; set; }
     }
 }

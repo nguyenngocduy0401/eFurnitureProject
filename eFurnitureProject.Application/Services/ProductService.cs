@@ -8,10 +8,8 @@ using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using FluentValidation;
 using FluentValidation.Results;
+using System.Data.Common;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -23,18 +21,18 @@ namespace eFurnitureProject.Application.Services
         private readonly IClaimsService _claimsService;
         private readonly IMemoryCache _memoryCache;
         private readonly IValidator<CreateProductDTO> _createProductvalidator;
-       
 
-        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, ICurrentTime currentTime, IClaimsService claimsService, IMemoryCache memoryCache, IProductRepository productRepository,IValidator<CreateProductDTO> validatorCreateProduct)
+
+        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, ICurrentTime currentTime, IClaimsService claimsService, IMemoryCache memoryCache, IProductRepository productRepository, IValidator<CreateProductDTO> validatorCreateProduct)
         {
-            
+
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _currentTime = currentTime;
             _claimsService = claimsService;
             _memoryCache = memoryCache;
             _createProductvalidator = validatorCreateProduct;
-         
+
         }
         public async Task<ApiResponse<ProductDTO>> CreateProductByAdmin(CreateProductDTO createProductDTO)
         {
@@ -50,37 +48,23 @@ namespace eFurnitureProject.Application.Services
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
                 }
-                else
-                {
-                    await _unitOfWork.ProductRepository.AddAsync(product);
-                    var addSuccessfully = await _unitOfWork.SaveChangeAsync();
-                    var productDTO = _mapper.Map<ProductDTO>(product);
-                    response.Data = productDTO;
-                    if (addSuccessfully > 0)
-                    {
-
-                        response.Data = productDTO;
-                        response.isSuccess = true;
-                        response.Message = "Create new Product successfully";
-                        return response;
-                    }
-                }
+                await _unitOfWork.ProductRepository.AddAsync(product);
+                var isSuccess = await _unitOfWork.SaveChangeAsync();
+                return response;
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-            
                 response.isSuccess = false;
                 response.Message = ex.Message;
-
-             
-                if (ex.InnerException != null)
-                {
-                    response.Message = ex.Message + "Inner Exception: " + ex.InnerException.Message;
-                }
             }
-
             return response;
         }
+    
 
         public async Task<ApiResponse<int>> CalculateTotalPages(int totalItemsCount, int pageSize)
         {
@@ -97,10 +81,10 @@ namespace eFurnitureProject.Application.Services
             }
             catch (Exception ex)
             {
-                 return response;
+                return response;
             }
         }
-            public async Task<ApiResponse<bool>> DeleteProduct(Guid productID)
+        public async Task<ApiResponse<bool>> DeleteProduct(Guid productID)
         {
             var response = new ApiResponse<bool>();
             try
@@ -119,18 +103,8 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
                 _unitOfWork.ProductRepository.SoftRemove(exist);
-                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                if (isSuccess)
-                {
-                    response.isSuccess = true;
-                    response.Message = "Product Deleted Successfully";
-
-                }
-                else
-                {
-                    response.isSuccess = false;
-                    response.Message = "Error deleting Product";
-                }
+                var isSuccess = await _unitOfWork.SaveChangeAsync();
+              return response;  
             }
             catch (Exception ex)
             {
@@ -141,10 +115,10 @@ namespace eFurnitureProject.Application.Services
 
         }
 
-        public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex = 0, int pageSize = 10)
+        public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex , int pageSize )
         {
             var response = new ApiResponse<Pagination<ProductDTO>>();
-            var products = await _unitOfWork.ProductRepository.ToPaginationProduct(pageIndex,pageSize);
+            var products = await _unitOfWork.ProductRepository.ToPaginationProduct(pageIndex, pageSize);
             var result = _mapper.Map<Pagination<ProductDTO>>(products);
             response.Data = result;
             return response;
@@ -157,12 +131,12 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<ProductDTO>> GetProductByID(Guid id)
+        public async Task<ApiResponse<ProductDTO>> GetProductByID(string id)
         {
             var response = new ApiResponse<ProductDTO>();
             try
             {
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
+                var product = await _unitOfWork.ProductRepository.GetProductsByIDAsync(id);
                 if (product == null)
                 {
                     response.isSuccess = false;
@@ -234,40 +208,93 @@ namespace eFurnitureProject.Application.Services
             }
         }
 
-        public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, Guid CategoryID, string ProductName, double minPrice, double maxPrice, int pageSize)
+        public async Task<ApiResponse<Pagination<ProductDTO>>> GetAll(int page, String CategoryID, string ProductName, double? minPrice, double? maxPrice, int pageSize)
         {
-            var  response = new ApiResponse<Pagination<ProductDTO>>();
-          
+            var response = new ApiResponse<Pagination<ProductDTO>>();
+
             try
             {
                 Pagination<ProductDTO> products;
-
-                if (CategoryID == Guid.Empty && string.IsNullOrEmpty(ProductName) && minPrice<= 0 && maxPrice <= 0)
+                
+                if (string.IsNullOrEmpty(CategoryID) && string.IsNullOrEmpty(ProductName) && minPrice <= 0 && maxPrice <= 0)
                 {
 
-                   
+
                     var product = await _unitOfWork.ProductRepository.ToPaginationProduct(page, pageSize);
                     var result = _mapper.Map<Pagination<ProductDTO>>(product);
                     response.Data = result;
                     return response;
                 }
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName)&& minPrice.HasValue && minPrice >= 0 && !maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIdAndNameAndMinPriceAsync(CategoryID, ProductName, minPrice, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName) && maxPrice.HasValue && maxPrice >= 0 && !minPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIdAndNameAndMaxPriceAsync(CategoryID, ProductName, maxPrice, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName) && maxPrice.HasValue && maxPrice >= 0 && minPrice.HasValue && minPrice >= 0 && minPrice <= maxPrice)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIdAndNameAndMinAndMaxPriceAsync(CategoryID, ProductName, minPrice, maxPrice, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(CategoryID) && !string.IsNullOrEmpty(ProductName))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndNameAsync(CategoryID, ProductName, page, pageSize);
+                }
+               else  if (!string.IsNullOrEmpty(CategoryID)&&string.IsNullOrEmpty(ProductName)&&!minPrice.HasValue &&!maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID, page, pageSize);
+                }
+                else if (!string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID) && !minPrice.HasValue && !maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName, page, pageSize);
+                }
+               else if (minPrice.HasValue && maxPrice.HasValue&& minPrice >= 0 && maxPrice >= 0 && minPrice<=maxPrice&& string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByPriceAsync(minPrice, maxPrice, page, pageSize);
+                }
+               else  if (!string.IsNullOrEmpty(CategoryID) && minPrice.HasValue && minPrice >= 0 && string.IsNullOrEmpty(ProductName)&&!maxPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndMinPriceAsync(CategoryID, minPrice.Value, page, pageSize);
+                }
+                
+                else if (!string.IsNullOrEmpty(CategoryID) && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(ProductName) && !minPrice.HasValue)
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndMaxPriceAsync(CategoryID, maxPrice.Value, page, pageSize);
+                }
 
-                if (CategoryID !=Guid.Empty  )
+                else if (!string.IsNullOrEmpty(CategoryID) && minPrice.HasValue && minPrice >= 0 && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(ProductName))
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAsync(CategoryID,page,pageSize);
+                    products = await _unitOfWork.ProductRepository.GetProductsByCategoryIDAndPriceRangeAsync(CategoryID, minPrice.Value, maxPrice.Value, page, pageSize);
                 }
-                else if (!string.IsNullOrEmpty(ProductName))
+            
+                else if (!string.IsNullOrEmpty(ProductName) && minPrice.HasValue && minPrice >= 0 && string.IsNullOrEmpty(CategoryID) && !maxPrice.HasValue)
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByNameAsync(ProductName,page,pageSize);
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAndMinPriceAsync(ProductName, minPrice.Value, page, pageSize);
                 }
-                else if (minPrice >= 0 || maxPrice >= 0)
+         
+                else if (!string.IsNullOrEmpty(ProductName) && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(CategoryID) && !minPrice.HasValue)
                 {
-                    products = await _unitOfWork.ProductRepository.GetProductsByPriceAsync(minPrice,  maxPrice, page,pageSize);
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAndMaxPriceAsync(ProductName, maxPrice.Value, page, pageSize);
+                }
+           
+                else if (!string.IsNullOrEmpty(ProductName) && minPrice.HasValue && minPrice >= 0 && maxPrice.HasValue && maxPrice >= 0 && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByNameAndPriceRangeAsync(ProductName, minPrice.Value, maxPrice.Value, page, pageSize);
+                }
+        
+                else if (minPrice.HasValue && minPrice >= 0 && !maxPrice.HasValue && string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByMinPriceAsync(minPrice.Value, page, pageSize);
+                }
+       
+                else if (maxPrice.HasValue && maxPrice >= 0 &&!minPrice.HasValue && string.IsNullOrEmpty(ProductName) && string.IsNullOrEmpty(CategoryID))
+                {
+                    products = await _unitOfWork.ProductRepository.GetProductsByMaxPriceAsync(maxPrice.Value, page, pageSize);
                 }
                 else
                 {
-                    var pagination = await _unitOfWork.ProductRepository.ToPaginationProduct(page - 1, pageSize);
-                    response.Data = _mapper.Map<Pagination<ProductDTO>>(pagination);
+                    
                     response.isSuccess = true;
                     response.Message = "Get all products successfully";
                     return response;
@@ -290,6 +317,30 @@ namespace eFurnitureProject.Application.Services
 
 
 
+        public async Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity)
+        {
+            var response = new ApiResponse<ProductDTO>();
+            try
+            {
+                var existProduct = await _unitOfWork.ProductRepository.GetByIdAsync(productID);
+                if (existProduct == null)
+                {
+                    response.isSuccess = false;
+                  
+                    return response;
+                }
+                existProduct.InventoryQuantity = quantity;
+                _unitOfWork.ProductRepository.Update(existProduct);
+                await _unitOfWork.SaveChangeAsync();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
 
     }
 }

@@ -12,6 +12,9 @@ namespace eFurnitureProject.Application.Repositories
     {
         Task AddAsync(AppointmentDetail appointmentDetail);
         Task DeleteByAppointmentIdAsync(Guid appointmentId);
-       
+        Task UpdateAsync(AppointmentDetail appointmentDetail);
+        Task<List<AppointmentDetail>> GetByAppointmentIdAsync(Guid appointmentId);
+
+
     }
 }

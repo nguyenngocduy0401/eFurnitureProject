@@ -61,11 +61,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<OrderDetail, OrderDetailViewDTO>();
             CreateMap<Order, OrderViewDTO>();
             CreateMap<Order, OrderViewForCustomerDTO>()
-     .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
-     {
-         StatusCode = src.StatusOrder.StatusCode,
-         Name = src.StatusOrder.Name
-     }));
+                 .ForMember(dest => dest.StatusOrderViewDTO, opt => opt.MapFrom(src => new StatusOrderViewDTO
+                 {
+                     StatusCode = src.StatusOrder.StatusCode,
+                     Name = src.StatusOrder.Name
+                 }));
             CreateMap<CreateCategoryViewModel, Category>();
             CreateMap<Category, CategoryViewModel>()
                  .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
@@ -77,6 +77,15 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateImportDetailDTO, ImportDetail>();
             CreateMap<UpdateImportDTO, Import>();
             CreateMap<AddProductToCartDTO, CartDetail>();
+            CreateMap<CartDetail, CartDetailViewDTO>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
+            CreateMap<StatusOrder, StatusDetailOrderViewDTO>();
+            CreateMap<ImportDetail, ImportDetailViewDTO>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
             CreateMap<Cart, CartDetailViewDTO>();
         }
     }

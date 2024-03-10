@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IImportDetailRepository
     {
+        Task<List<ImportDetail>> GetImportDetailsByIdAsync(Guid Id);
     }
 }

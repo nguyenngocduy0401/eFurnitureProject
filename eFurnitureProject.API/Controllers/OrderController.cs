@@ -17,22 +17,26 @@ namespace eFurnitureProject.API.Controllers
         {
             _service = service;
         }
-        [Authorize(Roles = AppRole.Admin+","+AppRole.Staff+","+AppRole.DeliveryStaff)]
+        [Authorize(Roles = AppRole.Admin + "," + AppRole.Staff + "," + AppRole.DeliveryStaff)]
         [HttpGet]
         public async Task<ApiResponse<Pagination<OrderViewDTO>>> GetOrderByFilter ([FromQuery]FilterOrderDTO filterOrderDTO) =>
             await _service.GetOrderFilterAsync(filterOrderDTO);
+
         [Authorize(Roles = AppRole.Customer)]
         [HttpGet]
         public async Task<ApiResponse<Pagination<OrderViewForCustomerDTO>>> GetOrderFilterByLogin([FromQuery]FilterOrderByLoginDTO filterOrderByLoginDTO) =>
             await _service.GetOrderFilterByLoginAsync(filterOrderByLoginDTO);
+
         [Authorize]
         [HttpPut]
         public async Task<ApiResponse<string>> UpdateOrderStatus([FromBody]UpdateOrderStatusDTO updateOrderStatusDTO) =>
             await _service.UpdateOrderStatusAsync(updateOrderStatusDTO);
         [Authorize(Roles = AppRole.Admin + "," + AppRole.Staff + "," + AppRole.DeliveryStaff)]
+
         [HttpGet]
         public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderById(Guid orderId) =>
             await _service.GetOrderByIdAsync(orderId);
+
         [Authorize]
         [HttpGet]
         public async Task<ApiResponse<StatusDetailOrderViewDTO>> GetStatusByOrderId(Guid orderId) =>

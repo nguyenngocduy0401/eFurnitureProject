@@ -24,9 +24,5 @@ namespace eFurnitureProject.Domain.Entities
         public User? User { get; set; }
         
         public virtual ICollection<OrderDetail>? OrderDetail { get; set; }
-
-        public Guid? VoucherId { get; set; }
-        [ForeignKey("VoucherId")]
-        public Voucher? Voucher { get; set; }
     }
 }

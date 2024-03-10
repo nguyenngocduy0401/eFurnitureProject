@@ -10,6 +10,7 @@ using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
 using FluentValidation.Results;
 using System.Data.Common;
+using eFurnitureProject.Domain.Enums;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -341,7 +342,30 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
+        public async Task<ApiResponse<bool>> UpdateProductStatus(Guid productId, ProductStatus newStatus)
+        {
 
+            var response = new ApiResponse<bool>();
+
+            try
+            {
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(productId);
+                if (product == null)
+                {
+                    response.Message = "Product not found";
+                    return response;
+                }
+                product.Status = (int)newStatus;
+                await _unitOfWork.SaveChangeAsync();
+            }
+            catch (Exception ex)
+            {
+                response.Data = false;
+                response.Message = $"Error updating product status: {ex.Message}";
+            }
+
+            return response;
+        }
     }
 }
 

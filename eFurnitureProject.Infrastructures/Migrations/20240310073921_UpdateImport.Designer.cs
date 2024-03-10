@@ -12,7 +12,7 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240310042403_UpdateImport")]
+    [Migration("20240310073921_UpdateImport")]
     partial class UpdateImport
     {
         /// <inheritdoc />

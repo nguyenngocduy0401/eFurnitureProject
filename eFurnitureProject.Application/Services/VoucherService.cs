@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
+using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,137 +21,82 @@ namespace eFurnitureProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
-
-        public VoucherService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService)
+        private readonly IValidator<CreateVoucherDTO> _createVouchervalidator;
+       private readonly  UserManager<User> _userManager;
+        public VoucherService(UserManager<User> userManager,IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService,IValidator<CreateVoucherDTO>validator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _claimsService = claimsService;
+            _createVouchervalidator = validator;
+            _userManager = userManager;
         }
 
-        public async Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucher()
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> GetAllVoucher(int pageIndex, int pageSize)
         {
-            var response = new ApiResponse<IEnumerable<VoucherViewDTO>>();
-
-            try
-            {
-                var result = await _unitOfWork.VoucherRepository.GetAllAsync();
-                var viewItems = new List<VoucherViewDTO>();
-
-                foreach (var voucher in result)
-                {
-                    viewItems.Add(_mapper.Map<VoucherViewDTO>(voucher));
-                }
-
-                if (viewItems.Count != 0)
-                {
-                    response.Data = viewItems;
-                    response.isSuccess = true;
-                    response.Message = "Success!";
-                }
-                else
-                {
-                    response.Data = null;
-                    response.isSuccess = true;
-                    response.Message = "No reocrd!";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Data = null;
-                response.isSuccess = false;
-                response.Message = ex.Message;
-            }
-
+            var response = new ApiResponse<Pagination<VoucherViewDTO>>();
+          
+            var voucher = await _unitOfWork.VoucherRepository.ToPagination(pageIndex, pageSize);
+            var result = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
+            response.Data = result;
             return response;
         }
 
-        public async Task<ApiResponse<CreateVoucherDTO>> CreateVoucherAsync(CreateVoucherDTO createVoucherDTO)
+        public async Task<ApiResponse<VoucherViewDTO>> CreateVoucherAsync(CreateVoucherDTO createVoucherDTO)
         {
-            var response = new ApiResponse<CreateVoucherDTO>
-            {
-                isSuccess = false,
-                Message = "Create new voucher failled!"
-            };
-
-            if (createVoucherDTO.StartDate > createVoucherDTO.EndDate)
-            {
-                throw new Exception("Invalid information in voucher!");
-            }
-
+            var response = new ApiResponse<VoucherViewDTO>();
             try
             {
                 var voucher = _mapper.Map<Voucher>(createVoucherDTO);
-                voucher.CreatedBy = _claimsService.GetCurrentUserId;
+                
+                ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
+                if (!validationResult.IsValid)
+                {
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
                 await _unitOfWork.SaveChangeAsync();
-                _unitOfWork.VoucherRepository.Update(voucher);
-                if (await _unitOfWork.SaveChangeAsync() > 0)
-                {
-                    response.isSuccess = true;
-                    response.Data = createVoucherDTO;
-                    response.Message = "Create new voucher successfully!";
-                }
+                return response;
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                response.Data = null;
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                return response;
             }
-
             return response;
         }
 
-        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(UpdateVoucherDTO updateVoucherDTO)
+        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO,Guid id)
         {
-            var response = new ApiResponse<UpdateVoucherDTO>
-            {
-                isSuccess = false,
-                Message = "Update new voucher failled!"
-            };
+            var response = new ApiResponse<UpdateVoucherDTO>();
+           
 
             try
             {
-                var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(updateVoucherDTO.Id);
-                if (voucher is null)
+               
+                   var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
+                ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
+                if (!validationResult.IsValid)
                 {
-                    throw new Exception("No voucher found to update!");
+                   
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
                 }
                 else
                 {
-
-                    //voucher.StartDate = updateVoucherDTO.StartDate;
-                    //voucher.EndDate = updateVoucherDTO.EndDate;
-                    //voucher.Percent = updateVoucherDTO.Percent;
-                    voucher.IsDeleted = updateVoucherDTO.IsDeleted;
-                    if (updateVoucherDTO.IsDeleted)
+                    if (existVoucher != null)
                     {
-                        voucher.DeletionDate = DateTime.Now;
-                        voucher.DeleteBy = _claimsService.GetCurrentUserId;
-                    }
-                    else
-                    {
-                        voucher.DeletionDate = null;
-                        voucher.DeleteBy = null;
-                    }
-                    //voucher.DeletionDate = updateVoucherDTO.DeletionDate;
-                    //voucher.DeleteBy = updateVoucherDTO.DeleteBy;
-                    voucher.ModificationBy = _claimsService.GetCurrentUserId;
-                    voucher.ModificationDate = DateTime.Now;
-
-                    int update = await _unitOfWork.SaveChangeAsync();
-                    if (update > 0)
-                    {
-                        response.Data = updateVoucherDTO;
-                        response.isSuccess = true;
-                        response.Message = "Update Succesfully";
-                    }
-                    else
-                    {
-                        throw new Exception("Update failled");
+                        var updateVoucher = _mapper.Map(createVoucherDTO, existVoucher);
+                        await _unitOfWork.SaveChangeAsync();
+                        return response;
                     }
                 }
             }
@@ -162,41 +112,51 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucherPaging(int pageIndex, int pageSize)
+        public async Task<ApiResponse<VoucherViewDTO>> GetVouchertoUser(List<string>? userIDs,List<Guid> voucherIds)
         {
-            var response = new ApiResponse<IEnumerable<VoucherViewDTO>>();
-
+            var response = new ApiResponse<VoucherViewDTO>();
             try
             {
-                var result = await _unitOfWork.VoucherRepository.Get(pageIndex, pageSize);
-                var viewItems = new List<VoucherViewDTO>();
+                foreach (var userID in userIDs)
+                {
+                    var user = await _userManager.FindByIdAsync(userID);
+                    if (user == null)
+                    {
+                        response.Message = "User not found";
+                        response.isSuccess = false;
+                        return response;
+                    }
 
-                foreach (var voucher in result)
-                {
-                    viewItems.Add(_mapper.Map<VoucherViewDTO>(voucher));
+                    foreach (var voucherId in voucherIds)
+                    {
+                        var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
+                        if (existVoucher == null)
+                        {
+                            response.Message = "Voucher not found";
+                            response.isSuccess = false;
+                            return response;
+                        }
+
+                        var voucherDetail = new VoucherDetail
+                        {
+                            UserId = userID,
+                            VoucherId = voucherId
+                        };
+                        await _unitOfWork.VoucherDetailRepository.AddAsync(voucherDetail);
+                    }
                 }
 
-                if (viewItems.Count != 0)
-                {
-                    response.Data = viewItems;
-                    response.isSuccess = true;
-                    response.Message = "Success!";
-                }
-                else
-                {
-                    response.Data = null;
-                    response.isSuccess = true;
-                    response.Message = "No reocrd!";
-                }
+                await _unitOfWork.SaveChangeAsync();
+                response.isSuccess = true;
+                response.Message = "Vouchers assigned successfully";
             }
             catch (Exception ex)
             {
-                response.Data = null;
                 response.isSuccess = false;
-                response.Message = ex.Message;
+                response.Message = "User already has a voucher";
             }
 
             return response;
+        }
         }
     }
-}

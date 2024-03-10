@@ -12,8 +12,8 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240309022650_UpdateCartDetail")]
-    partial class UpdateCartDetail
+    [Migration("20240310094121_a")]
+    partial class a
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -432,9 +432,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("TotalQuantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Imports");
@@ -514,11 +511,16 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("VoucherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VoucherId");
 
                     b.ToTable("Orders");
                 });
@@ -767,7 +769,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("Responses");
+                    b.ToTable("Responsses");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Role", b =>
@@ -1053,6 +1055,12 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<double>("MaximumDiscountAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MinimumOrderValue")
+                        .HasColumnType("float");
+
                     b.Property<Guid?>("ModificationBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1252,9 +1260,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .WithMany("Order")
                         .HasForeignKey("UserId");
 
+                    b.HasOne("eFurnitureProject.Domain.Entities.Voucher", "Voucher")
+                        .WithMany()
+                        .HasForeignKey("VoucherId");
+
                     b.Navigation("StatusOrder");
 
                     b.Navigation("User");
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderDetail", b =>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateCartDetail : Migration
+    public partial class a : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -107,7 +107,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -170,6 +169,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Percent = table.Column<double>(type: "float", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
+                    MinimumOrderValue = table.Column<double>(type: "float", nullable: false),
+                    MaximumDiscountAmount = table.Column<double>(type: "float", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -441,6 +442,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -461,6 +463,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         name: "FK_Orders_StatusOrders_StatusId",
                         column: x => x.StatusId,
                         principalTable: "StatusOrders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_Vouchers_VoucherId",
+                        column: x => x.VoucherId,
+                        principalTable: "Vouchers",
                         principalColumn: "Id");
                 });
 
@@ -699,7 +706,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Responses",
+                name: "Responsses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -716,15 +723,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Responses", x => x.Id);
+                    table.PrimaryKey("PK_Responsses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Responses_AspNetUsers_StaffId",
+                        name: "FK_Responsses_AspNetUsers_StaffId",
                         column: x => x.StaffId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Responses_Feedbacks_FeedbackId",
+                        name: "FK_Responsses_Feedbacks_FeedbackId",
                         column: x => x.FeedbackId,
                         principalTable: "Feedbacks",
                         principalColumn: "Id",
@@ -831,6 +838,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_VoucherId",
+                table: "Orders",
+                column: "VoucherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrdersDetails_ProductId",
                 table: "OrdersDetails",
                 column: "ProductId");
@@ -846,13 +858,13 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Responses_FeedbackId",
-                table: "Responses",
+                name: "IX_Responsses_FeedbackId",
+                table: "Responsses",
                 column: "FeedbackId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Responses_StaffId",
-                table: "Responses",
+                name: "IX_Responsses_StaffId",
+                table: "Responsses",
                 column: "StaffId");
 
             migrationBuilder.CreateIndex(
@@ -916,7 +928,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "Responses");
+                name: "Responsses");
 
             migrationBuilder.DropTable(
                 name: "Transactions");
@@ -946,9 +958,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Vouchers");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
@@ -959,6 +968,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             migrationBuilder.DropTable(
                 name: "StatusOrders");
+
+            migrationBuilder.DropTable(
+                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

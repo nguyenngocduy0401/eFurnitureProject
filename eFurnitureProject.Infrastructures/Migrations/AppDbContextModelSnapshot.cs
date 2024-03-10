@@ -508,11 +508,16 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("VoucherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VoucherId");
 
                     b.ToTable("Orders");
                 });
@@ -761,7 +766,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("Responses");
+                    b.ToTable("Responsses");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Role", b =>
@@ -1047,6 +1052,12 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<double>("MaximumDiscountAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MinimumOrderValue")
+                        .HasColumnType("float");
+
                     b.Property<Guid?>("ModificationBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1246,9 +1257,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .WithMany("Order")
                         .HasForeignKey("UserId");
 
+                    b.HasOne("eFurnitureProject.Domain.Entities.Voucher", "Voucher")
+                        .WithMany()
+                        .HasForeignKey("VoucherId");
+
                     b.Navigation("StatusOrder");
 
                     b.Navigation("User");
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderDetail", b =>

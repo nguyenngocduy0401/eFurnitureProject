@@ -93,5 +93,6 @@ namespace eFurnitureProject.Infrastructures.Repositories
             var user = await _userManager.FindByIdAsync(userId);
             return (List<string>)(user != null ? await _userManager.GetRolesAsync(user) : new List<string>());
         }
+     
     }
 }

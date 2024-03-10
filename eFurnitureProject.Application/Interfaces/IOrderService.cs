@@ -1,6 +1,7 @@
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
+using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

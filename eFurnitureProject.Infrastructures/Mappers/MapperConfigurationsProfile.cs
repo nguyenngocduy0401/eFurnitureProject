@@ -87,6 +87,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
             CreateMap<Cart, CartDetailViewDTO>();
+            CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
         }
     }
 }

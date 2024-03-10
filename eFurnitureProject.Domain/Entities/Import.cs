@@ -11,7 +11,6 @@ namespace eFurnitureProject.Domain.Entities
         public string Name { get; set; }
         public double TotalPrice { get; set; }
         public int Status { get; set; } = 1;
-        public int TotalQuantity { get; set; }
 
         public ICollection<ImportDetail>? ImportDetail { get; set; }
     }

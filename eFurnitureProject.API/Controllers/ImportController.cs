@@ -20,6 +20,12 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<ImportViewDTO>> CreateImportWithDetail(CreateImportDTO createImport) => await _importService.CreateImportWithDetailAsync(createImport);
 
         [HttpPut]
-        public async Task<ApiResponse<ImportViewDTO>> UpdateImport(Guid importId,UpdateImportDTO updateImport) => await _importService.UpdateImportAysnc(importId, updateImport);
+        public async Task<ApiResponse<string>> UpdateStatusImport(UpdateImportDTO updateImport) => await _importService.UpdateStatusImportAsync(updateImport);
+
+        [HttpGet]
+        public async Task<ApiResponse<List<ImportViewDTO>>> GetAllImport() => await _importService.GetAllImportAsync();
+
+        [HttpGet]
+        public async Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetail(string importID) => await _importService.GetImportDetailAsync(importID);
     }
 }

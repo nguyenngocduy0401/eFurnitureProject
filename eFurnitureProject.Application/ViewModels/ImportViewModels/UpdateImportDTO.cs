@@ -8,7 +8,7 @@ namespace eFurnitureProject.Application.ViewModels.ImportViewModels
 {
     public class UpdateImportDTO
     {
-        public string Name { get; set; }
+        public string ImportId { get; set; }
         public int Status { get; set; }
     }
 }

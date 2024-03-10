@@ -43,7 +43,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             entity.IsDeleted = true;
             entity.DeletionDate = _timeService.GetCurrentTime();
             entity.DeleteBy = _claimsService.GetCurrentUserId;
-            _dbSet.Update(entity);
+            _dbSet.Update(entity);  
         }
 
         public void Update(TEntity entity)

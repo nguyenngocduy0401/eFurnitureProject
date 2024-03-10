@@ -87,5 +87,24 @@ namespace eFurnitureProject.Infrastructures.Repositories
             };
             return result;
         }
+        public async Task<StatusOrder> GetStatusOrderByOrderId(Guid orderId)
+        {
+            var order = await _dbSet
+                .Where(x => x.Id == orderId)
+                .Include(x => x.StatusOrder)
+                .FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                throw new Exception("Not Found!");
+            }
+
+            if (order.StatusOrder == null)
+            {
+                throw new Exception("StatusOrder not found!");
+            }
+
+            return order.StatusOrder;
+        }
     }
 }

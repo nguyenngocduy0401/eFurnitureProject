@@ -23,6 +23,7 @@ namespace eFurnitureProject.Application.Repositories
 
         Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndNameAsync(String categoryId, string productName, int pageIndex, int pageSize);
         void IncreaseQuantityProductFromImport(ICollection<ImportDetail> importDetails);
+        Task<int> GetQuantityByIdAsync(Guid productId);
        //----------------------------Filter ---------------------------------------
         Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndMaxPriceAsync(string categoryID, double value, int page, int pageSize);
         Task<Pagination<ProductDTO>> GetProductsByCategoryIDAndMinPriceAsync(string categoryID, double value, int page, int pageSize);

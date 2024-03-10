@@ -66,7 +66,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
                      StatusCode = src.StatusOrder.StatusCode,
                      Name = src.StatusOrder.Name
                  }));
-                        CreateMap<CreateCategoryViewModel, Category>();
+            CreateMap<CreateCategoryViewModel, Category>();
             CreateMap<Category, CategoryViewModel>()
                  .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
             CreateMap<OrderViewDTO, Order>();
@@ -81,7 +81,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
-            CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
+            CreateMap<StatusOrder, StatusDetailOrderViewDTO>();
+            CreateMap<ImportDetail, ImportDetailViewDTO>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
         }
     }
 }

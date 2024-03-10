@@ -1,5 +1,4 @@
-﻿using eFurnitureProject.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.ViewModels.ImportViewModels
 {
-    public class ImportViewDTO
+    public class ImportDetailViewDTO
     {
-        public String Id { get; set; }
+        public string ProductId { get; set; }
         public string Name { get; set; }
-        public double TotalPrice { get; set; }
-        public int Status { get; set; }
+        public double Price { get; set; }
+        public string? Image { get; set; }
+        public int Quantity { get; set; }
     }
 }

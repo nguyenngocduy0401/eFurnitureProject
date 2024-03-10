@@ -11,7 +11,8 @@ namespace eFurnitureProject.Application.Interfaces
     public interface IImportService 
     {
         Task<ApiResponse<ImportViewDTO>> CreateImportWithDetailAsync(CreateImportDTO createImport);
-
-        Task<ApiResponse<ImportViewDTO>> UpdateImportAysnc(Guid importId, UpdateImportDTO updateImport);
+        Task<ApiResponse<string>> UpdateStatusImportAsync(UpdateImportDTO updateImport);
+        Task<ApiResponse<List<ImportViewDTO>>> GetAllImportAsync();
+        Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetailAsync(string importId);
     }
 }

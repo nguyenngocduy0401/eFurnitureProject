@@ -50,11 +50,12 @@ namespace eFurnitureProject.Application.Services
                 {
                     await _unitOfWork.ImportRepository.AddWithDetailAsync(importObj);
                     var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                    if (isSuccess == true)
+                    if (isSuccess is false)
                     {
-                        response.Data = _mapper.Map<ImportViewDTO>(importObj);
-                        response.Message = "Create import with details is successful!";
+                        throw new Exception("Create import with details is fail!");
                     }
+                    response.Data = _mapper.Map<ImportViewDTO>(importObj);
+                    response.Message = "Create import with details is successful!";
                 }
             }
             catch (DbException ex)
@@ -70,12 +71,40 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<ImportViewDTO>> UpdateImportAysnc(Guid importId, UpdateImportDTO updateImport)
+        public async Task<ApiResponse<List<ImportViewDTO>>> GetAllImportAsync()
         {
-            var response = new ApiResponse<ImportViewDTO>();
+            var response = new ApiResponse<List<ImportViewDTO>>();
+            var imports = await _unitOfWork.ImportRepository.GetAllIsNotDeleteAsync();
+            var result = _mapper.Map<List<ImportViewDTO>>(imports);
+            response.Data = result;
+            response.Message = $"Have {result.Count} imports.";
+            return response;
+        }
+
+        public async Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetailAsync(string importId)
+        {
+            var response = new ApiResponse<List<ImportDetailViewDTO>>();
             try
             {
-                var existingImport = await _unitOfWork.ImportRepository.GetByIdAsync(importId);
+                var importDetail = await _unitOfWork.ImportDetailRepository.GetImportDetailsByIdAsync(Guid.Parse(importId));
+                var result = _mapper.Map<List<ImportDetailViewDTO>>(importDetail);
+                response.Data = result;
+                response.Message = $"Have {result.Count} items.";
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponse<string>> UpdateStatusImportAsync(UpdateImportDTO updateImport)
+        {
+            var response = new ApiResponse<string>();
+            try
+            {
+                var existingImport = await _unitOfWork.ImportRepository.GetByIdAsync(Guid.Parse(updateImport.ImportId));
                 var importObj = _mapper.Map<Import>(updateImport);
                 ValidationResult validationResult = await _validatorUpdateImport.ValidateAsync(updateImport);
                 if (!validationResult.IsValid)
@@ -84,24 +113,39 @@ namespace eFurnitureProject.Application.Services
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
                 }
-                existingImport.Name = importObj.Name;
-                existingImport.Status = importObj.Status;
-                _unitOfWork.ImportRepository.Update(existingImport);
-                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                if (isSuccess == true)
+                if (existingImport.Status == importObj.Status || existingImport.Status > importObj.Status)
                 {
-                    if (existingImport.Status == 2)
+                    throw new Exception($"Can not update status value {existingImport.Status} again");
+                }
+                existingImport.Status = importObj.Status;
+                bool isSuccess;
+                if (existingImport.Status == 2)
+                {
+                    var importDetail = await _unitOfWork.ImportDetailRepository.GetImportDetailsByIdAsync(existingImport.Id);
+                    _unitOfWork.ProductRepository.IncreaseQuantityProductFromImport(importDetail);
+                    if (await _unitOfWork.SaveChangeAsync() <= 0)
                     {
-                        _unitOfWork.ProductRepository.IncreaseQuantityProductFromImport(existingImport.ImportDetail);
-                        if (await _unitOfWork.SaveChangeAsync() > 0)
-                        {
-                            response.Data = _mapper.Map<ImportViewDTO>(existingImport);
-                            response.Message = "Update import and product's quantity are successful!";
-                        }
-                        return response;
+                        throw new Exception("Update status import and product quantity are fail!");
                     }
-                    response.Data = _mapper.Map<ImportViewDTO>(existingImport);
-                    response.Message = "Update import is successful!";
+                    _unitOfWork.ImportRepository.Update(existingImport);
+                    isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                    if (isSuccess)
+                    {
+                        response.Message = "Update status import and product quantity are successful!";
+                    }
+                }
+                else
+                {
+                    _unitOfWork.ImportRepository.Update(existingImport);
+                    isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                    if (isSuccess)
+                    {
+                        response.Message = "Update status import is successful!";
+                    }
+                }
+                if (isSuccess is false)
+                {
+                    throw new Exception("Update status import fail");
                 }
             }
             catch (Exception ex)

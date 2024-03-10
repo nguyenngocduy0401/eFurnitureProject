@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eFurnitureProject.Domain.Enums;
 
 namespace eFurnitureProject.Application.Interfaces
 {
@@ -21,5 +22,6 @@ namespace eFurnitureProject.Application.Interfaces
 
         Task<ApiResponse<int>> CalculateTotalPages(int totalItemsCount, int pageSize);
         Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity);
+        Task<ApiResponse<bool>> UpdateProductStatus(Guid productId, ProductStatus newStatus);
     }
 }

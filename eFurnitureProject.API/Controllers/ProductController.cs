@@ -24,7 +24,7 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<Pagination<ProductDTO>>> FilterProducts2(
           int page,
-         [FromQuery] String categoryId,
+         String? categoryId,
          string? productName,
            double? minPrice, double? maxPrice,
          int pageSize)
@@ -44,7 +44,7 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<Pagination<ProductDTO>>> getAllProduct(int pageIndex = 0, int pageSize = 10)=> await _productService.getAllProduct();
         [HttpGet]
-        public async Task<ApiResponse<IEnumerable<ProductDTO>>> GetProductByID(Guid id) => await _productService.GetProductByID(id);   
+        public async Task<ApiResponse<ProductDTO>> GetProductByID(string id) => await _productService.GetProductByID(id);   
         [Authorize(Roles = AppRole.Admin)]
         [HttpPut]
         public async Task<ApiResponse<ProductDTO>> UpdateProductByAdmin(CreateProductDTO createProductDTO, Guid productID)=>await _productService.UpdateProductByAdmin(createProductDTO, productID);

@@ -6,6 +6,7 @@ using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using eFurnitureProject.Domain.Entities;
+using eFurnitureProject.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,28 @@ namespace eFurnitureProject.Application.Services
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
         }
+
+        public async Task<ApiResponse<string>> CheckOutOrder(CreateOrderDTO createOrderDTO)
+        {
+            var response = new ApiResponse<string>();
+            try
+            {
+                
+
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+    
 
         public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
         {

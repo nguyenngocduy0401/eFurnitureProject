@@ -9,7 +9,6 @@ namespace eFurnitureProject.Domain.Entities
 {
     public class Order : BaseEntity
     {
-        public DateTime DateTime { get; set; }
         public int Price { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
@@ -18,7 +17,8 @@ namespace eFurnitureProject.Domain.Entities
         public Guid? StatusId { get; set; }
         [ForeignKey("StatusId")]
         public StatusOrder? StatusOrder { get; set; }
-
+        public Guid? VoucherId { get; set; }
+        public Voucher? Voucher { get; set; }
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public User? User { get; set; }

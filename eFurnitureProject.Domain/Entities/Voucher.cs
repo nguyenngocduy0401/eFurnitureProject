@@ -15,5 +15,6 @@ namespace eFurnitureProject.Domain.Entities
         public int Number { get; set; }
 
         public virtual ICollection<VoucherDetail>? VoucherDetail { get; set; }
+        public virtual ICollection<Order>? Order { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<Pagination<OrderViewDTO>>> GetOrderFilterAsync(FilterOrderDTO filterOrderDTO);
         Task<ApiResponse<string>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO);
         Task<ApiResponse<StatusDetailOrderViewDTO>> GetOrderStatusByOrderId(Guid orderId);
+        Task<ApiResponse<string>> CheckOutOrder(CreateOrderDTO createOrderDTO);
     }
 }

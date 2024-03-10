@@ -40,10 +40,9 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IUserService, UserService>();
-            #endregion
-
             services.AddScoped<IImportService, ImportService>();
             services.AddScoped<ICartService, CartService>();
+            #endregion
             #region Repository DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();

@@ -9,6 +9,8 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface ICartDetailRepository 
     {
-        Task AddProductInCartAsync(CartDetail cartDetail);
+        void UpdateQuantityProductInCart(CartDetail cartdetail);
+        Task AddAsync(CartDetail cartdetail);
+        void DeleteProductInCart(Guid cartId, Guid productId);
     }
 }

@@ -18,9 +18,18 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task AddProductInCartAsync(CartDetail cartDetail)
+        public async Task AddAsync(CartDetail cartdetail) => await _dbContext.AddAsync(cartdetail);
+
+        public void DeleteProductInCart(Guid cartId, Guid productId)
         {
-            await _dbContext.AddAsync(cartDetail);
+            var itemInCart = new CartDetail()
+            {
+                CartId = cartId,
+                ProductId = productId
+            };
+            _dbContext.CartDetails.Remove(itemInCart);
         }
+        
+        public void UpdateQuantityProductInCart(CartDetail cartdetail) => _dbContext.Update(cartdetail);
     }
 }

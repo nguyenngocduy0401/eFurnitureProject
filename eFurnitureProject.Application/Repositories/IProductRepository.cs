@@ -23,5 +23,7 @@ namespace eFurnitureProject.Application.Repositories
 
 
         void IncreaseQuantityProductFromImport(ICollection<ImportDetail> importDetails);
+
+        Task<int> GetQuantityByIdAsync(Guid productId);
     }
 }

@@ -10,9 +10,10 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IVoucherService
     {
-        Task<ApiResponse<CreateVoucherDTO>> CreateVoucherAsync(CreateVoucherDTO createVoucherDTO);
-        Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucher();
-        Task<ApiResponse<IEnumerable<VoucherViewDTO>>> GetAllVoucherPaging(int pageIndex, int pageSize);
-        Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(UpdateVoucherDTO updateVoucherDTO);
+        Task<ApiResponse<VoucherViewDTO>> CreateVoucherAsync(CreateVoucherDTO createVoucherDTO);
+        Task<ApiResponse<Pagination<VoucherViewDTO>>> GetAllVoucher(int pageIndex, int pageSize);
+        //Task<ApiResponse<Pagination<VoucherViewDTO>>> GetAllVoucherPaging(int pageIndex, int pageSize);
+        Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, Guid id);
+        Task<ApiResponse<VoucherViewDTO>> GetVouchertoUser(List<string>? userIDs, List<Guid> voucherIds);
     }
 }

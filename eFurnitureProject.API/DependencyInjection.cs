@@ -24,6 +24,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics;
+using eFurnitureProject.Application.ViewModels.VoucherDTO;
+using eFurnitureProject.API.Validator.VoucherValidator;
 
 namespace eFurnitureProject.API
 {
@@ -99,7 +101,7 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<CreateImportDTO>, CreateImportValidation>();
             services.AddTransient<IValidator<CreateImportDetailDTO>, CreateImportDetailValidation>();
             services.AddTransient<IValidator<UpdateImportDTO>, UpdateImportValidation>();
-
+            services.AddTransient<IValidator<CreateVoucherDTO>, CreateVoucherValidation>();
             #endregion
 
             return services;

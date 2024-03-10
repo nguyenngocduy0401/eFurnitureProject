@@ -26,8 +26,7 @@ namespace eFurnitureProject.Application.Services
             {
                 if (productDTO.Quantity <= 0)
                 {
-                    response.Message = "Quanity must greater than 0";
-                    return response;
+                    throw new Exception("Quanity must greater than 0");
                 }
                 var inventoryQuantity = await _unitOfWork.ProductRepository.GetQuantityByIdAsync(productDTO.ProductId);
                 var cartObj = await _unitOfWork.CartRepository.GetCartAsync();

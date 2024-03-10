@@ -66,7 +66,11 @@ namespace eFurnitureProject.Infrastructures.Mappers
                      StatusCode = src.StatusOrder.StatusCode,
                      Name = src.StatusOrder.Name
                  }));
+<<<<<<< HEAD
             CreateMap<CreateCategoryViewModel, Category>();
+=======
+                        CreateMap<CreateCategoryViewModel, Category>();
+>>>>>>> parent of e927f9d (Revert "Merge branch 'main' of https://github.com/nguyenngocduy0401/eFurnitureProject")
             CreateMap<Category, CategoryViewModel>()
                  .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
             CreateMap<OrderViewDTO, Order>();
@@ -87,6 +91,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
             CreateMap<Cart, CartDetailViewDTO>();
+            CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
         }
     }
 }

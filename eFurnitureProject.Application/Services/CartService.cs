@@ -121,7 +121,7 @@ namespace eFurnitureProject.Application.Services
                 var cartObj = await _unitOfWork.CartRepository.GetCartAsync();
                 var item = _mapper.Map<List<CartDetailViewDTO>>(cartObj.CartDetails);
                 response.Data = item;
-                response.Message = "Get item success";
+                response.Message = $"Cart contains {item.Count} item";
             }
             catch (Exception ex)
             {

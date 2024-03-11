@@ -8,6 +8,6 @@ namespace eFurnitureProject.Domain.Enums
 {
     public  enum FeedBackStatus
     {
-        Awaiting response=1 ,Responsed=2
+     response=1 ,Responsed=2
     }
 }

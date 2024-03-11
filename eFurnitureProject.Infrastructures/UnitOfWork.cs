@@ -35,7 +35,9 @@ namespace eFurnitureProject.Infrastructures
         private readonly IUserRepository _userRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly IVoucherDetailRepository _voucherDetailRepository;
+        private readonly IResponseRepository _responseRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+       
         public UnitOfWork(AppDbContext dbContext, IAppointmentRepository appointmentRepository,
             IAppointmentDetailRepository appointmentDetailRepository, ICartDetailRepository cartDetailRepository,
             ICartRepository cartRepository, ICategoryRepository categoryRepository,
@@ -46,8 +48,9 @@ namespace eFurnitureProject.Infrastructures
             IProductRepository productRepository, IRoleRepository roleRepository, IStatusOrderProcessingRepository statusOrderProcessingRepository, 
             IStatusOrderRepository statusOrderRepository, ITransactionRepository transactionRepository, 
             IUserRepository userRepository, IVoucherRepository voucherRepository, 
-            IVoucherDetailRepository voucherDetailRepository, IRefreshTokenRepository refreshTokenRepository)
+            IVoucherDetailRepository voucherDetailRepository, IRefreshTokenRepository refreshTokenRepository,IResponseRepository responseRepository)
         {   
+
             _refreshTokenRepository = refreshTokenRepository;
             _appointmentRepository = appointmentRepository;
             _dbContext = dbContext;
@@ -72,6 +75,7 @@ namespace eFurnitureProject.Infrastructures
             _userRepository = userRepository;
             _voucherRepository = voucherRepository;
             _voucherDetailRepository = voucherDetailRepository;
+            _responseRepository= responseRepository;
         }
         public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository;
         public IAppointmentRepository AppointmentRepository => _appointmentRepository;
@@ -97,6 +101,7 @@ namespace eFurnitureProject.Infrastructures
         public IVoucherRepository VoucherRepository => _voucherRepository;
 
         public ICartRepository CartRepository => _cartRepository;
+        public IResponseRepository ResponseRepository => _responseRepository;
 
         public async Task<int> SaveChangeAsync()
         {

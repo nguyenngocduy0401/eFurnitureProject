@@ -1,5 +1,8 @@
-﻿using eFurnitureProject.Application.Interfaces;
+﻿using eFurnitureProject.Application.Commons;
+using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,14 +39,43 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
         }
 
-        public async Task<List<Voucher>> GetVoucherByDateAsync(DateTime date)
+        public async Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date)
         {
-            return await _dbContext.Vouchers 
-                .Where(ad => ad.EndDate.Date == date.Date || ad.StartDate.Date ==date.Date)
-                .ToListAsync();
+            var voucher = await _dbContext.Vouchers
+       .Where(p => p.EndDate.Year == date.Year && p.EndDate.Month == date.Month || p.StartDate.Year == date.Year && p.StartDate.Month == date.Month)
+       .Select(p => new Voucher
+       {
+           Id = p.Id,
+           VoucherName = p.VoucherName,
+           StartDate = p.StartDate,
+           EndDate = p.EndDate,
+           Percent = p.Percent,
+           Number = p.Number,
+           MinimumOrderValue = p.MinimumOrderValue,
+           MaximumDiscountAmount = p.MaximumDiscountAmount
+       })
+       .ToListAsync();
+
+            var totalItems = voucher.Count;
+
+            var paginatedProducts = voucher.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var pagination = new Pagination<Voucher>
+            {
+                Items = paginatedProducts,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+
+            };
+
+            return pagination;
         }
-
-
     }
 }
+
+
+    
       

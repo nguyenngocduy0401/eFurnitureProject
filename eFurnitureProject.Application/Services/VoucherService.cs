@@ -228,24 +228,38 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<List<VoucherViewDTO>>> SearchVoucherByDate(DateTime date)
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, DateTime date)
         {
-            var response = new ApiResponse<List<VoucherViewDTO>>();
+            var response = new ApiResponse<Pagination<VoucherViewDTO>>();
             try
             {
-                var voucher = await _unitOfWork.VoucherRepository.GetVoucherByDateAsync(date);
-                if (voucher == null)
+                if (date == default)
                 {
-                    response.isSuccess = false;
-                    response.Message = "not found";
+
+                    var vouchers = await _unitOfWork.VoucherRepository.ToPagination(pageIndex, pageSize);
+                    var result = _mapper.Map<Pagination<VoucherViewDTO>>(vouchers);
+                    response.Data = result;
+                    return response;
                 }
                 else
                 {
 
 
-                    var resul = _mapper.Map<List<VoucherViewDTO>>(voucher);
-                    response.isSuccess = true;
-                    response.Data = resul; }
+                    var voucher = await _unitOfWork.VoucherRepository.GetVoucherByDateAsync(pageIndex,pageSize,date);
+                    if (voucher == null)
+                    {
+                        response.isSuccess = false;
+                        response.Message = "not found";
+                    }
+                    else
+                    {
+
+
+                        var resul = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
+                        response.isSuccess = true;
+                        response.Data = resul;
+                    }
+                }
             }
             catch (Exception ex)
             {

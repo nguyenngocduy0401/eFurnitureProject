@@ -18,16 +18,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eFurnitureProject.Application.Utils;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
-<<<<<<< HEAD
-using System.Data.Common;
-=======
+
 using System.Globalization;
->>>>>>> Appointment-
+using System.Data.Common;
 
 namespace eFurnitureProject.Application.Services
 {

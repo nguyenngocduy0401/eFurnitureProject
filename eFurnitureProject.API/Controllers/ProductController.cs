@@ -10,6 +10,8 @@ using System.Net;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using eFurnitureProject.Application.Services;
+using eFurnitureProject.Domain.Enums;
 
 namespace eFurnitureProject.API.Controllers
 {
@@ -53,6 +55,7 @@ namespace eFurnitureProject.API.Controllers
         [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpPut]
         public async Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity) => await _productService.UpdateQuantityProduct(productID, quantity);
-
+        [HttpPost]
+        public async Task<ApiResponse<bool>> UpdateProductStatus(Guid ProductId, ProductStatus newStatus) => await _productService.UpdateProductStatus(ProductId, newStatus);
     }
 }

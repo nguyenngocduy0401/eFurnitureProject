@@ -2,6 +2,7 @@
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.AppointmentViewModel.AppointmentDetailViewModel;
+using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
@@ -19,23 +20,23 @@ namespace eFurnitureProject.Application.Services
         private readonly IClaimsService _claimsService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public FeedBackService(IClaimsService claimsService, IUnitOfWork unitOfWork,IMapper mapper)
+        public FeedBackService(IClaimsService claimsService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _claimsService = claimsService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-    
-        public async Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO,Guid productId)
+
+        public async Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO, Guid productId)
         {
             var response = new ApiResponse<FeedBackDTO>();
             try
             {
                 var checkProduct = await _unitOfWork.FeedbackRepository.CheckProduct(productId);
-                if (!checkProduct )
+                if (!checkProduct)
                 {
                     response.isSuccess = false;
-                    response.Message="Fail by product";
+                    response.Message = "Fail by product";
                 }
                 else
                 {
@@ -49,7 +50,8 @@ namespace eFurnitureProject.Application.Services
                 }
 
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
 
                 response.Data = null;
@@ -65,7 +67,7 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var userCurrentID = _claimsService.GetCurrentUserId.ToString();
-                var feedbacks = await _unitOfWork.FeedbackRepository.GetFeedBacksByUserID(pageIndex, PageSize,userCurrentID);
+                var feedbacks = await _unitOfWork.FeedbackRepository.GetFeedBacksByUserID(pageIndex, PageSize, userCurrentID);
                 var result = _mapper.Map<Pagination<FeedBackViewDTO>>(feedbacks);
 
             }
@@ -79,5 +81,35 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
+        public async Task<ApiResponse<bool>> DeleteFeedBack(Guid id)
+        {
+            var response = new ApiResponse<bool>();
+            try
+            {
+                var exist = await _unitOfWork.FeedbackRepository.GetByIdAsync(id);
+                if (exist == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "FeedBack does not exist";
+                    return response;
+                }
+                if (exist.IsDeleted)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Product is already deleted";
+                    return response;
+                }
+                _unitOfWork.FeedbackRepository.SoftRemove(exist);
+                var isSuccess = await _unitOfWork.SaveChangeAsync();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+
+        }
     }
-}
+    }

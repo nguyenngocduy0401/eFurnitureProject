@@ -15,6 +15,7 @@ using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 using eFurnitureProject.Application.ViewModels.CartViewModels;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
+using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -90,6 +91,10 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
             CreateMap<Import, ImportViewFullDTO>()
                 .ForMember(dest => dest.importDetailViewDTOs, opt => opt.MapFrom(src => src.ImportDetail));
+            CreateMap<Feedback, FeedBackDTO>();
+            CreateMap<FeedBackDTO, Feedback>();
+            CreateMap<CreateFeedBackDTO, Feedback>();
+
         }
     }
 }

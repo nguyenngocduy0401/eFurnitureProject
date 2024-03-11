@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 else
                 {
-                    
+
                     var feedback = _mapper.Map<Feedback>(feedBackDTO);
                     if (feedback.Status == 2)
                     {
@@ -52,21 +53,32 @@ namespace eFurnitureProject.Application.Services
                         feedback.Status = 1;
                         feedback.ProductId = feedBackId;
                         await _unitOfWork.FeedbackRepository.AddAsync(feedback);
-                        await _unitOfWork.SaveChangeAsync();
-                        return response;
+                        var issuccess = await _unitOfWork.SaveChangeAsync();
+                        if (issuccess > 0)
+                        {
+                            response.isSuccess = false;
+                            response.Message = "Create Fail";
+                            return response;
+                        }
+                        else
+                        {
+                            response.isSuccess = true;
+                            response.Message = "Create Successfully";
+                            return response;
+                        }
                     }
                 }
-
-
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-
-                response.Data = null;
                 response.isSuccess = false;
-                response.Message = $"An error occurred while creating the appointment: {ex.Message}";
+                response.Message = ex.Message;
             }
-
             return response;
         }
         public async Task<ApiResponse<Pagination<FeedBackViewDTO>>> GetFeedBackJWT(int pageIndex, int PageSize)

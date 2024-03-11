@@ -23,6 +23,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eFurnitureProject.Application.Utils;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
+using System.Data.Common;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -73,18 +74,32 @@ namespace eFurnitureProject.Application.Services
                         UserId = currentID.ToString()
                     };
                     await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-                    await _unitOfWork.SaveChangeAsync();
-                    return response;
+                    var issuccess = await _unitOfWork.SaveChangeAsync();
+                    if (issuccess > 0)
+                    {
+                        response.isSuccess = false;
+                        response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                        return response;
+                    }
+                    else
+                    {
+                        response.isSuccess = true;
+                        response.Message = "Create Successfully";
+                        return response;
+                    }
+                   
                 }
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-
-                response.Data = null;
                 response.isSuccess = false;
-                response.Message = $"An error occurred while creating the appointment: {ex.Message}";
+                response.Message = ex.Message;
             }
-
             return response;
         }
 

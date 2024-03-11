@@ -13,9 +13,9 @@ namespace eFurnitureProject.Domain.Entities
         public DateTime EndDate { get; set; }
         public double Percent { get; set; }
         public int Number { get; set; }
-       
-        public double MinimumOrderValue { get; set; } // giá trị đơn hàng tối thiểu
-        public double MaximumDiscountAmount { get; set; } // Giá trị tối đa được giảm
+        public double MinimumOrderValue { get; set; } 
+        public double MaximumDiscountAmount { get; set; } 
         public virtual ICollection<VoucherDetail>? VoucherDetail { get; set; }
+        public virtual ICollection<Order>? Order { get; set; }
     }
 }

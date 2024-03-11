@@ -17,7 +17,11 @@ namespace eFurnitureProject.Domain.Entities
         [Required]
         public string? Email { get; set; }
         public int Status { get; set; }
-        public int Time { get; set; }
+<<<<<<< HEAD
+        public string? Time { get; set; }
+=======
+        public string?  Time { get; set; }
+>>>>>>> Appointment-
 
         public virtual ICollection<AppointmentDetail>? AppointmentDetail { get; set; }
     }

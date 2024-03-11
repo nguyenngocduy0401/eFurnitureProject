@@ -19,7 +19,7 @@ namespace eFurnitureProject.API.Controllers
         [HttpPost]
         public async Task<ApiResponse<string>> AddProduct(AddProductToCartDTO product) => await _cartService.addProductAsync(product);
 
-        [HttpPut]
+        [HttpGet]
         public async Task<ApiResponse<List<CartDetailViewDTO>>> GetItemsInCart() => await _cartService.GetItemsInCartAsync();
 
         [HttpDelete]

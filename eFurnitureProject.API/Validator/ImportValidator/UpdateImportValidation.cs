@@ -7,10 +7,9 @@ namespace eFurnitureProject.API.Validator.ImportValidator
     {
         public UpdateImportValidation()
         {
-            RuleFor(x => x.Name).NotEmpty().MaximumLength(255)
-               .WithMessage("Length of name must not exceed 255 characters");
-            RuleFor(x => x.Status).NotEmpty().GreaterThanOrEqualTo(0).LessThanOrEqualTo(2)
-                .WithMessage("Status' value must between 0 and 2");
+            RuleFor(x => x.ImportId).NotEmpty();
+            RuleFor(x => x.Status).NotEmpty().GreaterThanOrEqualTo(1).LessThanOrEqualTo(3)
+                .WithMessage("Status value must between 1 and 3");
         }
     }
 }

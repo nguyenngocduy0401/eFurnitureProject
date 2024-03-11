@@ -71,13 +71,12 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<List<ImportViewDTO>>> GetAllImportAsync()
+        public async Task<ApiResponse<Pagination<ImportViewDTO>>> GetImportPaingAsync(int pageIndex, int pageSize)
         {
-            var response = new ApiResponse<List<ImportViewDTO>>();
-            var imports = await _unitOfWork.ImportRepository.GetAllIsNotDeleteAsync();
-            var result = _mapper.Map<List<ImportViewDTO>>(imports);
+            var response = new ApiResponse<Pagination<ImportViewDTO>>();
+            var imports = await _unitOfWork.ImportRepository.ToPaginationIsNotDelete(pageIndex, pageSize);
+            var result = _mapper.Map<Pagination<ImportViewDTO>>(imports);
             response.Data = result;
-            response.Message = $"Have {result.Count} imports.";
             return response;
         }
 

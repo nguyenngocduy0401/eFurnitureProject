@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Application.Interfaces
 {
-    public interface IImportService 
+    public interface IImportService
     {
         Task<ApiResponse<ImportViewDTO>> CreateImportWithDetailAsync(CreateImportDTO createImport);
         Task<ApiResponse<string>> UpdateStatusImportAsync(UpdateImportDTO updateImport);
-        Task<ApiResponse<List<ImportViewDTO>>> GetAllImportAsync();
+        Task<ApiResponse<Pagination<ImportViewDTO>>> GetImportPaingAsync(int pageIndex, int pageSize);
         Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetailAsync(string importId);
     }
 }

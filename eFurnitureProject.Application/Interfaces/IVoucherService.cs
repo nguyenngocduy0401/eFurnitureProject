@@ -17,6 +17,6 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<VoucherViewDTO>> GetVouchertoUser(List<string>? userIDs, List<Guid> voucherIds);
         Task<ApiResponse<VoucherViewDTO>> SearchVoucherById(Guid id);
         Task<ApiResponse<bool>> DeleteVoucher(Guid ID);
-        Task<ApiResponse<List<VoucherViewDTO>>> SearchVoucherByDate(DateTime date);
+        Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, DateTime date);
     }
 }

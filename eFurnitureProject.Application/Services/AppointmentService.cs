@@ -23,11 +23,11 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eFurnitureProject.Application.Utils;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
-<<<<<<< HEAD
+
 using System.Data.Common;
-=======
+
 using System.Globalization;
->>>>>>> Appointment-
+
 
 namespace eFurnitureProject.Application.Services
 {
@@ -66,32 +66,40 @@ namespace eFurnitureProject.Application.Services
                 else
                 {
 
-                    await _unitOfWork.AppointmentRepository.AddAsync(appointment);
-                    await _unitOfWork.SaveChangeAsync();
-
+                   
                     var currentID = _claimsService.GetCurrentUserId;
-                    var appointmentDTO = _mapper.Map<AppointmentDTO>(appointment);
-
-                    var appointmentDetail = new AppointmentDetail
-                    {
-                        AppointmentId = appointment.Id,
-                        UserId = currentID.ToString()
-                    };
-                    await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-                    var issuccess = await _unitOfWork.SaveChangeAsync();
-                    if (issuccess > 0)
+                    if (currentID == Guid.Empty)
                     {
                         response.isSuccess = false;
-                        response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
-                        return response;
+                        response.Message = "Register please";
                     }
                     else
                     {
-                        response.isSuccess = true;
-                        response.Message = "Create Successfully";
-                        return response;
+                        await _unitOfWork.AppointmentRepository.AddAsync(appointment);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        var appointmentDTO = _mapper.Map<AppointmentDTO>(appointment);
+
+                        var appointmentDetail = new AppointmentDetail
+                        {
+                            AppointmentId = appointment.Id,
+                            UserId = currentID.ToString()
+                        };
+                        await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
+                        var issuccess = await _unitOfWork.SaveChangeAsync();
+                        if (issuccess > 0)
+                        {
+                            response.isSuccess = false;
+                            response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                            return response;
+                        }
+                        else
+                        {
+                            response.isSuccess = true;
+                            response.Message = "Create Successfully";
+                            return response;
+                        }
                     }
-                   
                 }
             }
             catch (DbException ex)

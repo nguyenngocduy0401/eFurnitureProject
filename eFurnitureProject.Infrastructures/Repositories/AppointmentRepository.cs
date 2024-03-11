@@ -346,8 +346,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
             var query = _dbSet
                 .Include(a => a.AppointmentDetail)
                 .ThenInclude(ad => ad.User)
-                .Where(appointment => appointment.Email == search ||
-                                      appointment.AppointmentDetail.Any(ad => ad.User.UserName.Contains(search)))
+                .Where(appointment => (appointment.Email == search ||
+                                      appointment.AppointmentDetail.Any(ad => ad.User.UserName.Contains(search))))
                 .OrderByDescending(appointment => appointment.CreationDate)
                 .Select(appointment => new AppoitmentDetailViewDTO
                 {
@@ -397,8 +397,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
             var query = _dbSet
                 .Include(a => a.AppointmentDetail)
                 .ThenInclude(ad => ad.User)
-                .Where(appointment => appointment.Email==search &&
-                                      appointment.AppointmentDetail.Any(ad => ad.User.UserName.Contains(search))
+                .Where(appointment =>( appointment.Email==search ||
+                                      appointment.AppointmentDetail.Any(ad => ad.User.UserName.Contains(search)))
                                      && appointment.Status == status
                                       && appointment.Date.Date == date.Date)
                 .OrderByDescending(appointment => appointment.CreationDate)
@@ -503,8 +503,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 .Include(a => a.AppointmentDetail)
                 .ThenInclude(ad => ad.User).
                 Where(appointment =>
-                appointment.Email==search ||
-                appointment.AppointmentDetail.Any(ad => ad.User.UserName.Contains(search)
+               ( appointment.Email==search ||
+                appointment.AppointmentDetail.Any(ad => ad.User.UserName.Contains(search))
                 && appointment.Status == status))
                 .OrderByDescending(appointment => appointment.CreationDate)
                 .Select(appointment => new AppoitmentDetailViewDTO

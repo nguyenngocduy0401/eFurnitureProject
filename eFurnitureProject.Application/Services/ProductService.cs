@@ -51,6 +51,16 @@ namespace eFurnitureProject.Application.Services
                 }
                 await _unitOfWork.ProductRepository.AddAsync(product);
                 var isSuccess = await _unitOfWork.SaveChangeAsync();
+                if (isSuccess > 0)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Create successfully";
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    response.Message = "Create Unsuccessfully";
+                }
                 return response;
             }
             catch (DbException ex)

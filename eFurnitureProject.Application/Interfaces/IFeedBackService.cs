@@ -11,5 +11,6 @@ namespace eFurnitureProject.Application.Interfaces
     public interface IFeedBackService
     {
         Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO, Guid productId);
+        Task<ApiResponse<Pagination<FeedBackViewDTO>>> GetFeedBackJWT(int pageIndex, int PageSize);
     }
 }

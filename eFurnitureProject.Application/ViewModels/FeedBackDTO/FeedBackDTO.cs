@@ -12,7 +12,7 @@ namespace eFurnitureProject.Application.ViewModels.FeedBackDTO
     {
         public string? UserId { get; set; }
     
-   
+        public int Status {  get; set; }
         public string? Details { get; set; }
         public string Title { get; set; }
         public Guid ProductId { get; set; }

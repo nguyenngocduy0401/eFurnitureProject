@@ -14,6 +14,7 @@ namespace eFurnitureProject.Domain.Entities
         public User? User { get; set; }
         public string? Details { get; set; }
         public string Title { get; set; }
+        public int Status { get; set; }
         public Guid ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }

@@ -44,14 +44,14 @@ namespace eFurnitureProject.Infrastructures.Repositories
         }
       public async   Task<Pagination<FeedBackViewDTO>> GetFeedBacksByUserID(int pageIndex, int pageSize, string userID)
         {
-            var feedbackList = await _dbContext.Feedback
+            var feedbackList = await _dbContext.Feedbacks
         .Where(f => f.UserId == userID)
         .OrderByDescending(f => f.CreationDate)
         .Skip(pageIndex * pageSize)
         .Take(pageSize)
         .ToListAsync();
 
-            var totalCount = await _dbContext.Feedback
+            var totalCount = await _dbContext.Feedbacks
                 .Where(f => f.UserId == userID)
                 .CountAsync();
 
@@ -61,13 +61,13 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 Details = f.Details,
                 Title = f.Title,
                 ProductId = f.ProductId,
-                ProductName = f.ProductName
+                ProductName = f.Product.Name
             }).ToList();
 
             var pagination = new Pagination<FeedBackViewDTO>
             {
                 Items = feedbackViewList,
-                TotalItems = totalCount,
+                TotalItemsCount = totalCount,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };

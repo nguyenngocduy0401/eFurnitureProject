@@ -41,6 +41,7 @@ namespace eFurnitureProject.Application.Services
                 {
 
                     var feedback = _mapper.Map<Feedback>(feedBackDTO);
+                    feedback.Status = 1;
                     feedback.ProductId = productId;
                     await _unitOfWork.FeedbackRepository.AddAsync(feedback);
                     await _unitOfWork.SaveChangeAsync();
@@ -63,10 +64,20 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<Pagination<FeedBackViewDTO>>();
             try
             {
-                var userCurrentID = _claimsService.GetCurrentUserId;
-                var feedbacks = await _unitOfWork.FeedbackRepository.ToPagination(pageIndex, PageSize);
-                      var result = _mapper.Map<Pagination<FeedBackViewDTO>>(feedbacks);
+                var userCurrentID = _claimsService.GetCurrentUserId.ToString();
+                var feedbacks = await _unitOfWork.FeedbackRepository.GetFeedBacksByUserID(pageIndex, PageSize,userCurrentID);
+                var result = _mapper.Map<Pagination<FeedBackViewDTO>>(feedbacks);
+
             }
+            catch (Exception ex)
+            {
+
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = $" error : {ex.Message}";
+            }
+
+            return response;
         }
     }
 }

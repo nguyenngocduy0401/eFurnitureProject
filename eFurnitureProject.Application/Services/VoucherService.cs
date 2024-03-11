@@ -57,8 +57,20 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
-                await _unitOfWork.SaveChangeAsync();
-                return response;
+                var issuccess = await _unitOfWork.SaveChangeAsync();
+                    if(issuccess>0)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Create Successfully";
+                    return response;
+                }
+                else
+                {
+                    response.isSuccess = true;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
+               
             }
             catch (DbException ex)
             {

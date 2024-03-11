@@ -80,8 +80,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<AddProductToCartDTO, CartDetail>();
             CreateMap<CartDetail, CartDetailViewDTO>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product != null ? src.Product.Price : 0));
             CreateMap<StatusOrder, StatusDetailOrderViewDTO>();
             CreateMap<ImportDetail, ImportDetailViewDTO>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))

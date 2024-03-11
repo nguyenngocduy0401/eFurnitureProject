@@ -23,6 +23,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eFurnitureProject.Application.Utils;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
+using System.Globalization;
 
 namespace eFurnitureProject.Application.Services
 {
@@ -179,7 +180,7 @@ namespace eFurnitureProject.Application.Services
         }
 
 
-      /*  public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
+        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
         {
             var response = new ApiResponse<AppointmentDTO>();
             try
@@ -190,20 +191,40 @@ namespace eFurnitureProject.Application.Services
                     response.Message = "Appointment not found";
                     return response;
                 }
+                var time = ParseTime( appointment.Time);
+                var isTrue = 0;
                 var existingAppointmentDetails = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentIdAsync(appointmentId);
 
                 await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentId);
                 foreach (var id in staffIds)
                 {
-                    var existingAppointmentDetail = existingAppointmentDetails.FirstOrDefault(ad => ad.UserId == id.ToString());
-
-                    if (existingAppointmentDetail != null)
+                    var listStaffAppointmentDetail = existingAppointmentDetails.Where(ad => ad.UserId == id.ToString() && ad.Appointment.Date == appointment.Date).ToList();
+                    foreach (var item in listStaffAppointmentDetail)
+                    {
+                        if (item != null)
+                        {
+                            item.IsDeleted = false;
+                            var timeCheck1= ParseTime(item.Appointment.Time) - time;
+                            var timeCheck2=time- ParseTime(item.Appointment.Time);
+                            if (timeCheck1.Hours >=3 || timeCheck2.Hours >= 3)
+                            {
+                                 isTrue = 1;
+                            }
+                            else
+                            {
+                                isTrue = 0;
+                            }
+                            
+                        }
+                    }
+                    var existingAppointmentDetail= existingAppointmentDetails.FirstOrDefault(ad=> ad.UserId == id.ToString());
+                    if (isTrue ==1)
                     {
                         existingAppointmentDetail.IsDeleted = false;
                         await _unitOfWork.AppointmentDetailRepository.UpdateAsync(existingAppointmentDetail);
                     }
 
-                    else
+                    else if(isTrue ==0) 
                     {
                         var appointmentDetail = new AppointmentDetail
                         {
@@ -224,7 +245,7 @@ namespace eFurnitureProject.Application.Services
             }
 
             return response;
-        }*/
+        }
         public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)
         {
 
@@ -288,99 +309,22 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
+        private TimeSpan ParseTime(string? time)
         {
-            var response = new ApiResponse<AppointmentDTO>();
-            try
+            if (string.IsNullOrEmpty(time))
             {
-                // Lấy thông tin cuộc hẹn
-                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
-                if (appointment == null)
-                {
-                    response.Message = "Appointment not found";
-                    return response;
-                }
-
-            
-                if (appointment.Status != (int)AppointmentStatus.Processing && appointment.Status != (int)AppointmentStatus.Pending)
-                {
-                    response.Message = "Cannot pick staff for appointment: Appointment status is not Processing or Pending";
-                    return response;
-                }
-
-                // Kiểm tra xem staffIDs có rỗng không
-                if (staffIds == null || !staffIds.Any())
-                {
-                    response.Message = "No staff selected for appointment";
-                    return response;
-                }
-
-                // Lấy thông tin chi tiết cuộc hẹn
-                var existingDetails = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentIdAsync(appointmentId);
-
-                // Kiểm tra xung đột thời gian cho từng nhân viên đã chọn
-                foreach (var detail in existingDetails)
-                {
-                    if (IsTimeConflict(detail, existingDetails))
-                    {
-                        response.Message = "Schedule conflict: One of the selected staff has a schedule conflict";
-                        return response;
-                    }
-                }
-
-                // Thêm các chi tiết cuộc hẹn mới cho từng nhân viên đã chọn
-                foreach (var staffId in staffIds)
-                {
-                    var existingDetail = existingDetails.FirstOrDefault(d => d.UserId == staffId);
-
-                    if (existingDetail != null)
-                    {
-                        existingDetail.IsDeleted = false;
-                        await _unitOfWork.AppointmentDetailRepository.UpdateAsync(existingDetail);
-                    }
-                    else
-                    {
-                        var newDetail = new AppointmentDetail
-                        {
-                            AppointmentId = appointmentId,
-                            UserId = staffId
-                        };
-                        await _unitOfWork.AppointmentDetailRepository.AddAsync(newDetail);
-                    }
-                }
-
-                // Lưu các thay đổi vào cơ sở dữ liệu
-                await _unitOfWork.SaveChangeAsync();
-
-                response.isSuccess = true;
-                response.Message = "Staff picked for appointment successfully";
-            }
-            catch (Exception ex)
-            {
-                response.isSuccess = false;
-                response.Message = $"Error picking staff: {ex.Message}";
+               
+                return TimeSpan.Zero;
             }
 
-            return response;
-        }
-
-        private bool IsTimeConflict(AppointmentDetail appointmentDetail, IEnumerable<AppointmentDetail> existingDetails)
-        {
-            // Lấy danh sách các chi tiết cuộc hẹn khác có cùng UserId
-            var conflictingDetails = existingDetails.Where(ad => ad.UserId == appointmentDetail.UserId && ad.IsDeleted == false);
-
-            // Kiểm tra xem có trùng giờ với các cuộc hẹn khác hoặc cách ít nhất 5 giờ không
-            foreach (var detail in conflictingDetails)
+            if (DateTime.TryParseExact(time, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedTime))
             {
-                var timeDiff = Math.Abs((detail.Appointment.Date - appointmentDetail.Appointment.Date).TotalHours);
-
-                if (timeDiff < 5)
-                {
-                    return true;
-                }
+                return parsedTime.TimeOfDay;
             }
-
-            return false;
+            else
+            {
+                return TimeSpan.Zero;
+            }
         }
     }
     }

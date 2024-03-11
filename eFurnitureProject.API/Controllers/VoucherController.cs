@@ -26,6 +26,12 @@ namespace eFurnitureProject.API.Controllers
         [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpPost]
         public async Task<ApiResponse<VoucherViewDTO>> GetVouchertoUser([FromQuery] List<string>? userIDs, List<Guid> voucherIds) => await _voucherService.GetVouchertoUser(userIDs, voucherIds);
-
+       
+        [HttpDelete]
+        public async Task<ApiResponse<bool>> DeleteVoucher(Guid id)=>await _voucherService.DeleteVoucher(id);
+        [HttpGet]
+        public async Task<ApiResponse<VoucherViewDTO>> SearchVoucherById(Guid id)=> await _voucherService.SearchVoucherById(id);
+        [HttpGet]
+        public async Task<ApiResponse<List<VoucherViewDTO>>> SearchVoucherByDate(DateTime date) => await _voucherService.SearchVoucherByDate(date);
     }
 }

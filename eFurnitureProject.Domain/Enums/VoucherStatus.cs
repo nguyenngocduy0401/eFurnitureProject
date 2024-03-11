@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    internal class VoucherStatus
+    public enum VoucherStatus
     {
+        unused = 0 ,used=1
     }
 }

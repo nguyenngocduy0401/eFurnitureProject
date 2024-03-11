@@ -158,5 +158,90 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
+        public async Task<ApiResponse<bool>> DeleteVoucher(Guid ID)
+        {
+            var response = new ApiResponse<bool>();
+            try
+            {
+                var exist = await _unitOfWork.VoucherRepository.GetByIdAsync(ID);
+                if (exist == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Voucher does not exist";
+                    return response;
+                }
+                if (exist.IsDeleted)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Voucher is already deleted";
+                    return response;
+                }
+                _unitOfWork.VoucherRepository.SoftRemove(exist);
+              var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+
         }
+        public async Task<ApiResponse<VoucherViewDTO>> SearchVoucherById(Guid id)
+        {
+            var response= new ApiResponse<VoucherViewDTO>();
+            try
+            {
+                var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
+                if(voucher == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Not found";
+                }
+                else
+                {
+                    var result =  _mapper.Map<VoucherViewDTO>(voucher);   
+                    response.isSuccess = true;
+                    response.Data= result;
+                   
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+            return response;
+        }
+        public async Task<ApiResponse<List<VoucherViewDTO>>> SearchVoucherByDate(DateTime date)
+        {
+            var response = new ApiResponse<List<VoucherViewDTO>>();
+            try
+            {
+                var voucher = await _unitOfWork.VoucherRepository.GetVoucherByDateAsync(date);
+                if (voucher == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "not found";
+                }
+                else
+                {
+
+
+                    var resul = _mapper.Map<List<VoucherViewDTO>>(voucher);
+                    response.isSuccess = true;
+                    response.Data = resul; }
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+            return response;
+        }
+    }
     }

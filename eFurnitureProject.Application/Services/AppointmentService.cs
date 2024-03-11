@@ -147,21 +147,36 @@ namespace eFurnitureProject.Application.Services
                 {
                     appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
                 }
-                else if (!string.IsNullOrEmpty(filterAppointment.search))
+               else  if (!string.IsNullOrEmpty(filterAppointment.search) && date != default && status != 0)
+                {
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsBySearchDateAndStatusAsync(filterAppointment.search, date, status, filterAppointment.pageIndex, filterAppointment.pageSize);
+                }
+                else if (string.IsNullOrEmpty(filterAppointment.search)&&date != default && status != 0)
+                {
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateAndStatusAsync(date, status, filterAppointment.pageIndex, filterAppointment.pageSize);
+                }
+                else if (!string.IsNullOrEmpty(filterAppointment.search) && status != 0 && date == default)
+                {
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsBySearchAndStatusAsync(filterAppointment.search, status, filterAppointment.pageIndex, filterAppointment.pageSize);
+                }
+                else if (!string.IsNullOrEmpty(filterAppointment.search)&& status == 0 && date == default)
                 {
                     appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByFilter(filterAppointment.search, filterAppointment.pageIndex, filterAppointment.pageSize);
                 }
-                else if (date != default)
+                else if (date != default && string.IsNullOrEmpty(filterAppointment.search) && status == 0)
                 {
                     appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(filterAppointment.pageIndex, filterAppointment.pageSize, date);
                 }
-                else if (status != 0)
+                else if (status != 0 && date == default && string.IsNullOrEmpty(filterAppointment.search))
                 {
                     appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(filterAppointment.pageIndex, filterAppointment.pageSize, status);
                 }
                 else
                 {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
+                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize); 
+                    response.isSuccess = true;
+                    response.isSuccess = true;
+                    response.Message = "Get all appointments successfully";
                 }
 
                 var appointmentsDTO = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointments);
@@ -185,57 +200,20 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
-                if (appointment == null)
+               
+                var appoiment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                var time = ParseTime(appoiment.Time).Hours;
+               foreach (var staffId in staffIds)
                 {
-                    response.Message = "Appointment not found";
-                    return response;
+                    var appointmentOfStaffs = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentByStaffIdAsync(staffId);
+                    foreach(var appointmentOfStaff in appointmentOfStaffs)
+                    {
+                        var timeCheck1 = ParseTime(appointmentOfStaff.Appointment.Time).Hours - time;
+                        var timeCheck2 = time - ParseTime(appointmentOfStaff.Appointment.Time).Hours;
+
+                    }
                 }
-                var time = ParseTime( appointment.Time);
-                var isTrue = 0;
-                var existingAppointmentDetails = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentIdAsync(appointmentId);
-
-                await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentId);
-                foreach (var id in staffIds)
-                {
-                    var listStaffAppointmentDetail = existingAppointmentDetails.Where(ad => ad.UserId == id.ToString() && ad.Appointment.Date == appointment.Date).ToList();
-                    foreach (var item in listStaffAppointmentDetail)
-                    {
-                        if (item != null)
-                        {
-                            item.IsDeleted = false;
-                            var timeCheck1= ParseTime(item.Appointment.Time) - time;
-                            var timeCheck2=time- ParseTime(item.Appointment.Time);
-                            if (timeCheck1.Hours >=3 || timeCheck2.Hours >= 3)
-                            {
-                                 isTrue = 1;
-                            }
-                            else
-                            {
-                                isTrue = 0;
-                            }
-                            
-                        }
-                    }
-                    var existingAppointmentDetail= existingAppointmentDetails.FirstOrDefault(ad=> ad.UserId == id.ToString());
-                    if (isTrue ==1)
-                    {
-                        existingAppointmentDetail.IsDeleted = false;
-                        await _unitOfWork.AppointmentDetailRepository.UpdateAsync(existingAppointmentDetail);
-                    }
-
-                    else if(isTrue ==0) 
-                    {
-                        var appointmentDetail = new AppointmentDetail
-                        {
-                            AppointmentId = appointment.Id,
-                            UserId = id.ToString()
-                        };
-
-                        await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-                    }
-                    await _unitOfWork.SaveChangeAsync();
-                }
+                
 
             }
             catch (Exception ex)
@@ -325,6 +303,11 @@ namespace eFurnitureProject.Application.Services
             {
                 return TimeSpan.Zero;
             }
+        }
+        private int ParseTimetoInt(string timeString)
+        {
+            DateTime appointmentTime = DateTime.Parse(timeString);
+            return appointmentTime.Hour;
         }
     }
     }

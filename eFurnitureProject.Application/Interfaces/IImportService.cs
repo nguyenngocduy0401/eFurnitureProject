@@ -12,7 +12,7 @@ namespace eFurnitureProject.Application.Interfaces
     {
         Task<ApiResponse<ImportViewDTO>> CreateImportWithDetailAsync(CreateImportDTO createImport);
         Task<ApiResponse<string>> UpdateStatusImportAsync(UpdateImportDTO updateImport);
-        Task<ApiResponse<Pagination<ImportViewDTO>>> GetImportPaingAsync(int pageIndex, int pageSize);
-        Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetailAsync(string importId);
+        Task<ApiResponse<Pagination<ImportViewDTO>>> GetImportPagingAsync(int pageIndex, int pageSize);
+        Task<ApiResponse<ImportViewFullDTO>> GetImportDetailAsync(string importId);
     }
 }

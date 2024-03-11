@@ -22,11 +22,11 @@ namespace eFurnitureProject.API.Validator.AppointmentValidator
                 .NotEmpty().NotEmpty().EmailAddress()
                 .WithMessage("Email is invalid format!");
 
-            RuleFor(x => x.Time)
-                .NotEmpty()
-                .GreaterThan(0).WithMessage("Time is greater than zero and less than 10 ")
-                .LessThanOrEqualTo(10).WithMessage("Time is greater than zero and less than 10 ");
 
+            RuleFor(x => x.Time)
+           .NotEmpty().WithMessage("Time is required.")
+           .Matches(@"^(1[0-2]|0?[1-9]):([0-5][0-9]) (AM|PM|am|pm)$")
+           .WithMessage("Time must be in valid format, e.g., 9:00 AM or 9:00PM");
 
         }
 

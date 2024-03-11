@@ -35,5 +35,15 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 throw new NotImplementedException();
             }
         }
+
+        public async Task<List<Voucher>> GetVoucherByDateAsync(DateTime date)
+        {
+            return await _dbContext.Vouchers 
+                .Where(ad => ad.EndDate.Date == date.Date || ad.StartDate.Date ==date.Date)
+                .ToListAsync();
+        }
+
+
     }
 }
+      

@@ -53,22 +53,25 @@ namespace eFurnitureProject.Application.Services
                         feedback.Status = 1;
                         feedback.ProductId = feedBackId;
                         await _unitOfWork.FeedbackRepository.AddAsync(feedback);
-                        var issuccess = await _unitOfWork.SaveChangeAsync();
-                        if (issuccess > 0)
-                        {
-                            response.isSuccess = false;
-                            response.Message = "Create Fail";
-                            return response;
-                        }
-                        else
+                        var issuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                        if (issuccess)
                         {
                             response.isSuccess = true;
                             response.Message = "Create Successfully";
                             return response;
+
+                        }
+                        else
+                        {
+                            response.isSuccess = false;
+                            response.Message = "Create Fail";
+                            return response;
+
+                        }
                         }
                     }
-                }
-            }
+                } 
+            
             catch (DbException ex)
             {
                 response.isSuccess = false;
@@ -121,7 +124,21 @@ namespace eFurnitureProject.Application.Services
                 }
                 _unitOfWork.FeedbackRepository.SoftRemove(exist);
                 var isSuccess = await _unitOfWork.SaveChangeAsync();
-                return response;
+                var issuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (issuccess)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Create Successfully";
+                    return response;
+
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    response.Message = "Create Fail";
+                    return response;
+
+                }
             }
             catch (Exception ex)
             {

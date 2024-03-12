@@ -2,6 +2,7 @@
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
+using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.Domain.Entities;
 using FluentValidation;
@@ -54,6 +55,12 @@ namespace eFurnitureProject.Application.Services
                 {
                     response.isSuccess = false;
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
+                if (await _unitOfWork.VoucherRepository.CheckVoucherNameExisted(createVoucherDTO.VoucherName))
+                {
+                    response.isSuccess = false;
+                    response.Message = "Voucher Name is existed!";
                     return response;
                 }
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);

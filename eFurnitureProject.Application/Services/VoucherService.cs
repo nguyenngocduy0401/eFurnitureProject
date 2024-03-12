@@ -22,8 +22,8 @@ namespace eFurnitureProject.Application.Services
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
         private readonly IValidator<CreateVoucherDTO> _createVouchervalidator;
-       private readonly  UserManager<User> _userManager;
-        public VoucherService(UserManager<User> userManager,IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService,IValidator<CreateVoucherDTO>validator)
+        private readonly UserManager<User> _userManager;
+        public VoucherService(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, IValidator<CreateVoucherDTO> validator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -35,7 +35,7 @@ namespace eFurnitureProject.Application.Services
         public async Task<ApiResponse<Pagination<VoucherViewDTO>>> GetAllVoucher(int pageIndex, int pageSize)
         {
             var response = new ApiResponse<Pagination<VoucherViewDTO>>();
-          
+
             var voucher = await _unitOfWork.VoucherRepository.ToPagination(pageIndex, pageSize);
             var result = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
             response.Data = result;
@@ -48,7 +48,7 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var voucher = _mapper.Map<Voucher>(createVoucherDTO);
-                
+
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
                 if (!validationResult.IsValid)
                 {
@@ -58,7 +58,7 @@ namespace eFurnitureProject.Application.Services
                 }
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
                 var issuccess = await _unitOfWork.SaveChangeAsync();
-                    if(issuccess>0)
+                if (issuccess > 0)
                 {
                     response.isSuccess = true;
                     response.Message = "Create Successfully";
@@ -70,7 +70,7 @@ namespace eFurnitureProject.Application.Services
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
                 }
-               
+
             }
             catch (DbException ex)
             {
@@ -85,19 +85,19 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO,Guid id)
+        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, Guid id)
         {
             var response = new ApiResponse<UpdateVoucherDTO>();
-           
+
 
             try
             {
-               
-                   var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
+
+                var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
                 if (!validationResult.IsValid)
                 {
-                   
+
                     response.isSuccess = false;
                     response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                     return response;
@@ -124,7 +124,7 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<VoucherViewDTO>> GetVouchertoUser(List<string>? userIDs,List<Guid> voucherIds)
+        public async Task<ApiResponse<VoucherViewDTO>> GetVouchertoUser(List<string>? userIDs, List<Guid> voucherIds)
         {
             var response = new ApiResponse<VoucherViewDTO>();
             try
@@ -189,7 +189,7 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
                 _unitOfWork.VoucherRepository.SoftRemove(exist);
-              var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
 
             }
             catch (Exception ex)
@@ -202,21 +202,21 @@ namespace eFurnitureProject.Application.Services
         }
         public async Task<ApiResponse<VoucherViewDTO>> SearchVoucherById(Guid id)
         {
-            var response= new ApiResponse<VoucherViewDTO>();
+            var response = new ApiResponse<VoucherViewDTO>();
             try
             {
                 var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
-                if(voucher == null)
+                if (voucher == null)
                 {
                     response.isSuccess = false;
                     response.Message = "Not found";
                 }
                 else
                 {
-                    var result =  _mapper.Map<VoucherViewDTO>(voucher);   
+                    var result = _mapper.Map<VoucherViewDTO>(voucher);
                     response.isSuccess = true;
-                    response.Data= result;
-                   
+                    response.Data = result;
+
                 }
 
             }
@@ -228,36 +228,37 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, DateTime date)
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, string  date)
         {
             var response = new ApiResponse<Pagination<VoucherViewDTO>>();
             try
             {
-                if (date == default)
+                if (string.IsNullOrWhiteSpace(date))
                 {
-
                     var vouchers = await _unitOfWork.VoucherRepository.ToPagination(pageIndex, pageSize);
                     var result = _mapper.Map<Pagination<VoucherViewDTO>>(vouchers);
                     response.Data = result;
-                    return response;
                 }
                 else
                 {
+                    if (!DateTime.TryParse(date, out DateTime parsedDate))
+                    {
+                        response.isSuccess = false;
+                        response.Message = "Invalid date format";
+                        return response;
+                    }
 
-
-                    var voucher = await _unitOfWork.VoucherRepository.GetVoucherByDateAsync(pageIndex, pageSize, date);
+                    var voucher = await _unitOfWork.VoucherRepository.GetVoucherByDateAsync(pageIndex, pageSize, parsedDate);
                     if (voucher == null)
                     {
                         response.isSuccess = false;
-                        response.Message = "not found";
+                        response.Message = "Voucher not found";
                     }
                     else
                     {
-
-
-                        var resul = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
+                        var result = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
                         response.isSuccess = true;
-                        response.Data = resul;
+                        response.Data = result;
                     }
                 }
             }
@@ -265,9 +266,10 @@ namespace eFurnitureProject.Application.Services
             {
                 response.isSuccess = false;
                 response.Message = ex.Message;
-                return response;
             }
+
+
             return response;
         }
     }
-    }
+}

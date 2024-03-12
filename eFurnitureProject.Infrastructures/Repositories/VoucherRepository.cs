@@ -39,8 +39,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         public async Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date)
         {
-            var voucher = await _dbContext.Vouchers
-       .Where(p => p.EndDate.Year == date.Year && p.EndDate.Month == date.Month || p.StartDate.Year == date.Year && p.StartDate.Month == date.Month)
+            var voucher = await _dbContext.Vouchers.
+     Where(v => v.StartDate.Date == date.Date || v.EndDate.Date == date.Date)
        .Select(p => new Voucher
        {
            Id = p.Id,
@@ -70,6 +70,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
             };
 
             return pagination;
+
+
         }
 
     }

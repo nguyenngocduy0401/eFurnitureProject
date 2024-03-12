@@ -32,6 +32,6 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<VoucherViewDTO>> SearchVoucherById(Guid id)=> await _voucherService.SearchVoucherById(id);
         [HttpGet]
-        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, DateTime date)=> await _voucherService.Fileter(pageIndex, pageSize, date);
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, string?  date)=> await _voucherService.Fileter(pageIndex, pageSize, date);
     }
 }

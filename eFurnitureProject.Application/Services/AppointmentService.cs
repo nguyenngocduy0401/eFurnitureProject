@@ -86,17 +86,18 @@ namespace eFurnitureProject.Application.Services
                             UserId = currentID.ToString()
                         };
                         await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-                        var issuccess = await _unitOfWork.SaveChangeAsync();
-                        if (issuccess > 0)
-                        {
-                            response.isSuccess = false;
-                            response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
-                            return response;
-                        }
-                        else
+                        var issuccess = await _unitOfWork.SaveChangeAsync()>0;
+                        if (issuccess )
                         {
                             response.isSuccess = true;
                             response.Message = "Create Successfully";
+                            return response;
+                          
+                        }
+                        else
+                        {
+                            response.isSuccess = false;
+                            response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
                             return response;
                         }
                     }
@@ -136,6 +137,7 @@ namespace eFurnitureProject.Application.Services
                         var saveAppointment = await _unitOfWork.SaveChangeAsync();
                         if (saveAppointment > 0)
                         {
+                            response.isSuccess = true;
                             return response;
                         }
 
@@ -215,7 +217,6 @@ namespace eFurnitureProject.Application.Services
                     {
                         appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
                         response.isSuccess = true;
-                        response.isSuccess = true;
                         response.Message = "Get all appointments successfully";
                     }
 
@@ -275,14 +276,28 @@ namespace eFurnitureProject.Application.Services
                 var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
                 if (appointment == null)
                 {
+                    response.isSuccess = false;
                     response.Message = "Appointment not found";
                     return response;
                 }
                 appointment.Status = (int)newStatus;
-                await _unitOfWork.SaveChangeAsync();
+               var isSuccess= await _unitOfWork.SaveChangeAsync() > 0;
+                if (isSuccess)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Update Successfully";
+                    return response;
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    response.Message = "Update UnSuccessfully";
+                    return response;
+                }
                 }
             catch (Exception ex)
             {
+                response.isSuccess = false;
                 response.Data = false;
                 response.Message = $"Error updating appointment status: {ex.Message}";
             }
@@ -309,7 +324,18 @@ namespace eFurnitureProject.Application.Services
                 }
                 _unitOfWork.AppointmentRepository.SoftRemove(exist);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-               
+                if (isSuccess)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Delete Successfully";
+                    return response;
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    response.Message = "Delete UnSuccessfully";
+                    return response;
+                }
             }
             catch (Exception ex)
             {

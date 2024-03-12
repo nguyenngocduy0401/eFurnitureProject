@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public enum Order
+    public enum OrderStatusEnum
     {
         Pending = 1, //Chờ Xác Nhận
         Delivering = 2, //Đang Giao Hàng

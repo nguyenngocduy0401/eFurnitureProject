@@ -1,6 +1,8 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.Repositories;
+using eFurnitureProject.Application.ViewModels.CartViewModels;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
@@ -30,29 +32,6 @@ namespace eFurnitureProject.Application.Services
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
         }
-
-        public async Task<ApiResponse<string>> CheckOutOrder(CreateOrderDTO createOrderDTO)
-        {
-            var response = new ApiResponse<string>();
-            try
-            {
-                
-
-            }
-            catch (DbException ex)
-            {
-                response.isSuccess = false;
-                response.Message = ex.Message;
-            }
-            catch (Exception ex)
-            {
-                response.isSuccess = false;
-                response.Message = ex.Message;
-            }
-            return response;
-        }
-    
-
         public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
             var response = new ApiResponse<OrderDetailViewDTO>();
@@ -113,11 +92,6 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var userId = _claimsService.GetCurrentUserId.ToString();
-                if (userId == null) 
-                {
-                    response.isSuccess = false;
-                    response.Message = "login first!";
-                }
                 var listOrder = await _unitOfWork.OrderRepository.GetOrderFilterByLogin
                     (filterOrderByLogin.PageIndex, filterOrderByLogin.PageSize, 
                      filterOrderByLogin.StatusCode, filterOrderByLogin.FromTime, 
@@ -218,6 +192,50 @@ namespace eFurnitureProject.Application.Services
                 response.Message = ex.Message;
             }
             return response;
-        }   
+        }
+        public async Task<ApiResponse<string>> CheckOut(CreateOrderDTO createOrderDTO)
+        {
+            var response = new ApiResponse<string>();
+            try
+            {
+                var userId = _claimsService.GetCurrentUserId.ToString();
+                var cartDetails = await _unitOfWork.CartRepository.GetCartDetailsByUserId(userId);
+                var createOrder = _mapper.Map<Order>(createOrderDTO);
+                await _unitOfWork.OrderRepository.AddAsync(createOrder);
+                var resultCreate = await _unitOfWork.SaveChangeAsync() > 0;
+                if (!resultCreate) throw new Exception("Order creation failed!");
+                var id = createOrder.Id;
+                var price = 0d;
+                List<OrderDetail> orderDetails = new List<OrderDetail>();
+                foreach (var cartDetail in cartDetails)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(cartDetail.ProductId);
+                    if (product == null) throw new Exception($"Some products do not exist in your shopping cart!");
+                    if (product.IsDeleted) throw new Exception($"{product.Name} do not exist in your shopping cart!");
+                    if (product.Status != 2) throw new Exception($"{product.Name} has been discontinued!");
+                    if (product.InventoryQuantity <=0) throw new Exception($"{product.Name} out of stock!");
+                        orderDetails.Add(new OrderDetail
+                    {
+                        ProductId = id,
+                        Quantity = cartDetail.Quantity,
+                        Price = product.Price,
+                    });
+                    price =+ product.Price * cartDetail.Quantity;
+                    
+                }
+
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
     }
 }

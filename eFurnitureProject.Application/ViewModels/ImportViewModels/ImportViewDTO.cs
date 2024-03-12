@@ -9,7 +9,7 @@ namespace eFurnitureProject.Application.ViewModels.ImportViewModels
 {
     public class ImportViewDTO
     {
-        public String Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public double TotalPrice { get; set; }
         public int Status { get; set; }

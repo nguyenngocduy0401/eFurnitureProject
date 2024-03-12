@@ -9,14 +9,13 @@ namespace eFurnitureProject.Domain.Entities
 {
     public class Transaction : BaseEntity
     {
-        public int BalanceRemain { get; set; }
+        public int? BalanceRemain { get; set; }
         public string? Type { get; set; }
-        public string From { get; set; }
-        public string To { get; set; }
-        public DateTime? DateTime { get; set; }
-        public int Amount { get; set; }
-        public int Status { get; set; }
-        public string TypeOrder { get; set; }
+        public string? From { get; set; }
+        public string? To { get; set; }
+        public int? Amount { get; set; }
+        public int? Status { get; set; }
+        public string? Description { get; set; }
         public Guid? OrderId{ get; set; }
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }

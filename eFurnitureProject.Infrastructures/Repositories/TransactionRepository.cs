@@ -15,6 +15,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
         private readonly AppDbContext _dbContext;
         public TransactionRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
+            _dbContext = context;
         }
 
         public async Task<IEnumerable<Transaction>> Get(int pageIndex, int pageSize)

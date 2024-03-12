@@ -3,11 +3,6 @@ using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Repositories
 {
@@ -40,19 +35,19 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public async Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date)
         {
             var voucher = await _dbContext.Vouchers.
-     Where(v => v.StartDate.Date == date.Date || v.EndDate.Date == date.Date)
-       .Select(p => new Voucher
-       {
-           Id = p.Id,
-           VoucherName = p.VoucherName,
-           StartDate = p.StartDate,
-           EndDate = p.EndDate,
-           Percent = p.Percent,
-           Number = p.Number,
-           MinimumOrderValue = p.MinimumOrderValue,
-           MaximumDiscountAmount = p.MaximumDiscountAmount
-       })
-       .ToListAsync();
+            Where(v => v.StartDate.Date == date.Date || v.EndDate.Date == date.Date)
+            .Select(p => new Voucher
+               {
+                   Id = p.Id,
+                   VoucherName = p.VoucherName,
+                   StartDate = p.StartDate,
+                   EndDate = p.EndDate,
+                   Percent = p.Percent,
+                   Number = p.Number,
+                   MinimumOrderValue = p.MinimumOrderValue,
+                   MaximumDiscountAmount = p.MaximumDiscountAmount
+               })
+            .ToListAsync();
 
             var totalItems = voucher.Count;
 
@@ -66,14 +61,9 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalItemsCount = totalItems,
-
             };
-
             return pagination;
-
-
         }
 
     }
 }
-      

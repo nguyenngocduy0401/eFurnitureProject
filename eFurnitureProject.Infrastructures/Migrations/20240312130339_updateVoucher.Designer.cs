@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eFurnitureProject.Infrastructures;
 
@@ -11,9 +12,11 @@ using eFurnitureProject.Infrastructures;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240312130339_updateVoucher")]
+    partial class updateVoucher
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -877,10 +880,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Amount")
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BalanceRemain")
+                    b.Property<int>("BalanceRemain")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("CreatedBy")
@@ -889,16 +892,17 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("From")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -916,13 +920,18 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid?>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("To")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOrder")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")

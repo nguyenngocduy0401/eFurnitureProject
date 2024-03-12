@@ -10,6 +10,7 @@ using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -154,7 +155,7 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
-                var newStatus = await _unitOfWork.StatusOrderRepository.GetGuidByStatusCode(updateOrderStatusDTO.StatusCode);
+                var newStatus = await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(updateOrderStatusDTO.StatusCode);
                 var newOrder = await _unitOfWork.OrderRepository.GetByIdAsync(updateOrderStatusDTO.Id);
                 if (newOrder == null) 
                 {
@@ -198,7 +199,20 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
+                bool checkVoucher = false;
+                var voucherInfo = new Voucher();
                 var userId = _claimsService.GetCurrentUserId.ToString();
+                if (!createOrderDTO.voucherId.Equals(null))
+                {
+                    //Check voucher existed
+                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync((Guid)createOrderDTO.voucherId);
+                    if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
+                    //Check voucher be used
+                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, (Guid)createOrderDTO.voucherId)) 
+                        throw new Exception("Voucher is used!");
+                    else 
+                        checkVoucher = true;
+                }
                 var cartDetails = await _unitOfWork.CartRepository.GetCartDetailsByUserId(userId);
                 var createOrder = _mapper.Map<Order>(createOrderDTO);
                 await _unitOfWork.OrderRepository.AddAsync(createOrder);
@@ -206,6 +220,7 @@ namespace eFurnitureProject.Application.Services
                 if (!resultCreate) throw new Exception("Order creation failed!");
                 var id = createOrder.Id;
                 var price = 0d;
+                // insert product from cart to orderDetail
                 List<OrderDetail> orderDetails = new List<OrderDetail>();
                 foreach (var cartDetail in cartDetails)
                 {
@@ -221,7 +236,30 @@ namespace eFurnitureProject.Application.Services
                         Price = product.Price,
                     });
                     price =+ product.Price * cartDetail.Quantity;
-                    
+                    if (checkVoucher) 
+                    {
+                        if (voucherInfo.MinimumOrderValue <= price) 
+                        {
+                            var discount = voucherInfo.Percent * price;
+                            if (discount > voucherInfo.MaximumDiscountAmount) 
+                            { 
+                                    price = price - voucherInfo.MaximumDiscountAmount;
+                            }
+                            else price = price - discount;
+                        }
+                    }
+                    createOrder.Address = createOrderDTO.Address;
+                    createOrder.Email = createOrderDTO.Email;
+                    createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
+                    createOrder.StatusId =  (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(1)).Id;
+                    createOrder.Name = createOrderDTO.Name;
+
+
+                    _unitOfWork.OrderRepository.Update(createOrder);
+                    var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                    if (!isSuccess) throw new Exception("Create fail!");
+                    response.isSuccess = true;
+                    response.Message = "Checkout Successfully!";
                 }
 
             }

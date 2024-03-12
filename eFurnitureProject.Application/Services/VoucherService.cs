@@ -235,7 +235,7 @@ namespace eFurnitureProject.Application.Services
             {
                 if (string.IsNullOrWhiteSpace(date))
                 {
-                    var vouchers = await _unitOfWork.VoucherRepository.ToPagination(pageIndex, pageSize);
+                    var vouchers = await _unitOfWork.VoucherRepository.ToPaginationIsNotDelete(pageIndex, pageSize);
                     var result = _mapper.Map<Pagination<VoucherViewDTO>>(vouchers);
                     response.Data = result;
                 }

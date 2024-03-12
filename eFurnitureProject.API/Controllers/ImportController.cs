@@ -23,9 +23,9 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<string>> UpdateStatusImport(UpdateImportDTO updateImport) => await _importService.UpdateStatusImportAsync(updateImport);
 
         [HttpGet]
-        public async Task<ApiResponse<List<ImportViewDTO>>> GetAllImport() => await _importService.GetAllImportAsync();
+        public async Task<ApiResponse<Pagination<ImportViewDTO>>> GetImportPaging(int pageIndex = 0, int pageSize = 10) => await _importService.GetImportPagingAsync(pageIndex, pageSize);
 
         [HttpGet]
-        public async Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetail(string importID) => await _importService.GetImportDetailAsync(importID);
+        public async Task<ApiResponse<ImportViewFullDTO>> GetImportDetail(string importID) => await _importService.GetImportDetailAsync(importID);
     }
 }

@@ -19,5 +19,8 @@ namespace eFurnitureProject.Application.Repositories
         Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByStatusAsync(int pageIndex, int pageSize,int status);
        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByUserID(int pageIndex, int pageSize, string userID);
         Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentByFilter(string search, int pageIndex, int pageSize);
-       }
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsBySearchDateAndStatusAsync(string search, DateTime date, int status, int pageIndex, int pageSize);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByDateAndStatusAsync(DateTime date, int status, int pageIndex, int pageSize);
+        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsBySearchAndStatusAsync(string search, int status, int pageIndex, int pageSize);
+    }
 }

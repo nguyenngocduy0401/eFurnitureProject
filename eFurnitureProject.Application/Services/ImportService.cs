@@ -71,25 +71,24 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<List<ImportViewDTO>>> GetAllImportAsync()
+        public async Task<ApiResponse<Pagination<ImportViewDTO>>> GetImportPagingAsync(int pageIndex, int pageSize)
         {
-            var response = new ApiResponse<List<ImportViewDTO>>();
-            var imports = await _unitOfWork.ImportRepository.GetAllIsNotDeleteAsync();
-            var result = _mapper.Map<List<ImportViewDTO>>(imports);
+            var response = new ApiResponse<Pagination<ImportViewDTO>>();
+            var imports = await _unitOfWork.ImportRepository.ToPaginationIsNotDelete(pageIndex, pageSize);
+            var result = _mapper.Map<Pagination<ImportViewDTO>>(imports);
             response.Data = result;
-            response.Message = $"Have {result.Count} imports.";
             return response;
         }
 
-        public async Task<ApiResponse<List<ImportDetailViewDTO>>> GetImportDetailAsync(string importId)
+        public async Task<ApiResponse<ImportViewFullDTO>> GetImportDetailAsync(string importId)
         {
-            var response = new ApiResponse<List<ImportDetailViewDTO>>();
+            var response = new ApiResponse<ImportViewFullDTO>();
             try
             {
-                var importDetail = await _unitOfWork.ImportDetailRepository.GetImportDetailsByIdAsync(Guid.Parse(importId));
-                var result = _mapper.Map<List<ImportDetailViewDTO>>(importDetail);
+                var import = await _unitOfWork.ImportRepository.GetImportWithDetail(Guid.Parse(importId));
+                var result = _mapper.Map<ImportViewFullDTO>(import);
                 response.Data = result;
-                response.Message = $"Have {result.Count} items.";
+                response.Message = "Get import successful!";
             }
             catch (Exception ex)
             {

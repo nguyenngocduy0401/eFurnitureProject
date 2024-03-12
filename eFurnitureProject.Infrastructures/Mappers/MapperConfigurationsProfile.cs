@@ -15,6 +15,7 @@ using eFurnitureProject.Application.ViewModels.ImportViewModels;
 using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 using eFurnitureProject.Application.ViewModels.CartViewModels;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
+using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -77,8 +78,9 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<AddProductToCartDTO, CartDetail>();
             CreateMap<CartDetail, CartDetailViewDTO>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product != null ? src.Product.Price : 0));
             CreateMap<StatusOrder, StatusDetailOrderViewDTO>();
             CreateMap<ImportDetail, ImportDetailViewDTO>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId.ToString()))
@@ -87,6 +89,12 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Cart, CartDetailViewDTO>();
             CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
             CreateMap<CreateOrderDTO, Order>();
+            CreateMap<Import, ImportViewFullDTO>()
+                .ForMember(dest => dest.importDetailViewDTOs, opt => opt.MapFrom(src => src.ImportDetail));
+            CreateMap<Feedback, FeedBackDTO>();
+            CreateMap<FeedBackDTO, Feedback>();
+            CreateMap<CreateFeedBackDTO, Feedback>();
+
         }
     }
 }

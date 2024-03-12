@@ -26,12 +26,15 @@ namespace eFurnitureProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
+        private readonly UserManager<User> _userManager;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) 
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService,
+                            UserManager<User> userManager) 
         { 
             _mapper = mapper;
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
+            _userManager = userManager;
         }
         public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
@@ -248,13 +251,16 @@ namespace eFurnitureProject.Application.Services
                             else price = price - discount;
                         }
                     }
+                    createOrder.Price = price;
                     createOrder.Address = createOrderDTO.Address;
                     createOrder.Email = createOrderDTO.Email;
                     createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
                     createOrder.StatusId =  (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(1)).Id;
                     createOrder.Name = createOrderDTO.Name;
 
-
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if (user.Wallet < price) throw new Exception("Not enough money!");
+                    user.Wallet = user.Wallet - price;
                     _unitOfWork.OrderRepository.Update(createOrder);
                     var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                     if (!isSuccess) throw new Exception("Create fail!");

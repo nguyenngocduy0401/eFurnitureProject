@@ -1006,8 +1006,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("Wallet")
-                        .HasColumnType("int");
+                    b.Property<double?>("Wallet")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

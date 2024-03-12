@@ -19,6 +19,9 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = context;
         }
 
+        public async Task<bool> CheckVoucherNameExisted(string Name) =>
+           await _dbContext.Vouchers.AnyAsync(u => u.VoucherName == Name);
+
         public async Task<IEnumerable<Voucher>> Get(int pageIndex, int pageSize)
         {
             try

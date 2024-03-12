@@ -15,7 +15,7 @@ namespace eFurnitureProject.API.Controllers
         {
             _voucherService = voucherService;
         }
-        [Authorize(Roles = AppRole.Admin)]
+       [Authorize(Roles = AppRole.Admin)]
         [HttpPost]
         public async Task<ApiResponse<VoucherViewDTO>> CreateVoucherAsync(CreateVoucherDTO createVoucherDTO) => await _voucherService.CreateVoucherAsync(createVoucherDTO);
         [HttpGet]

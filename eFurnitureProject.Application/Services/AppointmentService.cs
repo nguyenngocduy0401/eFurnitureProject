@@ -160,56 +160,71 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
-        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(FilterAppointmentDTO filterAppointment,DateTime date,int status) 
+        public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(FilterAppointmentDTO filterAppointment,string date,int status) 
         {
 
             var response = new ApiResponse<Pagination<AppoitmentDetailViewDTO>>();
 
             try
             {
-                Pagination<AppoitmentDetailViewDTO> appointments;
 
-                if (string.IsNullOrEmpty(filterAppointment.search) && date == default && status == 0)
+                Pagination<AppoitmentDetailViewDTO> appointments;
+                DateTime parsedDate = DateTime.MinValue; // Gán giá trị mặc định cho parsedDate
+
+                if (string.IsNullOrEmpty(filterAppointment.search) && string.IsNullOrEmpty(date) && status == 0)
                 {
                     appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
                 }
-               else  if (!string.IsNullOrEmpty(filterAppointment.search) && date != default && status != 0)
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsBySearchDateAndStatusAsync(filterAppointment.search, date, status, filterAppointment.pageIndex, filterAppointment.pageSize);
-                }
-                else if (string.IsNullOrEmpty(filterAppointment.search)&&date != default && status != 0)
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateAndStatusAsync(date, status, filterAppointment.pageIndex, filterAppointment.pageSize);
-                }
-                else if (!string.IsNullOrEmpty(filterAppointment.search) && status != 0 && date == default)
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsBySearchAndStatusAsync(filterAppointment.search, status, filterAppointment.pageIndex, filterAppointment.pageSize);
-                }
-                else if (!string.IsNullOrEmpty(filterAppointment.search)&& status == 0 && date == default)
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByFilter(filterAppointment.search, filterAppointment.pageIndex, filterAppointment.pageSize);
-                }
-                else if (date != default && string.IsNullOrEmpty(filterAppointment.search) && status == 0)
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(filterAppointment.pageIndex, filterAppointment.pageSize, date);
-                }
-                else if (status != 0 && date == default && string.IsNullOrEmpty(filterAppointment.search))
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(filterAppointment.pageIndex, filterAppointment.pageSize, status);
-                }
-                else
-                {
-                    appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize); 
-                    response.isSuccess = true;
+                
+                
+                    if (!string.IsNullOrEmpty(date) && !DateTime.TryParse(date, out parsedDate))
+                    {
+                        response.isSuccess = false;
+                        response.Message = "Invalid date format";
+                        return response;
+                    }
+                    if (string.IsNullOrEmpty(filterAppointment.search) && string.IsNullOrWhiteSpace(date) && status == 0)
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
+                    }
+                    else if (!string.IsNullOrEmpty(filterAppointment.search) && date != default && status != 0)
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsBySearchDateAndStatusAsync(filterAppointment.search, parsedDate, status, filterAppointment.pageIndex, filterAppointment.pageSize);
+                    }
+                    else if (string.IsNullOrEmpty(filterAppointment.search) && date != default && status != 0)
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateAndStatusAsync(parsedDate, status, filterAppointment.pageIndex, filterAppointment.pageSize);
+                    }
+                    else if (!string.IsNullOrEmpty(filterAppointment.search) && status != 0 && string.IsNullOrWhiteSpace(date))
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsBySearchAndStatusAsync(filterAppointment.search, status, filterAppointment.pageIndex, filterAppointment.pageSize);
+                    }
+                    else if (!string.IsNullOrEmpty(filterAppointment.search) && status == 0 && string.IsNullOrWhiteSpace(date))
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentByFilter(filterAppointment.search, filterAppointment.pageIndex, filterAppointment.pageSize);
+                    }
+                    else if (date != default && string.IsNullOrEmpty(filterAppointment.search) && status == 0)
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByDateTimeAsync(filterAppointment.pageIndex, filterAppointment.pageSize, parsedDate);
+                    }
+                    else if (status != 0 && string.IsNullOrWhiteSpace(date) && string.IsNullOrEmpty(filterAppointment.search))
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByStatusAsync(filterAppointment.pageIndex, filterAppointment.pageSize, status);
+                    }
+                    else
+                    {
+                        appointments = await _unitOfWork.AppointmentRepository.GetAppointmentPaging(filterAppointment.pageIndex, filterAppointment.pageSize);
+                        response.isSuccess = true;
+                        response.isSuccess = true;
+                        response.Message = "Get all appointments successfully";
+                    }
+
+                    var appointmentsDTO = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointments);
+                    response.Data = appointmentsDTO;
                     response.isSuccess = true;
                     response.Message = "Get all appointments successfully";
                 }
-
-                var appointmentsDTO = _mapper.Map<Pagination<AppoitmentDetailViewDTO>>(appointments);
-                response.Data = appointmentsDTO;
-                response.isSuccess = true;
-                response.Message = "Get all appointments successfully";
-            }
+            
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());

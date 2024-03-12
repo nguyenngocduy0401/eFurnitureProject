@@ -36,7 +36,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 throw new NotImplementedException();
             }
         }
-
+        public async Task<bool> CheckVoucherNameExisted(string Name) =>
+           await _dbContext.Vouchers.AnyAsync(u => u.VoucherName == Name);
+        public async Task<bool> CheckVoucherCodeExisted(string code) =>
+        await _dbContext.Vouchers.AnyAsync(u => u.VoucherCode == code);
         public async Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date)
         {
             var voucher = await _dbContext.Vouchers.
@@ -45,6 +48,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
        {
            Id = p.Id,
            VoucherName = p.VoucherName,
+           VoucherCode = p.VoucherCode??"",
            StartDate = p.StartDate,
            EndDate = p.EndDate,
            Percent = p.Percent,
@@ -74,6 +78,14 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         }
 
+        public async Task<Voucher> GetVoucherByCodeAsync(string voucherCode)
+        {
+            return await _dbContext.Vouchers.FirstOrDefaultAsync(v => v.VoucherCode == voucherCode);
+        }
+        public async Task<Voucher> GetDeletedVoucherByNameAsync(string voucherName)
+        {
+            return await _dbContext.Vouchers.FirstOrDefaultAsync(v => v.VoucherName == voucherName && v.IsDeleted);
+        }
     }
 }
       

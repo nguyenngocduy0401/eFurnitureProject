@@ -48,8 +48,16 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<VoucherViewDTO>();
             try
             {
+              
                 var voucher = _mapper.Map<Voucher>(createVoucherDTO);
-
+                voucher.VoucherCode = GenerateVoucherCode();
+                var existingVoucher = await _unitOfWork.VoucherRepository.GetVoucherByCodeAsync(voucher.VoucherCode);
+                if (existingVoucher != null && existingVoucher.IsDeleted == false)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Voucher Code is existed!";
+                    return response;
+                }
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
                 if (!validationResult.IsValid)
                 {
@@ -63,6 +71,16 @@ namespace eFurnitureProject.Application.Services
                     response.Message = "Voucher Name is existed!";
                     return response;
                 }
+
+                // Kiểm tra xem có voucher cũ đã bị xóa có cùng tên không
+                var existingDeletedVoucher = await _unitOfWork.VoucherRepository.GetDeletedVoucherByNameAsync(createVoucherDTO.VoucherName);
+                if (existingDeletedVoucher != null)
+                {
+                    // Khôi phục voucher cũ nếu tên trùng nhau
+                    existingDeletedVoucher.IsDeleted = false;
+                    voucher = existingDeletedVoucher;
+                }
+
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
                 var issuccess = await _unitOfWork.SaveChangeAsync();
                 if (issuccess > 0)
@@ -91,7 +109,6 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-
         public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, Guid id)
         {
             var response = new ApiResponse<UpdateVoucherDTO>();
@@ -277,6 +294,19 @@ namespace eFurnitureProject.Application.Services
 
 
             return response;
+        }
+        private string GenerateVoucherCode()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var voucherCodeBuilder = new StringBuilder();
+
+            for (int i = 0; i < 8; i++)
+            {
+                voucherCodeBuilder.Append(chars[random.Next(chars.Length)]);
+            }
+
+            return voucherCodeBuilder.ToString();
         }
     }
 }

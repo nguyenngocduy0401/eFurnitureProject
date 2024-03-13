@@ -24,13 +24,13 @@ namespace eFurnitureProject.API.Controllers
          _appointmentService = appointmentService;
         
         }
-       // [Authorize(Roles = AppRole.Customer)]
+        [Authorize(Roles = AppRole.Customer)]
         [HttpPost]
      
         public async Task<ApiResponse<AppointmentDTO>> CreateAppointment(CreateAppointmentDTO createAppointmentDTO)=> await _appointmentService.CreateAppointment(createAppointmentDTO);
 
 
-       // [Authorize(Roles = AppRole.Customer)]
+       [Authorize(Roles = AppRole.Customer)]
         [HttpPost]
         public async Task<ApiResponse<AppointmentDTO>> UpdateAppointmentByCustomer(string ID, CreateAppointmentDTO appointmentDTO) =>    
             await _appointmentService.UpdateAppointmentByCustomer(ID, appointmentDTO);
@@ -45,13 +45,13 @@ namespace eFurnitureProject.API.Controllers
             
            return await _appointmentService.Filter(filterAppointment,date,status);
         }
-     //   [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
+       [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpPost]
         public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(string appointmentId, string staffId) => await _appointmentService.PickStaffForAppointment(appointmentId,  staffId);
        
         [HttpPost]
         public async Task<ApiResponse<bool>> UpdateAppointmentStatus(string appointmentId, AppointmentStatusEnum newStatus)=> await _appointmentService.UpdateAppointmentStatus(appointmentId, newStatus);
-     //   [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
+       [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpDelete]
         public async Task<ApiResponse<bool>> DeleteAppointment(string ID)=> await _appointmentService.DeleteAppointment(ID);
         [HttpGet]

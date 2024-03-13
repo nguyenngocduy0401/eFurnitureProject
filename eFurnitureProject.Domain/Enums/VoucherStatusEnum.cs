@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public enum Contract
+    public enum VoucherStatusEnum
     {
-        Processing = 1,
-        Cancelled = 2,
-        Accepted = 3,
-        RequestFixing = 4,
+        unused = 0 ,used=1
     }
 }

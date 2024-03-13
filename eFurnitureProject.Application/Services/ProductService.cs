@@ -40,7 +40,7 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<ProductDTO>();
             try
             {
-                var product = _mapper.Map<Domain.Entities.Product>(createProductDTO);
+                var product = _mapper.Map<Product>(createProductDTO);
                 product.Status = 1;
                 ValidationResult validationResult = await _createProductvalidator.ValidateAsync(createProductDTO);
                 if (!validationResult.IsValid)

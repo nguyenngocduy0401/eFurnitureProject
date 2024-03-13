@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public  enum FeedBackStatus
+    public enum ContractStatusEnum
     {
-     response=1 ,Responsed=2
+        Processing = 1,
+        Cancelled = 2,
+        Accepted = 3,
+        RequestFixing = 4,
     }
 }

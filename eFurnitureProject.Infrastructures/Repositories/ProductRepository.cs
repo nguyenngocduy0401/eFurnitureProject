@@ -30,7 +30,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _claimsService = claimsService;
         }
 
-
+        public void UpdateProductByOrder(List<Product> product) 
+        {
+            _dbSet.UpdateRange(product);
+        }
         public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryNameAsync(string categoryName)
         {
             var product = await _dbContext.Products

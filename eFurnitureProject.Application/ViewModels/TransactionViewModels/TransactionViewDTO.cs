@@ -10,11 +10,11 @@ namespace eFurnitureProject.Application.ViewModels.TransactionViewModels
 {
     public class TransactionViewDTO : BaseEntity
     {
-        public int? BalanceRemain { get; set; }
+        public double BalanceRemain { get; set; }
         public string? Type { get; set; }
         public string? From { get; set; }
         public string? To { get; set; }
-        public int? Amount { get; set; }
+        public double? Amount { get; set; }
         public int? Status { get; set; }
         public string? Description { get; set; }
         public Guid? OrderId { get; set; }

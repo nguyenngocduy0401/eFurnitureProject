@@ -134,11 +134,27 @@ namespace eFurnitureProject.Application.Services
                     }
                     else
                     {
-                        var saveAppointment = await _unitOfWork.SaveChangeAsync();
-                        if (saveAppointment > 0)
+                        if(existingAppointment != null)
+                        {
+                            existingAppointment.Name=appointmentDTO.Name;
+                            existingAppointment.Date=appointmentDTO.Date;
+                            existingAppointment.Email=appointmentDTO.Email;
+                            existingAppointment.PhoneNumber=appointmentDTO.PhoneNumber;
+                            existingAppointment.Time=appointmentDTO.Time;
+                            existingAppointment.Date=appointmentDTO.Date.Date;
+                        }
+                        _unitOfWork.AppointmentRepository.Update(existingAppointment);
+                        var saveAppointment = await _unitOfWork.SaveChangeAsync()>0;
+                        if (saveAppointment )
                         {
                             response.isSuccess = true;
+                            response.Message = "Update Appointment is successful!";
                             return response;
+                            
+                        }
+                        else
+                        {
+                            response.isSuccess = false;
                         }
 
 
@@ -242,21 +258,62 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-               
-                var appoiment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
-                var time = ParseTime(appoiment.Time).Hours;
-               foreach (var staffId in staffIds)
+                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                var time = ParseTime(appointment.Time).Hours;
+
+                List<AppointmentDTO> allAppointments = new List<AppointmentDTO>();
+
+                foreach (var staffId in staffIds)
                 {
                     var appointmentOfStaffs = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentByStaffIdAsync(staffId);
-                    foreach(var appointmentOfStaff in appointmentOfStaffs)
-                    {
-                        var timeCheck1 = ParseTime(appointmentOfStaff.Appointment.Time).Hours - time;
-                        var timeCheck2 = time - ParseTime(appointmentOfStaff.Appointment.Time).Hours;
 
+                    var appointmentDTOs = appointmentOfStaffs.Select(appointment =>
+                        new AppointmentDTO
+                        {
+                            Id = appointment.AppointmentId,
+                            Time = appointment.Appointment != null ? appointment.Appointment.Time : null
+                        }
+                    );
+
+                    allAppointments.AddRange(appointmentDTOs);
+                }
+
+                // Sắp xếp danh sách các cuộc họp theo thời gian
+                var sortedAppointments = allAppointments.OrderBy(appointment => appointment.Time);
+
+                // Kiểm tra khoảng cách giữa thời gian của existAppointment với danh sách mới
+                foreach (var appointmentDTO in sortedAppointments)
+                {
+                    var newTime = ParseTime(appointmentDTO.Time).Hours;
+                    if (Math.Abs(newTime - time) >= 3)
+                    {
+                        // Có ít nhất một cuộc họp trong danh sách mới có cách nhau 3 giờ so với existAppointment
+                        // Tiếp tục với quá trình chọn nhân viên
+                        // Xóa các cuộc họp cũ và thêm nhân viên mới cho cuộc họp
+                        await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentId);
+
+                        foreach (var id in staffIds)
+                        {
+                            var appointmentDetail = new AppointmentDetail
+                            {
+                                AppointmentId = appointmentId,
+                                UserId = id
+                            };
+
+                            await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
+                        }
+
+                        await _unitOfWork.SaveChangeAsync();
+
+                        response.isSuccess = true;
+                        response.Message = "Staff picked successfully with at least 3 hours difference.";
+                        return response; // Trả về response thành công và kết thúc phương thức
                     }
                 }
-                
 
+                // Nếu không tìm thấy cuộc họp thỏa mãn điều kiện
+                response.isSuccess = false;
+                response.Message = "No staff available with at least 3 hours difference.";
             }
             catch (Exception ex)
             {
@@ -266,7 +323,7 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)
+        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatusEnum newStatus)
         {
 
             var response = new ApiResponse<bool>();

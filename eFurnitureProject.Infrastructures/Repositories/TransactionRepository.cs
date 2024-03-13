@@ -16,13 +16,11 @@ namespace eFurnitureProject.Infrastructures.Repositories
         private readonly AppDbContext _dbContext;
         public TransactionRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
-            _dbContext = context;
         }
 
-        public Task<Pagination<Transaction>> FilterTransaction(DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize)
+        public async Task<Pagination<Transaction>> FilterTransaction(DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
-            
         }
 
         public async Task<Pagination<Transaction>> FilterTransactionByLogin(string userId, DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize)
@@ -36,7 +34,6 @@ namespace eFurnitureProject.Infrastructures.Repositories
                                     .Take(pageSize)
                                     .AsNoTracking()
                                     .ToListAsync();
-
             var itemCount = await itemList.CountAsync();
             var result = new Pagination<Transaction>()
             {

@@ -24,7 +24,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public async Task<StatusOrder> GetStatusByStatusCode(int statusCode)
         {
             var result = await _dbSet.FirstOrDefaultAsync(x => x.StatusCode == statusCode);
-            if (result == null) 
+            if (result == null)
             {
                 throw new Exception();
             }

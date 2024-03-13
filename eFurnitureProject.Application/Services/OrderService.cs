@@ -261,7 +261,7 @@ namespace eFurnitureProject.Application.Services
                 {
                     if (voucherInfo.MinimumOrderValue <= price)
                     {
-                        var discount = voucherInfo.Percent * price;
+                        var discount = voucherInfo.Percent/100 * price;
                         if (discount > voucherInfo.MaximumDiscountAmount)
                         {
                             price = price - voucherInfo.MaximumDiscountAmount;

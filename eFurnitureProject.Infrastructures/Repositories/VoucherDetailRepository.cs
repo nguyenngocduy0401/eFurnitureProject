@@ -22,4 +22,4 @@ namespace eFurnitureProject.Infrastructures.Repositories
             await _dbContext.VouchersDetails.AddAsync(voucherDetail);
         }
     }
-}
+}//

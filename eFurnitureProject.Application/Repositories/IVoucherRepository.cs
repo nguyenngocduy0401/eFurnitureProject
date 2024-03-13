@@ -19,4 +19,4 @@ namespace eFurnitureProject.Application.Repositories
         Task<Pagination<Voucher>> GetVoucher(int pageIndex, int pageSize);
         Task<bool> CheckVoucherNameExisted(Guid id, string Name);
     }
-}
+}//

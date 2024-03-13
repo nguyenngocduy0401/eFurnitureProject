@@ -15,7 +15,6 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewModels
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? Name { get; set; }
-        public Guid? VoucherId { get; set; }
-        public virtual ICollection<OrderDetail>? OrderDetail { get; set; }
+        public Guid? voucherId { get; set; }
     }
 }

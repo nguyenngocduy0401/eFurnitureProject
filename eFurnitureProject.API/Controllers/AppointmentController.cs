@@ -40,7 +40,7 @@ namespace eFurnitureProject.API.Controllers
       
 
         [HttpGet]
-        public async  Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter([FromQuery] FilterAppointmentDTO filterAppointment, DateTime date, int status)
+        public async  Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter([FromQuery] FilterAppointmentDTO filterAppointment, string?  date, int status)
         {
             
            return await _appointmentService.Filter(filterAppointment,date,status);

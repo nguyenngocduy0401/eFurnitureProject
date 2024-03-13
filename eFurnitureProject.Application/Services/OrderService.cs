@@ -238,35 +238,35 @@ namespace eFurnitureProject.Application.Services
                         Quantity = cartDetail.Quantity,
                         Price = product.Price,
                     });
-                    price =+ product.Price * cartDetail.Quantity;
-                    if (checkVoucher) 
-                    {
-                        if (voucherInfo.MinimumOrderValue <= price) 
-                        {
-                            var discount = voucherInfo.Percent * price;
-                            if (discount > voucherInfo.MaximumDiscountAmount) 
-                            { 
-                                    price = price - voucherInfo.MaximumDiscountAmount;
-                            }
-                            else price = price - discount;
-                        }
-                    }
-                    createOrder.Price = price;
-                    createOrder.Address = createOrderDTO.Address;
-                    createOrder.Email = createOrderDTO.Email;
-                    createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
-                    createOrder.StatusId =  (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(1)).Id;
-                    createOrder.Name = createOrderDTO.Name;
-
-                    var user = await _userManager.FindByIdAsync(userId);
-                    if (user.Wallet < price) throw new Exception("Not enough money!");
-                    user.Wallet = user.Wallet - price;
-                    _unitOfWork.OrderRepository.Update(createOrder);
-                    var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
-                    if (!isSuccess) throw new Exception("Create fail!");
-                    response.isSuccess = true;
-                    response.Message = "Checkout Successfully!";
+                    price =+ product.Price * cartDetail.Quantity;  
                 }
+                if (checkVoucher)
+                {
+                    if (voucherInfo.MinimumOrderValue <= price)
+                    {
+                        var discount = voucherInfo.Percent * price;
+                        if (discount > voucherInfo.MaximumDiscountAmount)
+                        {
+                            price = price - voucherInfo.MaximumDiscountAmount;
+                        }
+                        else price = price - discount;
+                    }
+                }
+                createOrder.Price = price;
+                createOrder.Address = createOrderDTO.Address;
+                createOrder.Email = createOrderDTO.Email;
+                createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
+                createOrder.StatusId = (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(1)).Id;
+                createOrder.Name = createOrderDTO.Name;
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user.Wallet < price) throw new Exception("Not enough money!");
+                user.Wallet = user.Wallet - price;
+                _unitOfWork.OrderRepository.Update(createOrder);
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (!isSuccess) throw new Exception("Create fail!");
+                response.isSuccess = true;
+                response.Message = "Checkout Successfully!";
 
             }
             catch (DbException ex)

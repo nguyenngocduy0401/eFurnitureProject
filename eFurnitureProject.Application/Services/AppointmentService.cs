@@ -116,12 +116,13 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<AppointmentDTO>> UpdateAppointmentByCustomer(Guid ID,CreateAppointmentDTO appointmentDTO)
+        public async Task<ApiResponse<AppointmentDTO>> UpdateAppointmentByCustomer(string ID,CreateAppointmentDTO appointmentDTO)
         {
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-                var existingAppointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(ID);
+                var Id=Guid.Parse(ID);
+                var existingAppointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(Id);
                 if (existingAppointment != null)
                 {
                     var updateAppointment = _mapper.Map(appointmentDTO, existingAppointment);
@@ -253,67 +254,52 @@ namespace eFurnitureProject.Application.Services
         }
 
 
-        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds)
+        public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(string appointmentId, string staffId)
         {
             var response = new ApiResponse<AppointmentDTO>();
             try
             {
-                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
-                var time = ParseTime(appointment.Time).Hours;
+                var appointmentid = Guid.Parse(appointmentId);
+                var staffid = Guid.Parse(staffId);
+                var exitsAppointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentid);
+                var time = ParseTime(exitsAppointment.Time).Hours;
+                var isTrue = 0;
 
-                List<AppointmentDTO> allAppointments = new List<AppointmentDTO>();
+            
+                var staffAppointmentsTask = _unitOfWork.AppointmentDetailRepository.GetByAppointmentByStaffIdAsync(exitsAppointment.Date.Date,staffId);
+                var staffAppointments = await staffAppointmentsTask;
 
-                foreach (var staffId in staffIds)
+                foreach (var staffAppointment in staffAppointments)
                 {
-                    var appointmentOfStaffs = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentByStaffIdAsync(staffId);
-
-                    var appointmentDTOs = appointmentOfStaffs.Select(appointment =>
-                        new AppointmentDTO
+                    var appointmentIdCheck = staffAppointment.AppointmentId;
+                    var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentIdCheck);
+                    if (appointment != null)
+                    {
+                        var newTime = ParseTime(appointment.Time).Hours;
+                        if ((Math.Abs(newTime - time) < 3)||(Math.Abs(time-newTime)<3))
                         {
-                            Id = appointment.AppointmentId,
-                            Time = appointment.Appointment != null ? appointment.Appointment.Time : null
+                            throw new Exception(" staff aLready has appointment");
                         }
-                    );
-
-                    allAppointments.AddRange(appointmentDTOs);
+                    }
+                   
                 }
 
-                // Sắp xếp danh sách các cuộc họp theo thời gian
-                var sortedAppointments = allAppointments.OrderBy(appointment => appointment.Time);
-
-                // Kiểm tra khoảng cách giữa thời gian của existAppointment với danh sách mới
-                foreach (var appointmentDTO in sortedAppointments)
-                {
-                    var newTime = ParseTime(appointmentDTO.Time).Hours;
-                    if (Math.Abs(newTime - time) >= 3)
-                    {
-                        // Có ít nhất một cuộc họp trong danh sách mới có cách nhau 3 giờ so với existAppointment
-                        // Tiếp tục với quá trình chọn nhân viên
-                        // Xóa các cuộc họp cũ và thêm nhân viên mới cho cuộc họp
-                        await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentId);
-
-                        foreach (var id in staffIds)
+                    await _unitOfWork.AppointmentDetailRepository.DeleteByAppointmentIdAsync(appointmentid);
+                   
+                        var appointmentDetail = new AppointmentDetail
                         {
-                            var appointmentDetail = new AppointmentDetail
-                            {
-                                AppointmentId = appointmentId,
-                                UserId = id
-                            };
+                            AppointmentId = exitsAppointment.Id,
+                            UserId = staffId
+                        };
 
-                            await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
-                        }
+                        await _unitOfWork.AppointmentDetailRepository.AddAsync(appointmentDetail);
 
                         await _unitOfWork.SaveChangeAsync();
-
-                        response.isSuccess = true;
-                        response.Message = "Staff picked successfully with at least 3 hours difference.";
-                        return response; // Trả về response thành công và kết thúc phương thức
-                    }
-                }
-
-                // Nếu không tìm thấy cuộc họp thỏa mãn điều kiện
-                response.isSuccess = false;
-                response.Message = "No staff available with at least 3 hours difference.";
+                    
+                    response.isSuccess = true;
+                    response.Message = "Picked staff successfully";
+                
+               
             }
             catch (Exception ex)
             {
@@ -323,13 +309,14 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)
+        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(string appointmentID, AppointmentStatus newStatus)
         {
 
             var response = new ApiResponse<bool>();
 
             try
             {
+                var appointmentId = Guid.Parse(appointmentID);
                 var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
                 if (appointment == null)
                 {
@@ -361,12 +348,13 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        public async Task<ApiResponse<bool>> DeleteAppointment(Guid ID)
+        public async Task<ApiResponse<bool>> DeleteAppointment(string ID)
         {
             var response = new ApiResponse<bool>();
             try
             {
-                var exist = await _unitOfWork.AppointmentRepository.GetByIdAsync(ID);
+                var Id= Guid.Parse(ID);
+                var exist = await _unitOfWork.AppointmentRepository.GetByIdAsync(Id);
                 if (exist == null)
                 {
                     response.isSuccess = false;
@@ -411,6 +399,74 @@ namespace eFurnitureProject.Application.Services
             response.Data = result;
             return response;
         }
+        public async Task<ApiResponse<List<AppoitntmentListStaffDTO>>> GetStaffForAppointment(string appointmentID)
+        {
+            var response = new ApiResponse<List<AppoitntmentListStaffDTO>>();
+            try
+            {
+                var appointmentId = Guid.Parse(appointmentID);
+                var appointment = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentId);
+                if (appointment == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Appointment not found";
+                    return response;
+                }
+                var staffUsers = await _userManager.GetUsersInRoleAsync("Staff");
+                   var staffIdsForAppointment = new List<string>();
+                foreach (var staffUser in staffUsers)
+                {
+                    var staffId = staffUser.Id;
+                    var staffAppointments = await _unitOfWork.AppointmentDetailRepository.GetByAppointmentByStaffIdAsync(appointment.Date.Date, staffId);
+                    var time = ParseTime(appointment.Time).Hours;
+                    var isTrue = false;
+
+                    foreach (var staffAppointment in staffAppointments)
+                    {
+                        var appointmentIdCheck = staffAppointment.AppointmentId;
+                        var appointmentDetail = await _unitOfWork.AppointmentRepository.GetByIdAsync(appointmentIdCheck);
+                        if (appointmentDetail != null)
+                        {
+                            var newTime = ParseTime(appointmentDetail.Time).Hours;
+                            if (Math.Abs(newTime - time) < 3 || Math.Abs(time - newTime) < 3)
+                            {
+                                isTrue = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!isTrue)
+                    {
+                        staffIdsForAppointment.Add(staffId);
+                    }
+                }
+                var staffDTOs = new List<AppoitntmentListStaffDTO>();
+                foreach (var staffId in staffIdsForAppointment)
+                {
+                    var staffUser = await _userManager.FindByIdAsync(staffId);
+                    if (staffUser != null)
+                    {
+                        var staffDTO = new AppoitntmentListStaffDTO
+                        {
+                            StaffId = staffId,
+                            StaffName = staffUser.UserName,
+                        };
+                        staffDTOs.Add(staffDTO);
+                    }
+                }
+                response.Data = staffDTOs;
+                response.isSuccess = true;
+                response.Message = "Retrieved staffs successfully";
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = $"Error retrieving staffs: {ex.Message}";
+            }
+
+            return response;
+        }
         private TimeSpan ParseTime(string? time)
         {
             if (string.IsNullOrEmpty(time))
@@ -428,11 +484,7 @@ namespace eFurnitureProject.Application.Services
                 return TimeSpan.Zero;
             }
         }
-        private int ParseTimetoInt(string timeString)
-        {
-            DateTime appointmentTime = DateTime.Parse(timeString);
-            return appointmentTime.Hour;
-        }
+      
     }
     }
     

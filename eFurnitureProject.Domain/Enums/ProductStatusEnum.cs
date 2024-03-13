@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public enum AppointmentStatus
+    public enum ProductStatusEnum
+
     {
-        Processing = 1,
-        Pending = 2,
-        Completed = 3,
-        Canceled = 4
+        Lock=1, Unlock=2, Unreleased=3
+
     }
 }
-

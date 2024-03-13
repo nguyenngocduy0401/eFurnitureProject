@@ -323,7 +323,7 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)
+        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatusEnum newStatus)
         {
 
             var response = new ApiResponse<bool>();

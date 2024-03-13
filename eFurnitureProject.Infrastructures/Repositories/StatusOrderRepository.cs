@@ -21,14 +21,14 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public async Task<bool> CheckStatusOrderExisted(string name) =>
             await _dbContext.StatusOrders.AnyAsync(o => o.Name == name);
 
-        public async Task<StatusOrder> GetGuidByStatusCode(int statusCode)
+        public async Task<StatusOrder> GetStatusByStatusCode(int statusCode)
         {
             var result = await _dbSet.FirstOrDefaultAsync(x => x.StatusCode == statusCode);
-            if (result == null) 
+            if (result == null)
             {
                 throw new Exception();
             }
             return result;
-        }//
+        }
     }
 }

@@ -22,6 +22,6 @@ namespace eFurnitureProject.Application.Interfaces
 
         Task<ApiResponse<int>> CalculateTotalPages(int totalItemsCount, int pageSize);
         Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity);
-        Task<ApiResponse<bool>> UpdateProductStatus(Guid productId, ProductStatus newStatus);
+        Task<ApiResponse<bool>> UpdateProductStatus(Guid productId, ProductStatusEnum newStatus);
     }
 }

@@ -50,7 +50,7 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(Guid appointmentId, List<string> staffIds) => await _appointmentService.PickStaffForAppointment(appointmentId,  staffIds);
        
         [HttpPost]
-        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatus newStatus)=> await _appointmentService.UpdateAppointmentStatus(appointmentId, newStatus);
+        public async Task<ApiResponse<bool>> UpdateAppointmentStatus(Guid appointmentId, AppointmentStatusEnum newStatus)=> await _appointmentService.UpdateAppointmentStatus(appointmentId, newStatus);
      //   [Authorize(Roles = AppRole.Staff + "," + AppRole.Admin)]
         [HttpDelete]
         public async Task<ApiResponse<bool>> DeleteAppointment(Guid ID)=> await _appointmentService.DeleteAppointment(ID);

@@ -352,7 +352,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<bool>> UpdateProductStatus(Guid productId, ProductStatus newStatus)
+        public async Task<ApiResponse<bool>> UpdateProductStatus(Guid productId, ProductStatusEnum newStatus)
         {
 
             var response = new ApiResponse<bool>();

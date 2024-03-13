@@ -22,6 +22,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             await _appDbContext.OrdersDetails.Where(od => od.OrderId == id)
                                              .Include(od => od.Product)
                                              .ToListAsync();
-       
+        public async Task AddRangeAsync(List<OrderDetail> orderDetails) =>
+            await _appDbContext.OrdersDetails.AddRangeAsync(orderDetails);
     }
 }

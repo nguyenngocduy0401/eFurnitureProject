@@ -44,6 +44,16 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
             return result;
         }
+        public async Task<IEnumerable<CartDetail>> GetCartDetailsByUserId(string userId)
+        {
+            var cartDetails = await _dbSet.Where(x => x.UserId == userId)
+                                              .Include(x => x.CartDetails)
+                                              .SelectMany(x => x.CartDetails).ToListAsync();
+            if (cartDetails == null)
+            {
+                throw new Exception($"No any product in cart!");
+            }
+            return cartDetails;
+        }
     }
-    //
 }

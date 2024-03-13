@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public enum VoucherStatus
+    public  enum FeedBackStatusEnum
     {
-        unused = 0 ,used=1
+     response=1 ,Responsed=2
     }
 }

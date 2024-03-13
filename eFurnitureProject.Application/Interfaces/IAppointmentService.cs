@@ -17,7 +17,7 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentPaging(int page, int amout);
         Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> Filter(FilterAppointmentDTO filterAppointment, string date, int status);
        Task<ApiResponse<AppointmentDTO>> PickStaffForAppointment(string appointmentId, string staffId);
-        Task<ApiResponse<bool>> UpdateAppointmentStatus(string appointmentId, AppointmentStatus newStatus);
+        Task<ApiResponse<bool>> UpdateAppointmentStatus(string appointmentId, AppointmentStatusEnum newStatus);
         Task<ApiResponse<bool>> DeleteAppointment(string ID);
         Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentByJWT(int pageIndex, int pageSize);
         Task<ApiResponse<List<AppoitntmentListStaffDTO>>> GetStaffForAppointment(string appointmentID);

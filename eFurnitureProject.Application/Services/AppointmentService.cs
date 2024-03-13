@@ -467,6 +467,37 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
+
+        public async Task<ApiResponse<AppoitmentDetailViewDTO>> GetAppointmentDetail(string id)
+        {
+            var response = new ApiResponse<AppoitmentDetailViewDTO>();
+            try
+            {
+                var iD = Guid.Parse(id);
+                var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentByIdAsync(iD);
+                if (appointment == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "not found product";
+                }
+                else
+                {
+                    var VoucherDTO = _mapper.Map<AppoitmentDetailViewDTO>(appointment);
+                    response.isSuccess = true;
+                    response.Data = VoucherDTO;
+                    response.Message = "Find appointment successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+                return response;
+            }
+            return response;
+        }
+
+
         private TimeSpan ParseTime(string? time)
         {
             if (string.IsNullOrEmpty(time))

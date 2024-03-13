@@ -14,7 +14,7 @@ namespace eFurnitureProject.Application.Repositories
     {
         Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentPaging(int pageIndex , int pageSize );
         Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByDateTimeAsync(int pageIndex, int pageSize, DateTime dateTime);
-      //  Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByEmailAsync(int pageIndex, int pageSize, string email);
+        Task<AppoitmentDetailViewDTO> GetAppointmentByIdAsync(Guid Id);
        // Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByNameAsync(int pageIndex, int pageSize, string appointName);
         Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByStatusAsync(int pageIndex, int pageSize,int status);
        Task<Pagination<AppoitmentDetailViewDTO>> GetAppointmentsByUserID(int pageIndex, int pageSize, string userID);

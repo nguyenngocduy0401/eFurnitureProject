@@ -20,6 +20,12 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         public async Task AddAsync(CartDetail cartdetail) => await _dbContext.AddAsync(cartdetail);
 
+        public void DeleteCart(Guid cartId)
+        {
+            var cartDetails = _dbContext.CartDetails.Where(cd => cd.CartId == cartId).ToList();
+            _dbContext.CartDetails.RemoveRange(cartDetails);
+        }
+
         public void DeleteProductInCart(Guid cartId, Guid productId)
         {
             var itemInCart = new CartDetail()

@@ -212,7 +212,12 @@ namespace eFurnitureProject.Application.Services
                     //Check voucher existed
                     voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
                     if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
-                    else { voucherInfo.Number = voucherInfo.Number - 1; }
+                    else 
+                    { 
+                        voucherInfo.Number = voucherInfo.Number - 1;
+                        _unitOfWork.VoucherRepository.Update(voucherInfo);
+                        await _unitOfWork.VoucherDetailRepository.AddAsync(new VoucherDetail {UserId = userId, VoucherId = voucherId});
+                    }
                     //Check voucher be used
                     if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, voucherId))
                         throw new Exception("Voucher is used!");
@@ -269,10 +274,13 @@ namespace eFurnitureProject.Application.Services
                 createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
                 createOrder.StatusId = (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode((int)OrderStatusEnum.Pending)).Id;
                 createOrder.Name = createOrderDTO.Name;
-
+                createOrder.UserId = userId;
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user.Wallet < price || user.Wallet == null) throw new Exception("Not enough money!");
                 user.Wallet = user.Wallet - price;
+
+                
+
                 await _userManager.UpdateAsync(user);
                 _unitOfWork.OrderRepository.Update(createOrder);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;

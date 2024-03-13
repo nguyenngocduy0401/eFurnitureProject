@@ -288,7 +288,6 @@ namespace eFurnitureProject.Application.Services
                 response.Message = ex.Message;
             }
             return response;
-            //sdsd
         }
     }
 }

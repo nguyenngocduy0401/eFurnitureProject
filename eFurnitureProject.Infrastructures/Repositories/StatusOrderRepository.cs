@@ -29,6 +29,6 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 throw new Exception();
             }
             return result;
-        }
+        }//
     }
 }

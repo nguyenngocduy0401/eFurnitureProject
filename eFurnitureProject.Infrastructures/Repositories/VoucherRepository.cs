@@ -38,6 +38,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
         }
         public async Task<bool> CheckVoucherNameExisted(string Name) =>
            await _dbContext.Vouchers.AnyAsync(u => u.VoucherName == Name && u.IsDeleted==false);
+        public async Task<bool> CheckVoucherNameExisted(Guid id,string Name) =>
+         await _dbContext.Vouchers.AnyAsync(u => u.VoucherName == Name && u.Id !=id  &&u.IsDeleted == false);
         
         public async Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date)
         {

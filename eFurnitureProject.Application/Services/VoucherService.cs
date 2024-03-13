@@ -103,7 +103,7 @@ namespace eFurnitureProject.Application.Services
             {
                 var voucherID = Guid.Parse(id);
                 var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherID);
-                var isExist = await _unitOfWork.VoucherRepository.CheckVoucherNameExisted( createVoucherDTO.VoucherName) ;
+                var isExist = await _unitOfWork.VoucherRepository.CheckVoucherNameExisted(voucherID, createVoucherDTO.VoucherName) ;
                 if (isExist)
                 {
                     response.isSuccess = false;

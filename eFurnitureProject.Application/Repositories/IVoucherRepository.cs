@@ -17,5 +17,6 @@ namespace eFurnitureProject.Application.Repositories
     
         Task<Voucher> GetDeletedVoucherByNameAsync(string voucherName);
         Task<Pagination<Voucher>> GetVoucher(int pageIndex, int pageSize);
+        Task<bool> CheckVoucherNameExisted(Guid id, string Name);
     }
 }

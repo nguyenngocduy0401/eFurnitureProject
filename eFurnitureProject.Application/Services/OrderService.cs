@@ -205,13 +205,13 @@ namespace eFurnitureProject.Application.Services
                 bool checkVoucher = false;
                 var voucherInfo = new Voucher();
                 var userId = _claimsService.GetCurrentUserId.ToString();
-                if (!createOrderDTO.VoucherId.Equals(null))
+                if (createOrderDTO.VoucherId != null)
                 {
                     //Check voucher existed
-                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync((Guid)createOrderDTO.VoucherId);
+                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync(Guid.Parse(createOrderDTO.VoucherId));
                     if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
                     //Check voucher be used
-                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, (Guid)createOrderDTO.VoucherId)) 
+                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, Guid.Parse(createOrderDTO.VoucherId))) 
                         throw new Exception("Voucher is used!");
                     else 
                         checkVoucher = true;

@@ -58,5 +58,7 @@ namespace eFurnitureProject.API.Controllers
         public async Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentByJWT(int pageIndex, int pageSize) => await _appointmentService.GetAppointmentByJWT(pageIndex, pageSize);
         [HttpGet]
         public async Task<ApiResponse<List<AppoitntmentListStaffDTO>>> GetStaffForAppointment(string appointmentID) => await _appointmentService.GetStaffForAppointment( appointmentID);
+        [HttpGet]
+        public async Task<ApiResponse<AppoitmentDetailViewDTO>> GetAppointmentDetail(string id) => await _appointmentService.GetAppointmentDetail(id);
     }
 }

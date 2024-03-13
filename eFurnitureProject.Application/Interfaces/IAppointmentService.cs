@@ -21,5 +21,6 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<bool>> DeleteAppointment(string ID);
         Task<ApiResponse<Pagination<AppoitmentDetailViewDTO>>> GetAppointmentByJWT(int pageIndex, int pageSize);
         Task<ApiResponse<List<AppoitntmentListStaffDTO>>> GetStaffForAppointment(string appointmentID);
+        Task<ApiResponse<AppoitmentDetailViewDTO>> GetAppointmentDetail(string id);
     }
 }

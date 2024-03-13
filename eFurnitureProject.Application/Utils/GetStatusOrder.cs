@@ -13,15 +13,15 @@ namespace eFurnitureProject.Application.Utils
         {
             switch (status)
             {
-                case (int)OrderStatusEnum.Pending:
+                case (int)Order.Pending:
                     return "Pending";
-                case (int)OrderStatusEnum.Delivering:
+                case (int)Order.Delivering:
                     return "Delivering";
-                case (int)OrderStatusEnum.Cancelled:
+                case (int)Order.Cancelled:
                     return "Cancelled";
-                case (int)OrderStatusEnum.Delivered:
+                case (int)Order.Delivered:
                     return "Delivered";
-                case (int)OrderStatusEnum.Rejected:
+                case (int)Order.Rejected:
                     return "Rejected";
                 default:
                     return null;

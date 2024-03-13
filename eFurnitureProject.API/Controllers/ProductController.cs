@@ -56,6 +56,6 @@ namespace eFurnitureProject.API.Controllers
         [HttpPut]
         public async Task<ApiResponse<ProductDTO>> UpdateQuantityProduct(Guid productID, int quantity) => await _productService.UpdateQuantityProduct(productID, quantity);
         [HttpPost]
-        public async Task<ApiResponse<bool>> UpdateProductStatus(Guid ProductId, ProductStatusEnum newStatus) => await _productService.UpdateProductStatus(ProductId, newStatus);
+        public async Task<ApiResponse<bool>> UpdateProductStatus(Guid ProductId, ProductStatus newStatus) => await _productService.UpdateProductStatus(ProductId, newStatus);
     }
 }

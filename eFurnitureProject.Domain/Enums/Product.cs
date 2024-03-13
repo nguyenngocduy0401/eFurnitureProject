@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public enum ProductStatusEnum
+    public enum ProductStatus
+
     {
-        Lock=1, 
-        Unlock=2, 
-        Unreleased=3
+        Lock=1, Unlock=2, Unreleased=3
 
     }
 }

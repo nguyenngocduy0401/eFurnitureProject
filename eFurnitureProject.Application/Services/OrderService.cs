@@ -1,8 +1,6 @@
 using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
-using eFurnitureProject.Application.Repositories;
-using eFurnitureProject.Application.ViewModels.CartViewModels;
 using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
@@ -10,7 +8,6 @@ using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,16 +23,36 @@ namespace eFurnitureProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
-        private readonly UserManager<User> _userManager;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService,
-                            UserManager<User> userManager) 
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService) 
         { 
             _mapper = mapper;
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
-            _userManager = userManager;
         }
+
+        public async Task<ApiResponse<string>> CheckOutOrder(CreateOrderDTO createOrderDTO)
+        {
+            var response = new ApiResponse<string>();
+            try
+            {
+                
+
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+    
+
         public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
             var response = new ApiResponse<OrderDetailViewDTO>();
@@ -96,6 +113,11 @@ namespace eFurnitureProject.Application.Services
             try
             {
                 var userId = _claimsService.GetCurrentUserId.ToString();
+                if (userId == null) 
+                {
+                    response.isSuccess = false;
+                    response.Message = "login first!";
+                }
                 var listOrder = await _unitOfWork.OrderRepository.GetOrderFilterByLogin
                     (filterOrderByLogin.PageIndex, filterOrderByLogin.PageSize, 
                      filterOrderByLogin.StatusCode, filterOrderByLogin.FromTime, 
@@ -158,7 +180,7 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
-                var newStatus = await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(updateOrderStatusDTO.StatusCode);
+                var newStatus = await _unitOfWork.StatusOrderRepository.GetGuidByStatusCode(updateOrderStatusDTO.StatusCode);
                 var newOrder = await _unitOfWork.OrderRepository.GetByIdAsync(updateOrderStatusDTO.Id);
                 if (newOrder == null) 
                 {

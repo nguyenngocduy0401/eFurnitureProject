@@ -13,13 +13,13 @@ namespace eFurnitureProject.Application.Utils
         {
             switch (role)
             {
-                case (int)RoleEnum.Administrator:
+                case (int)Roles.Administrator:
                     return "Administrator";
-                case (int)RoleEnum.Customer:
+                case (int)Roles.Customer:
                     return "Customer";
-                case (int)RoleEnum.Staff:
+                case (int)Roles.Staff:
                     return "Staff";
-                case (int)RoleEnum.DeliveryStaff:
+                case (int)Roles.DeliveryStaff:
                     return "DeliveryStaff";
                 default:
                     return null;

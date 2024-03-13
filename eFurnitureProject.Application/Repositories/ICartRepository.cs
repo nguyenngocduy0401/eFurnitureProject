@@ -11,6 +11,5 @@ namespace eFurnitureProject.Application.Repositories
     {
         Task<Cart> GetCartAsync();
         Task<Guid> GetCartIdAsync();
-        Task<IEnumerable<CartDetail>> GetCartDetailsByUserId(string userId);
     }
 }

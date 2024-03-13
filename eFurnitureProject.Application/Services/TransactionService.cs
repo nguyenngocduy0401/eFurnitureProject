@@ -28,6 +28,26 @@ namespace eFurnitureProject.Application.Services
 
             try
             {
+                var result = await _unitOfWork.TransactionRepository.Get(pageIndex, pageSize);
+                var viewItems = new List<TransactionViewDTO>();
+
+                foreach (var voucher in result)
+                {
+                    viewItems.Add(_mapper.Map<TransactionViewDTO>(voucher));
+                }
+
+                if (viewItems.Count != 0)
+                {
+                    response.Data = viewItems;
+                    response.isSuccess = true;
+                    response.Message = "Success!";
+                }
+                else
+                {
+                    response.Data = null;
+                    response.isSuccess = true;
+                    response.Message = "No reocrd!";
+                }
             }
             catch (Exception ex)
             {

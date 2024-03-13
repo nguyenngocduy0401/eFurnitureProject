@@ -1,6 +1,6 @@
 ﻿namespace eFurnitureProject.Domain.Enums
 {
-    public enum RoleEnum
+    public enum Roles
     {
         Administrator = 1,
         Customer = 2,

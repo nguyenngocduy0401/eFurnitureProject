@@ -40,6 +40,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Contract, ContractViewDTO>()
                  .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
             CreateMap<UpdateContractDTO, Contract>();
+            CreateMap<OrderViewGetDTO, Order>();
+            CreateMap<Order, OrderViewGetDTO>();
             CreateMap<CreateAppointmentDTO, Appointment>();
             CreateMap<AppointmentDetailDTO, AppointmentDetail>();
             CreateMap<Appointment, AppointmentDTO>();
@@ -88,7 +90,6 @@ namespace eFurnitureProject.Infrastructures.Mappers
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
             CreateMap<Cart, CartDetailViewDTO>();
             CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
-            CreateMap<CreateOrderDTO, Order>();
             CreateMap<Import, ImportViewFullDTO>()
                 .ForMember(dest => dest.importDetailViewDTOs, opt => opt.MapFrom(src => src.ImportDetail));
             CreateMap<Feedback, FeedBackDTO>();

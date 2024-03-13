@@ -10,6 +10,5 @@ namespace eFurnitureProject.Application.Repositories
     public interface IVoucherDetailRepository
     {
         Task AddAsync(VoucherDetail voucherDetail);
-        Task<bool> CheckVoucherBeUsedByUser(string userId, Guid voucherId);
     }
 }

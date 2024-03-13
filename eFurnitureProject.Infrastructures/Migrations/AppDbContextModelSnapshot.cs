@@ -173,8 +173,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -376,9 +376,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -475,6 +472,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -499,8 +499,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("StatusId")
                         .HasColumnType("uniqueidentifier");
@@ -508,16 +508,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("VoucherId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("VoucherId");
 
                     b.ToTable("Orders");
                 });
@@ -532,8 +527,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -877,10 +872,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Amount")
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BalanceRemain")
+                    b.Property<int>("BalanceRemain")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("CreatedBy")
@@ -889,16 +884,17 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("From")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -916,13 +912,18 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid?>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("To")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOrder")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -1006,8 +1007,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<double?>("Wallet")
-                        .HasColumnType("float");
+                    b.Property<int?>("Wallet")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1046,12 +1047,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<double>("MaximumDiscountAmount")
-                        .HasColumnType("float");
-
-                    b.Property<double>("MinimumOrderValue")
-                        .HasColumnType("float");
-
                     b.Property<Guid?>("ModificationBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1086,7 +1081,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
-                    b.Property<int>("Status")
+                    b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.HasKey("VoucherId", "UserId");
@@ -1251,15 +1246,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .WithMany("Order")
                         .HasForeignKey("UserId");
 
-                    b.HasOne("eFurnitureProject.Domain.Entities.Voucher", "Voucher")
-                        .WithMany("Order")
-                        .HasForeignKey("VoucherId");
-
                     b.Navigation("StatusOrder");
 
                     b.Navigation("User");
-
-                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderDetail", b =>
@@ -1443,8 +1432,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Voucher", b =>
                 {
-                    b.Navigation("Order");
-
                     b.Navigation("VoucherDetail");
                 });
 #pragma warning restore 612, 618

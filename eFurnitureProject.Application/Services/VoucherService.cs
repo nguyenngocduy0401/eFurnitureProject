@@ -135,6 +135,7 @@ namespace eFurnitureProject.Application.Services
                       var isSuccess=  await _unitOfWork.SaveChangeAsync() > 0;
                         if (isSuccess == true)
                         {
+                            response.isSuccess=true;
                             response.Data = _mapper.Map<VoucherViewDTO>(existVoucher);
                             response.Message = "Update voucher is successful!";
                         }

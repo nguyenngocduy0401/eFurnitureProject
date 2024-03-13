@@ -94,7 +94,6 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Feedback, FeedBackDTO>();
             CreateMap<FeedBackDTO, Feedback>();
             CreateMap<CreateFeedBackDTO, Feedback>();
-
         }
     }
 }

@@ -17,7 +17,7 @@ namespace eFurnitureProject.Infrastructures.DataInitializer
 
         public async Task StatusOrderProcessingInitializerAsync()
         {
-            string[] statusOrderProcessings = { "Pending", "Delivering", "Cancelled", "Delivered", "Rejected" };
+            string[] statusOrderProcessings = { "Pending", "Under Construction", "Complete Construction", "Delivering", "Cancelled", "Delivered", "Rejected" };
 
             foreach (var statusOrder in statusOrderProcessings)
             {
@@ -38,10 +38,12 @@ namespace eFurnitureProject.Infrastructures.DataInitializer
             return statusOrder switch
             {
                 "Pending" => 1,
-                "Delivering" => 2,
-                "Cancelled" => 3,
-                "Delivered" => 4,
-                "Rejected" => 5,
+                "Under Construction" => 2,
+                "Complete Construction" => 3,
+                "Delivering" => 4,
+                "Cancelled" => 5,
+                "Delivered" => 6,   
+                "Rejected" => 7,
                 _ => 0,
             };
         }

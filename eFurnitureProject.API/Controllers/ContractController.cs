@@ -15,7 +15,7 @@ namespace eFurnitureProject.API.Controllers
         {
             _contractService = contractService;
         }
-        [Authorize()]
+        [Authorize]
         [HttpPost]
         public async Task<ApiResponse<ContractViewDTO>> CreateContract(CreateContractDTO contract) => await _contractService.CreateContractAsync(contract);
 

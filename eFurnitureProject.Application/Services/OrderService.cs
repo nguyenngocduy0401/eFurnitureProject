@@ -212,12 +212,14 @@ namespace eFurnitureProject.Application.Services
                     //Check voucher existed
                     voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
                     if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
+                    else { voucherInfo.Number = voucherInfo.Number - 1; }
                     //Check voucher be used
                     if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, voucherId))
                         throw new Exception("Voucher is used!");
                     else
                         checkVoucher = true;
-                } else createOrderDTO.VoucherId = null;
+                }
+                else { createOrderDTO.VoucherId = null; }
                 var cartDetails = await _unitOfWork.CartRepository.GetCartDetailsByUserId(userId);
                 var createOrder = _mapper.Map<Order>(createOrderDTO);
                 await _unitOfWork.OrderRepository.AddAsync(createOrder);
@@ -234,7 +236,7 @@ namespace eFurnitureProject.Application.Services
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(cartDetail.ProductId);
                     if (product == null) throw new Exception($"Some products do not exist in your shopping cart!");
                     if (product.IsDeleted) throw new Exception($"{product.Name} do not exist in your shopping cart!");
-                    if (product.Status != 2) throw new Exception($"{product.Name} has been discontinued!");
+                    if (product.Status != (int)ProductStatusEnum.Unlock) throw new Exception($"{product.Name} has been discontinued!");
                     if (product.InventoryQuantity <=0) throw new Exception($"{product.Name} out of stock!");
                     product.InventoryQuantity = product.InventoryQuantity - cartDetail.Quantity;
                     products.Add(product);
@@ -265,11 +267,11 @@ namespace eFurnitureProject.Application.Services
                 createOrder.Address = createOrderDTO.Address;
                 createOrder.Email = createOrderDTO.Email;
                 createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
-                createOrder.StatusId = (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(1)).Id;
+                createOrder.StatusId = (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode((int)OrderStatusEnum.Pending)).Id;
                 createOrder.Name = createOrderDTO.Name;
 
                 var user = await _userManager.FindByIdAsync(userId);
-                if (user.Wallet < price) throw new Exception("Not enough money!");
+                if (user.Wallet < price || user.Wallet == null) throw new Exception("Not enough money!");
                 user.Wallet = user.Wallet - price;
                 await _userManager.UpdateAsync(user);
                 _unitOfWork.OrderRepository.Update(createOrder);

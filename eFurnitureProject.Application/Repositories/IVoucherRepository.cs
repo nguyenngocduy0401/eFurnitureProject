@@ -1,6 +1,5 @@
 ﻿using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +13,5 @@ namespace eFurnitureProject.Application.Repositories
         Task<IEnumerable<Voucher>> Get(int pageIndex, int pageSize);
         Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date);
         Task<bool> CheckVoucherNameExisted(string Name);
-    
-        Task<Voucher> GetDeletedVoucherByNameAsync(string voucherName);
-        Task<Pagination<Voucher>> GetVoucher(int pageIndex, int pageSize);
-        Task<bool> CheckVoucherNameExisted(Guid id, string Name);
     }
 }

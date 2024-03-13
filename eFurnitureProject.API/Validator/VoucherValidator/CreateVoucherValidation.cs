@@ -21,7 +21,11 @@ namespace eFurnitureProject.API.Validator.VoucherValidator
                 .GreaterThan(x => x.StartDate).WithMessage("EndDate must be after StartDate");
 
             RuleFor(x => x.Percent)
-                .InclusiveBetween(1, 5).WithMessage("Percent must be between 1 and 5");         
+                .InclusiveBetween(1, 5).WithMessage("Percent must be between 1 and 5");
+
+            RuleFor(x => x.Number)
+                .GreaterThan(0).WithMessage("Number must be greater than 0");
+
             RuleFor(x => x.MinimumOrderValue)
                 .GreaterThan(0).WithMessage("MinimumOrderValue must be greater than 0");
 

@@ -13,7 +13,7 @@ namespace eFurnitureProject.Domain.Entities
         public DateTime? DateOfBird { get; set; }
         public string? Gender { get; set; }
         public string? Address { get; set; }
-        public int? Wallet { get; set; }
+        public double? Wallet { get; set; }
         public bool Status { get; set; } = true;
         
         public virtual ICollection<AppointmentDetail>? AppointmentDetail { get; set; }

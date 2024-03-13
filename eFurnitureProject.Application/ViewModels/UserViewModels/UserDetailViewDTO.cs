@@ -9,12 +9,11 @@ namespace eFurnitureProject.Application.ViewModels.UserViewModels
 {
     public class UserDetailViewDTO : IdentityUser
     {
-        public string Id { get; set; }
         public string? Name { get; set; }
         public DateTime? DateOfBird { get; set; }
         public string? Gender { get; set; }
         public string? Address { get; set; }
-        public int? Wallet { get; set; }
+        public double? Wallet { get; set; }
         public bool Status { get; set; }
         public List<string>? Roles { get; set; }
     }

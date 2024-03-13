@@ -10,6 +10,6 @@ namespace eFurnitureProject.Application.Repositories
     public interface IStatusOrderRepository : IGenericRepository<StatusOrder>
     {
         Task<bool> CheckStatusOrderExisted(string name);
-        Task<StatusOrder> GetGuidByStatusCode(int statusCode);
+        Task<StatusOrder> GetStatusByStatusCode(int statusCode);
     }
 }

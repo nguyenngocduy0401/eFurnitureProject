@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
@@ -48,16 +49,9 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<VoucherViewDTO>();
             try
             {
-              
+
                 var voucher = _mapper.Map<Voucher>(createVoucherDTO);
-                voucher.VoucherCode = GenerateVoucherCode();
-                var existingVoucher = await _unitOfWork.VoucherRepository.GetVoucherByCodeAsync(voucher.VoucherCode);
-                if (existingVoucher != null && existingVoucher.IsDeleted == false)
-                {
-                    response.isSuccess = false;
-                    response.Message = "Voucher Code is existed!";
-                    return response;
-                }
+
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
                 if (!validationResult.IsValid)
                 {
@@ -70,15 +64,6 @@ namespace eFurnitureProject.Application.Services
                     response.isSuccess = false;
                     response.Message = "Voucher Name is existed!";
                     return response;
-                }
-
-                // Kiểm tra xem có voucher cũ đã bị xóa có cùng tên không
-                var existingDeletedVoucher = await _unitOfWork.VoucherRepository.GetDeletedVoucherByNameAsync(createVoucherDTO.VoucherName);
-                if (existingDeletedVoucher != null)
-                {
-                    // Khôi phục voucher cũ nếu tên trùng nhau
-                    existingDeletedVoucher.IsDeleted = false;
-                    voucher = existingDeletedVoucher;
                 }
 
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
@@ -109,15 +94,22 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, Guid id)
+        public async Task<ApiResponse<VoucherViewDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, string id)
         {
-            var response = new ApiResponse<UpdateVoucherDTO>();
+            var response = new ApiResponse<VoucherViewDTO>();
 
 
             try
             {
-
-                var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
+                var voucherID = Guid.Parse(id);
+                var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherID);
+                var isExist = await _unitOfWork.VoucherRepository.CheckVoucherNameExisted( createVoucherDTO.VoucherName) ;
+                if (isExist)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Voucher's name is existed, please try again";
+                    return response;
+                }
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
                 if (!validationResult.IsValid)
                 {
@@ -130,9 +122,26 @@ namespace eFurnitureProject.Application.Services
                 {
                     if (existVoucher != null)
                     {
-                        var updateVoucher = _mapper.Map(createVoucherDTO, existVoucher);
-                        await _unitOfWork.SaveChangeAsync();
-                        return response;
+
+                        existVoucher.VoucherName = createVoucherDTO.VoucherName;
+                        existVoucher.StartDate = createVoucherDTO.StartDate;
+                        existVoucher.EndDate=createVoucherDTO.EndDate;
+                        existVoucher.Percent= createVoucherDTO.Percent;
+                        existVoucher.Number = createVoucherDTO.Number;
+                        existVoucher.MinimumOrderValue= createVoucherDTO.MinimumOrderValue;
+                        existVoucher.MaximumDiscountAmount=createVoucherDTO.MaximumDiscountAmount;
+
+                        _unitOfWork.VoucherRepository.Update(existVoucher );
+                      var isSuccess=  await _unitOfWork.SaveChangeAsync() > 0;
+                        if (isSuccess == true)
+                        {
+                            response.Data = _mapper.Map<VoucherViewDTO>(existVoucher);
+                            response.Message = "Update voucher is successful!";
+                        }
+                        else
+                        {
+                            response.isSuccess=false;
+                        }
                     }
                 }
             }
@@ -252,7 +261,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, string  date)
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, string date)
         {
             var response = new ApiResponse<Pagination<VoucherViewDTO>>();
             try
@@ -295,18 +304,18 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        private string GenerateVoucherCode()
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            var voucherCodeBuilder = new StringBuilder();
-
-            for (int i = 0; i < 8; i++)
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> GetVoucherByLogin(int pageIndex, int pageSize)
+          {
+            var response = new ApiResponse<Pagination<VoucherViewDTO>>();
+            var voucher = await _unitOfWork.VoucherRepository.GetVoucher(pageIndex, pageSize);
+            var result = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
+            if (result == null)
             {
-                voucherCodeBuilder.Append(chars[random.Next(chars.Length)]);
+                response.Message = "no vouchers";
             }
+            response.Data = result;
+            return response;
 
-            return voucherCodeBuilder.ToString();
         }
-    }
+    } 
 }

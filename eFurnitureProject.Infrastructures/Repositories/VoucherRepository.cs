@@ -37,18 +37,17 @@ namespace eFurnitureProject.Infrastructures.Repositories
             }
         }
         public async Task<bool> CheckVoucherNameExisted(string Name) =>
-           await _dbContext.Vouchers.AnyAsync(u => u.VoucherName == Name);
-        public async Task<bool> CheckVoucherCodeExisted(string code) =>
-        await _dbContext.Vouchers.AnyAsync(u => u.VoucherCode == code);
+           await _dbContext.Vouchers.AnyAsync(u => u.VoucherName == Name && u.IsDeleted==false);
+        
         public async Task<Pagination<Voucher>> GetVoucherByDateAsync(int pageIndex, int pageSize, DateTime date)
         {
             var voucher = await _dbContext.Vouchers.
-     Where(v => v.StartDate.Date == date.Date || v.EndDate.Date == date.Date)
+     Where(v =>( v.StartDate.Date == date.Date || v.EndDate.Date == date.Date)&&v.IsDeleted==false)
        .Select(p => new Voucher
        {
            Id = p.Id,
            VoucherName = p.VoucherName,
-           VoucherCode = p.VoucherCode??"",
+  
            StartDate = p.StartDate,
            EndDate = p.EndDate,
            Percent = p.Percent,
@@ -78,9 +77,42 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         }
 
-        public async Task<Voucher> GetVoucherByCodeAsync(string voucherCode)
+        public async Task<Pagination<Voucher>> GetVoucher(int pageIndex, int pageSize)
         {
-            return await _dbContext.Vouchers.FirstOrDefaultAsync(v => v.VoucherCode == voucherCode);
+            var voucher = await _dbContext.Vouchers.
+     Where(v => v.Number>0 && v.IsDeleted==false)
+       .Select(p => new Voucher
+       {
+           Id = p.Id,
+           VoucherName = p.VoucherName,
+
+           StartDate = p.StartDate,
+           EndDate = p.EndDate,
+           Percent = p.Percent,
+           Number = p.Number,
+           MinimumOrderValue = p.MinimumOrderValue,
+           MaximumDiscountAmount = p.MaximumDiscountAmount
+       })
+       .ToListAsync();
+
+            var totalItems = voucher.Count;
+
+            var paginatedProducts = voucher.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var pagination = new Pagination<Voucher>
+            {
+                Items = paginatedProducts,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalItems,
+
+            };
+
+            return pagination;
+
+
         }
         public async Task<Voucher> GetDeletedVoucherByNameAsync(string voucherName)
         {

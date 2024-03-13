@@ -214,6 +214,7 @@ namespace eFurnitureProject.Application.Services
                     if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
                     else 
                     { 
+                        //Update Voucher
                         voucherInfo.Number = voucherInfo.Number - 1;
                         _unitOfWork.VoucherRepository.Update(voucherInfo);
                         await _unitOfWork.VoucherDetailRepository.AddAsync(new VoucherDetail {UserId = userId, VoucherId = voucherId});
@@ -278,12 +279,26 @@ namespace eFurnitureProject.Application.Services
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user.Wallet < price || user.Wallet == null) throw new Exception("Not enough money!");
                 user.Wallet = user.Wallet - price;
+                var cartId = await _unitOfWork.CartRepository.GetCartIdAsync();
+                _unitOfWork.CartDetailRepository.DeleteCart(cartId);
 
+                var transaction = new Transaction
+                {
+                    OrderId = id,
+                    Amount = price,
+                    From = "Wallet",
+                    To = "eFurniturePay",
+                    Type = "Order",
+                    BalanceRemain = (double)user.Wallet,
+                    UserId = userId,
+                    Status = 1,
+                    Description = $"Transfer {price:F2} from User wallet to eFurniturePay for paying Order",
+                };
+                await _unitOfWork.TransactionRepository.AddAsync(transaction);
                 
-
-                await _userManager.UpdateAsync(user);
                 _unitOfWork.OrderRepository.Update(createOrder);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                await _userManager.UpdateAsync(user);
                 if (!isSuccess) throw new Exception("Create fail!");
                 response.isSuccess = true;
                 response.Message = "Checkout Successfully!";

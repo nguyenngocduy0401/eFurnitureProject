@@ -37,6 +37,7 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<StatusDetailOrderViewDTO>> GetStatusByOrderId(Guid orderId) =>
             await _service.GetOrderStatusByOrderId(orderId);
+        [Authorize(Roles = AppRole.Customer)]
         [HttpPost]
         public async Task<ApiResponse<string>> CheckOut(CreateOrderDTO createOrderDTO) =>
             await _service.CheckOut(createOrderDTO);

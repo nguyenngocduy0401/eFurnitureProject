@@ -12,5 +12,5 @@ namespace eFurnitureProject.Application.Repositories
     {
         Task<Pagination<Transaction>> FilterTransactionByLogin(string userId, DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize);
         Task<Pagination<Transaction>> FilterTransaction(DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize);
-    }//11
+    }
 }

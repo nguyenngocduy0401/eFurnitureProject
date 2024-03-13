@@ -1,7 +1,6 @@
 ﻿using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,11 +29,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             };
             _dbContext.CartDetails.Remove(itemInCart);
         }
-
         
-
         public void UpdateQuantityProductInCart(CartDetail cartdetail) => _dbContext.Update(cartdetail);
-
-
     }
 }

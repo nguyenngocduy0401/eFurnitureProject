@@ -24,6 +24,5 @@ namespace eFurnitureProject.Infrastructures.Repositories
                                              .ToListAsync();
         public async Task AddRangeAsync(List<OrderDetail> orderDetails) =>
             await _appDbContext.OrdersDetails.AddRangeAsync(orderDetails);
-        
     }
 }

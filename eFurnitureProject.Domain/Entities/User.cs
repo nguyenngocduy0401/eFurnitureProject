@@ -15,7 +15,6 @@ namespace eFurnitureProject.Domain.Entities
         public string? Address { get; set; }
         public double? Wallet { get; set; }
         public bool Status { get; set; } = true;
-        //
         public virtual ICollection<AppointmentDetail>? AppointmentDetail { get; set; }
         public virtual ICollection<VoucherDetail>? VoucherDetail { get; set; }
         public virtual ICollection<RefreshToken>? RefreshToken { get; set; }

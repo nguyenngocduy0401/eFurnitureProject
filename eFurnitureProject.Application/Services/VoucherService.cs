@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.ViewModels.CategoryViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.UserViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
@@ -48,6 +49,7 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<VoucherViewDTO>();
             try
             {
+
                 var voucher = _mapper.Map<Voucher>(createVoucherDTO);
 
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
@@ -63,6 +65,7 @@ namespace eFurnitureProject.Application.Services
                     response.Message = "Voucher Name is existed!";
                     return response;
                 }
+
                 await _unitOfWork.VoucherRepository.AddAsync(voucher);
                 var issuccess = await _unitOfWork.SaveChangeAsync();
                 if (issuccess > 0)
@@ -91,16 +94,22 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-
-        public async Task<ApiResponse<UpdateVoucherDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, Guid id)
+        public async Task<ApiResponse<VoucherViewDTO>> UpdateVoucher(CreateVoucherDTO createVoucherDTO, string id)
         {
-            var response = new ApiResponse<UpdateVoucherDTO>();
+            var response = new ApiResponse<VoucherViewDTO>();
 
 
             try
             {
-
-                var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
+                var voucherID = Guid.Parse(id);
+                var existVoucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherID);
+                var isExist = await _unitOfWork.VoucherRepository.CheckVoucherNameExisted(voucherID, createVoucherDTO.VoucherName) ;
+                if (isExist)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Voucher's name is existed, please try again";
+                    return response;
+                }
                 ValidationResult validationResult = await _createVouchervalidator.ValidateAsync(createVoucherDTO);
                 if (!validationResult.IsValid)
                 {
@@ -113,9 +122,27 @@ namespace eFurnitureProject.Application.Services
                 {
                     if (existVoucher != null)
                     {
-                        var updateVoucher = _mapper.Map(createVoucherDTO, existVoucher);
-                        await _unitOfWork.SaveChangeAsync();
-                        return response;
+
+                        existVoucher.VoucherName = createVoucherDTO.VoucherName;
+                        existVoucher.StartDate = createVoucherDTO.StartDate;
+                        existVoucher.EndDate=createVoucherDTO.EndDate;
+                        existVoucher.Percent= createVoucherDTO.Percent;
+                        existVoucher.Number = createVoucherDTO.Number;
+                        existVoucher.MinimumOrderValue= createVoucherDTO.MinimumOrderValue;
+                        existVoucher.MaximumDiscountAmount=createVoucherDTO.MaximumDiscountAmount;
+
+                        _unitOfWork.VoucherRepository.Update(existVoucher );
+                      var isSuccess=  await _unitOfWork.SaveChangeAsync() > 0;
+                        if (isSuccess == true)
+                        {
+                            response.isSuccess=true;
+                            response.Data = _mapper.Map<VoucherViewDTO>(existVoucher);
+                            response.Message = "Update voucher is successful!";
+                        }
+                        else
+                        {
+                            response.isSuccess=false;
+                        }
                     }
                 }
             }
@@ -235,7 +262,7 @@ namespace eFurnitureProject.Application.Services
             }
             return response;
         }
-        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, string  date)
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> Fileter(int pageIndex, int pageSize, string date)
         {
             var response = new ApiResponse<Pagination<VoucherViewDTO>>();
             try
@@ -278,5 +305,18 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-    }
+        public async Task<ApiResponse<Pagination<VoucherViewDTO>>> GetVoucherByLogin(int pageIndex, int pageSize)
+          {
+            var response = new ApiResponse<Pagination<VoucherViewDTO>>();
+            var voucher = await _unitOfWork.VoucherRepository.GetVoucher(pageIndex, pageSize);
+            var result = _mapper.Map<Pagination<VoucherViewDTO>>(voucher);
+            if (result == null)
+            {
+                response.Message = "no vouchers";
+            }
+            response.Data = result;
+            return response;
+
+        }
+    } 
 }

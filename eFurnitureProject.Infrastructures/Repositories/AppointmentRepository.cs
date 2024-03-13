@@ -545,5 +545,19 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             return result;
         }
+        /*public async Task<List<AppoitntmentListStaffDTO>> GetStaffInfoAsync()
+        {
+            var userIdsByRole = new Dictionary<string, List<string>>();
+            userIdsByRole["Customer"] = (await _userManager.GetUsersInRoleAsync("Customer")).Select(u => u.Id).ToList();
+            userIdsByRole["Staff"] = (await _userManager.GetUsersInRoleAsync("Staff")).Select(u => u.Id).ToList();
+            return await _dbContext.
+                .Select(s => new StaffInfo
+                {
+                    Id = s.Id,
+                    Name = s.Name
+                })
+                .ToListAsync();
+        }*/
+
     }
 }

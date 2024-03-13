@@ -12,4 +12,4 @@ namespace eFurnitureProject.Application.Repositories
         Task AddAsync(VoucherDetail voucherDetail);
         Task<bool> CheckVoucherBeUsedByUser(string userId, Guid voucherId);
     }
-}
+}//

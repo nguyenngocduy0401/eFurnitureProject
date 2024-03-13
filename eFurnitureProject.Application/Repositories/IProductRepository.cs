@@ -12,7 +12,7 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        void UpdateProductByOrder(List<Product> product);
+        void UpdateProductByOrder(List<Product> product);//11
         Task<ProductDTO> GetProductsByIDAsync(string productId);
 
         Task<Pagination<ProductDTO>> GetProductsByNameAsync(string productName, int pageIndex, int pageSize);

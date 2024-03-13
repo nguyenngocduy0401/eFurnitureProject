@@ -11,6 +11,7 @@ using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -205,17 +206,18 @@ namespace eFurnitureProject.Application.Services
                 bool checkVoucher = false;
                 var voucherInfo = new Voucher();
                 var userId = _claimsService.GetCurrentUserId.ToString();
-                if (createOrderDTO.VoucherId != null)
+                if (!createOrderDTO.VoucherId.IsNullOrEmpty())
                 {
+                    var voucherId = Guid.Parse(createOrderDTO.VoucherId);
                     //Check voucher existed
-                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync(Guid.Parse(createOrderDTO.VoucherId));
+                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
                     if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
                     //Check voucher be used
-                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, Guid.Parse(createOrderDTO.VoucherId))) 
+                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, voucherId))
                         throw new Exception("Voucher is used!");
-                    else 
+                    else
                         checkVoucher = true;
-                }
+                } else createOrderDTO.VoucherId = null;
                 var cartDetails = await _unitOfWork.CartRepository.GetCartDetailsByUserId(userId);
                 var createOrder = _mapper.Map<Order>(createOrderDTO);
                 await _unitOfWork.OrderRepository.AddAsync(createOrder);

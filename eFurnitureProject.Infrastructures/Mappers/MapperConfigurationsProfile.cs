@@ -93,7 +93,10 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Feedback, FeedBackDTO>();
             CreateMap<FeedBackDTO, Feedback>();
             CreateMap<CreateFeedBackDTO, Feedback>();
-            CreateMap<CreateOrderDTO, Order>();
+            CreateMap<CreateOrderDTO, Order>()
+            .ForMember(dest => dest.VoucherId,
+               opt => opt.MapFrom(src =>
+                   string.IsNullOrEmpty(src.VoucherId) ? (Guid?)null : Guid.Parse(src.VoucherId)));
         }
     }
 }

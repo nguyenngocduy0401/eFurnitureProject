@@ -11,5 +11,6 @@ namespace eFurnitureProject.Application.Repositories
     public interface IOrderDetailRepository
     {
         Task<IEnumerable<OrderDetail>> GetOrderDetailsByIdAsync(Guid Id);
+        Task AddRangeAsync(List<OrderDetail> orderDetails);
     }
 }

@@ -14,7 +14,7 @@ namespace eFurnitureProject.Domain.Entities
         [ForeignKey("UserId")]
 
         public User? User { get; set; }
-
+        
         public virtual ICollection<CartDetail>? CartDetails { get; set; }
     }
 }

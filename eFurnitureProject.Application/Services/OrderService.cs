@@ -225,21 +225,28 @@ namespace eFurnitureProject.Application.Services
                 var price = 0d;
                 // insert product from cart to orderDetail
                 List<OrderDetail> orderDetails = new List<OrderDetail>();
+                List<Product> products = new List<Product>();
                 foreach (var cartDetail in cartDetails)
                 {
+                    
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(cartDetail.ProductId);
                     if (product == null) throw new Exception($"Some products do not exist in your shopping cart!");
                     if (product.IsDeleted) throw new Exception($"{product.Name} do not exist in your shopping cart!");
                     if (product.Status != 2) throw new Exception($"{product.Name} has been discontinued!");
                     if (product.InventoryQuantity <=0) throw new Exception($"{product.Name} out of stock!");
-                        orderDetails.Add(new OrderDetail
+                    product.InventoryQuantity = product.InventoryQuantity - cartDetail.Quantity;
+                    products.Add(product);
+                    orderDetails.Add(new OrderDetail
                     {
-                        ProductId = id,
+                        OrderId = id,
+                        ProductId = product.Id,
                         Quantity = cartDetail.Quantity,
                         Price = product.Price,
                     });
                     price =+ product.Price * cartDetail.Quantity;  
                 }
+                await _unitOfWork.OrderDetailRepository.AddRangeAsync(orderDetails);
+                _unitOfWork.ProductRepository.UpdateProductByOrder(products);
                 if (checkVoucher)
                 {
                     if (voucherInfo.MinimumOrderValue <= price)
@@ -262,6 +269,7 @@ namespace eFurnitureProject.Application.Services
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user.Wallet < price) throw new Exception("Not enough money!");
                 user.Wallet = user.Wallet - price;
+                await _userManager.UpdateAsync(user);
                 _unitOfWork.OrderRepository.Update(createOrder);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                 if (!isSuccess) throw new Exception("Create fail!");

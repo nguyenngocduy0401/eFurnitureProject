@@ -37,13 +37,18 @@ namespace eFurnitureProject.Application.Services
             _claimsService = claimsService;
             _userManager = userManager;
         }
-        public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
+        public async Task<ApiResponse<OrderViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
-            var response = new ApiResponse<OrderDetailViewDTO>();
+            var response = new ApiResponse<OrderViewDTO>();
             try
             {
-                var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
-                
+                var order = await _unitOfWork.OrderRepository.GetOrderByIdAsync(orderId);
+                if (order == null) throw new Exception("Not found!");
+                var result = _mapper.Map<OrderViewDTO>(order);
+                response.Data = result;
+                response.isSuccess = true;
+                response.Message= "Successful!";
+                return response;
             }
             catch (DbException ex)
             {

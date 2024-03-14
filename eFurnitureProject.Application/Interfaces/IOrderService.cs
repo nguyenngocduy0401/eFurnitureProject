@@ -12,7 +12,7 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IOrderService
     {
-        Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId);
+        Task<ApiResponse<OrderViewDTO>> GetOrderByIdAsync(Guid orderId);
         Task<ApiResponse<Pagination<OrderViewForCustomerDTO>>> GetOrderFilterByLoginAsync(FilterOrderByLoginDTO filterOrderByLogin);
         Task<ApiResponse<Pagination<OrderViewDTO>>> GetOrderFilterAsync(FilterOrderDTO filterOrderDTO);
         Task<ApiResponse<string>> UpdateOrderStatusAsync(UpdateOrderStatusDTO updateOrderStatusDTO);

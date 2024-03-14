@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace eFurnitureProject.Infrastructures.Repositories
-{//
+{
     public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
         private readonly AppDbContext _dbContext;
@@ -26,6 +26,15 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _claimsService = claimsService;
         }
 
+
+        public async Task<Order> GetOrderByIdAsync(Guid orderId)
+        {
+            var order = await _dbContext.Orders.Where(x => x.Id == orderId)
+                                         .Include(x => x.StatusOrder)
+                                         .Include(x => x.User).FirstOrDefaultAsync();
+            if (order == null) throw new Exception("Not found!");
+            return order;
+        }
 
         public async Task<Pagination<Order>> GetOrderByFilter(int pageIndex,
             int pageSize, int? status, DateTime? fromTime, DateTime? toTime,

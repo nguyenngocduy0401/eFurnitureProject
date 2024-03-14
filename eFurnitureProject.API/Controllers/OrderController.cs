@@ -31,7 +31,7 @@ namespace eFurnitureProject.API.Controllers
             await _service.UpdateOrderStatusAsync(updateOrderStatusDTO);
         [Authorize(Roles = AppRole.Admin + "," + AppRole.Staff + "," + AppRole.DeliveryStaff)]
         [HttpGet]
-        public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderById(Guid orderId) =>
+        public async Task<ApiResponse<OrderViewDTO>> GetOrderById(Guid orderId) =>
             await _service.GetOrderByIdAsync(orderId);
         [Authorize]
         [HttpGet]

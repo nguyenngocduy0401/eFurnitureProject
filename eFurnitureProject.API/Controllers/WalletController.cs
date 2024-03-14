@@ -16,11 +16,11 @@ namespace eFurnitureProject.API.Controllers
         }
         [Authorize(Roles = AppRole.Admin)]
         [HttpPost]
-        public async Task<ApiResponse<string>> AddMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO) =>
+        public async Task<ApiResponse<string>> AddMoneyByUserId(UpdateWalletDTO updateWalletDTO) =>
             await _walletService.AddMoneyByUserIdAsync(updateWalletDTO);
         [Authorize(Roles = AppRole.Admin)]
         [HttpPost]
-        public async Task<ApiResponse<string>> SubtractMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO) =>
+        public async Task<ApiResponse<string>> SubtractMoneyByUserId(UpdateWalletDTO updateWalletDTO) =>
             await _walletService.SubtractMoneyByUserIdAsync(updateWalletDTO);
 
     }

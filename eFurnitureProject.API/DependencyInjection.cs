@@ -26,6 +26,8 @@ using Microsoft.OpenApi.Models;
 using System.Diagnostics;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using eFurnitureProject.API.Validator.VoucherValidator;
+using eFurnitureProject.Application.ViewModels.WalletViewModels;
+using eFurnitureProject.API.Validator.WalletValidator;
 
 namespace eFurnitureProject.API
 {
@@ -102,6 +104,7 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<CreateImportDetailDTO>, CreateImportDetailValidation>();
             services.AddTransient<IValidator<UpdateImportDTO>, UpdateImportValidation>();
             services.AddTransient<IValidator<CreateVoucherDTO>, CreateVoucherValidation>();
+            services.AddTransient<IValidator<UpdateWalletDTO>,UpdateWalletValidation>();
             #endregion
 
             return services;

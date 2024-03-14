@@ -10,7 +10,7 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface IWalletService
     {
-        Task<ApiResponse<string>> SubtractMoneyByUserId(UpdateWalletDTO updateWalletDTO);
-        Task<ApiResponse<string>> AddMoneyByUserId(UpdateWalletDTO updateWalletDTO);
+        Task<ApiResponse<string>> SubtractMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO);
+        Task<ApiResponse<string>> AddMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO);
     }
 }

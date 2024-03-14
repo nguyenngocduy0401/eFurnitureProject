@@ -18,13 +18,8 @@ namespace eFurnitureProject.Application.ViewModels.TransactionViewModels
         public int? Status { get; set; }
         public string? Description { get; set; }
         public Guid? OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order? Order { get; set; }
         public Guid? OrderProcessingId { get; set; }
-        [ForeignKey("OrderProcessingId")]
-        public OrderProcessing? OrderProcessing { get; set; }
         public string? UserId { get; set; }
-        [ForeignKey("UserId")]
-        public User? User { get; set; }
+        
     }
 }

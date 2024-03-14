@@ -21,7 +21,12 @@ namespace eFurnitureProject.Application.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-        }   
+        }
+
+        public Task<ApiResponse<IEnumerable<TransactionViewDTO>>> FilterTransactionByLogin(int pageIndex, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<ApiResponse<IEnumerable<TransactionViewDTO>>> GetTransaction(int pageIndex, int pageSize)
         {

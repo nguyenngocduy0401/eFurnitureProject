@@ -311,7 +311,7 @@ namespace eFurnitureProject.Application.Services
                     Type = "Order",
                     BalanceRemain = (double)user.Wallet,
                     UserId = userId,
-                    Status = 1,
+                    Status = 0,
                     Description = $"Transfer {price:F2} from User wallet to eFurniturePay for paying Order",
                 };
                 await _unitOfWork.TransactionRepository.AddAsync(transaction);

@@ -18,13 +18,16 @@ namespace eFurnitureProject.Application.Services
     public class WalletService : IWalletService
     {
         private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly RoleManager<Role> _roleManager;
         private readonly IValidator<UpdateWalletDTO> _validatorUpdateWallet;
-        public WalletService(UserManager<User> userManager, RoleManager<Role> roleManager, IValidator<UpdateWalletDTO> validatorUpdateWallet)
+        public WalletService(UserManager<User> userManager, RoleManager<Role> roleManager, 
+            IValidator<UpdateWalletDTO> validatorUpdateWallet, IUnitOfWork unitOfWork)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _validatorUpdateWallet = validatorUpdateWallet;
+            _unitOfWork = unitOfWork;
         }
         public async Task<ApiResponse<string>> AddMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO)
         {
@@ -50,6 +53,21 @@ namespace eFurnitureProject.Application.Services
                 var isSuccess = await _userManager.UpdateAsync(user);
 
                 if (!isSuccess.Succeeded) throw new Exception("Top-up fail!");
+
+                await _unitOfWork.TransactionRepository.AddAsync(
+                    new Transaction {
+                        Amount = updateWalletDTO.Wallet,
+                        From = "Admin",
+                        To = user.Name,
+                        Type = "System",
+                        BalanceRemain = (double)user.Wallet,
+                        UserId = user.Id,
+                        Status = 1,
+                        Description = $"Transfer {updateWalletDTO.Wallet:F2} from eFurniturePay to User Wallet for paying Order by Admin",
+
+                    });
+                var createCheck = await _unitOfWork.SaveChangeAsync() > 0;
+                if (!createCheck) throw new Exception("Create transaction failed!");
                 response.isSuccess = true;
                 response.Message = "Successful!";
             } 
@@ -92,6 +110,21 @@ namespace eFurnitureProject.Application.Services
                 var isSuccess = await _userManager.UpdateAsync(user);
 
                 if(!isSuccess.Succeeded) throw new Exception("Withdraw fail!");
+                await _unitOfWork.TransactionRepository.AddAsync(
+                    new Transaction
+                    {
+                        Amount = updateWalletDTO.Wallet,
+                        From = "Admin",
+                        To = user.Name,
+                        Type = "System",
+                        BalanceRemain = (double)user.Wallet,
+                        UserId = user.Id,
+                        Status = 0,
+                        Description = $"Transfer {updateWalletDTO.Wallet:F2} from User wallet to eFurniturePay for paying Order by Admin",
+
+                    });
+                var createCheck = await _unitOfWork.SaveChangeAsync() > 0;
+                if (!createCheck) throw new Exception("Create transaction failed!");
                 response.isSuccess = true;
                 response.Message = "Successful!";
             }

@@ -10,7 +10,8 @@ namespace eFurnitureProject.Application.Interfaces
 {
     public interface ITransactionService
     {
-        Task<ApiResponse<IEnumerable<TransactionViewDTO>>> FilterTransactionByLogin(int pageIndex, int pageSize);
+        Task<ApiResponse<Pagination<TransactionViewDTO>>> FilterTransactionByLoginAsync(FilterTransactionByLoginDTO filterTransactionByLoginDTO);
+        Task<ApiResponse<Pagination<TransactionViewDTO>>> FilterTransactionAsync(FilterTransactionDTO filterTransactionDTO);
         Task<ApiResponse<TransactionViewDTO>> GetTransactionByIdAsync(Guid transactionId);
     }
 }

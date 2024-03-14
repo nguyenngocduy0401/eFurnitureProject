@@ -97,7 +97,6 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<CreateOrderDTO, Order>()
             .ForMember(dest => dest.VoucherId,opt => opt
             .MapFrom(src => string.IsNullOrEmpty(src.VoucherId) ? (Guid?)null : Guid.Parse(src.VoucherId)));
-
             CreateMap<Transaction, TransactionViewDTO>();
         }
     }

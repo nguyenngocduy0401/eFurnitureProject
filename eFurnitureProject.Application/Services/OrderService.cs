@@ -7,8 +7,11 @@ using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
+using eFurnitureProject.Application.ViewModels.WalletViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Domain.Enums;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
@@ -28,14 +31,16 @@ namespace eFurnitureProject.Application.Services
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
         private readonly UserManager<User> _userManager;
+        private readonly IValidator<CreateOrderDTO> _validatorCreateOrder;
 
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService,
-                            UserManager<User> userManager) 
+                            UserManager<User> userManager, IValidator<CreateOrderDTO> validatorCreateOrder) 
         { 
             _mapper = mapper;
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
             _userManager = userManager;
+            _validatorCreateOrder = validatorCreateOrder;
         }
         public async Task<ApiResponse<OrderViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
@@ -208,6 +213,14 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
+                ValidationResult validationResult = await _validatorCreateOrder.ValidateAsync(createOrderDTO);
+                if (!validationResult.IsValid)
+                {
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
+
                 bool checkVoucher = false;
                 var voucherInfo = new Voucher();
                 var userId = _claimsService.GetCurrentUserId.ToString();
@@ -232,6 +245,8 @@ namespace eFurnitureProject.Application.Services
                 }
                 else { createOrderDTO.VoucherId = null; }
                 var cartDetails = await _unitOfWork.CartRepository.GetCartDetailsByUserId(userId);
+                if (cartDetails.IsNullOrEmpty()) throw new Exception("Your cart has no products!");
+
                 var createOrder = _mapper.Map<Order>(createOrderDTO);
                 await _unitOfWork.OrderRepository.AddAsync(createOrder);
                 var resultCreate = await _unitOfWork.SaveChangeAsync() > 0;

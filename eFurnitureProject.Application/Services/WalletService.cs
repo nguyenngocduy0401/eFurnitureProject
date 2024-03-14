@@ -49,7 +49,7 @@ namespace eFurnitureProject.Application.Services
                 user.Wallet  = user.Wallet + updateWalletDTO.Wallet;
                 var isSuccess = await _userManager.UpdateAsync(user);
 
-                if (!isSuccess.Succeeded) throw new Exception("Subtract fail!");
+                if (!isSuccess.Succeeded) throw new Exception("Top-up fail!");
                 response.isSuccess = true;
                 response.Message = "Successful!";
             } 
@@ -91,7 +91,7 @@ namespace eFurnitureProject.Application.Services
                 user.Wallet = user.Wallet - updateWalletDTO.Wallet;
                 var isSuccess = await _userManager.UpdateAsync(user);
 
-                if(!isSuccess.Succeeded) throw new Exception("Subtract fail!");
+                if(!isSuccess.Succeeded) throw new Exception("Withdraw fail!");
                 response.isSuccess = true;
                 response.Message = "Successful!";
             }

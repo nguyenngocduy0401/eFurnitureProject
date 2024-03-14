@@ -5,6 +5,7 @@ using eFurnitureProject.Application.ViewModels.TransactionViewModels;
 using eFurnitureProject.Application.ViewModels.VoucherDTO;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,31 +43,29 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
-        public async Task<ApiResponse<TransactionViewDTO>> GetTransactionById(Guid transactionId)
+        public async Task<ApiResponse<TransactionViewDTO>> GetTransactionByIdAsync(Guid transactionId)
         {
             var response = new ApiResponse<TransactionViewDTO>();
 
             try
             {
-                var result = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionId);
+                var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionId);
+                var result = _mapper.Map<TransactionViewDTO>(transaction);
 
+                if (result == null) throw new Exception("Not found!");
 
-                if (result is not null)
-                {
-                    response.Data = _mapper.Map<TransactionViewDTO>(result);
-                    response.isSuccess = true;
-                    response.Message = "Success!";
-                }
-                else
-                {
-                    response.Data = null;
-                    response.isSuccess = true;
-                    response.Message = "No reocrd!";
-                }
+                response.Data = result;
+                response.isSuccess = true;
+                response.Message = "Success!";
+
+            }
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-                response.Data = null;
                 response.isSuccess = false;
                 response.Message = ex.Message;
             }

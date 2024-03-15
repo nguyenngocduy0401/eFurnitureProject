@@ -107,12 +107,35 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        public async Task<ApiResponse<bool>> DeleteFeedBack(Guid id)
+
+        public async Task<ApiResponse<Pagination<Product>>> GetFeedBackNotReviewedJWT(int pageIndex, int PageSize)
+        {
+            var response = new ApiResponse<Pagination<Product>>();
+            try
+            {
+                var userCurrentID = _claimsService.GetCurrentUserId.ToString();
+                var feedbacks = await _unitOfWork.FeedbackRepository.GetProductNotFeedbackByUserID(pageIndex, PageSize, userCurrentID);
+                var result = _mapper.Map<Pagination<Product>>(feedbacks);
+                response.Data = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = $" error : {ex.Message}";
+            }
+
+            return response;
+        }
+        public async Task<ApiResponse<bool>> DeleteFeedBack(string id)
         {
             var response = new ApiResponse<bool>();
             try
             {
-                var exist = await _unitOfWork.FeedbackRepository.GetByIdAsync(id);
+                var ID=Guid.Parse(id);
+                var exist = await _unitOfWork.FeedbackRepository.GetByIdAsync(ID);
                 if (exist == null)
                 {
                     response.isSuccess = false;
@@ -131,14 +154,14 @@ namespace eFurnitureProject.Application.Services
                 if (issuccess)
                 {
                     response.isSuccess = true;
-                    response.Message = "Create Successfully";
+                    response.Message = "Delete Successfully";
                     return response;
 
                 }
                 else
                 {
                     response.isSuccess = false;
-                    response.Message = "Create Fail";
+                    response.Message = "Delete Fail";
                     return response;
 
                 }

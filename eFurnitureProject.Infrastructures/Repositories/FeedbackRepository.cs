@@ -72,5 +72,24 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
             return pagination;
         }
+        public async Task<Pagination<Product>> GetProductNotFeedbackByUserID(int pageIndex, int pageSize, string userID)
+        {
+          var products= await _dbContext.Products
+                .Where(p=>!_dbContext.Feedbacks.Any(f => f.UserId == userID && f.ProductId == p.Id)).
+                Skip(pageIndex * pageSize).  
+                Take(pageSize)
+               .ToListAsync();
+            var count = await _dbContext.Products
+            .CountAsync(p => !_dbContext.Feedbacks.Any(f => f.UserId == userID && f.ProductId == p.Id));
+            var pagination = new Pagination<Product>
+            {
+                Items = products,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = count
+            };
+
+            return pagination;
+        }
     }
 }

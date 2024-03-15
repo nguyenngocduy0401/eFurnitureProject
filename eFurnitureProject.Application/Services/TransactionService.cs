@@ -34,8 +34,9 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<Pagination<TransactionViewDTO>>();
             try
             {
-                var transactions = await _unitOfWork.TransactionRepository.FilterTransactionAsync(filterTransactionDTO.Search, filterTransactionDTO.FromTime,
-                    filterTransactionDTO.ToTime, filterTransactionDTO.PageIndex, filterTransactionDTO.PageSize);
+                var transactions = await _unitOfWork.TransactionRepository.FilterTransactionAsync(filterTransactionDTO.Search,filterTransactionDTO.Type, 
+                    filterTransactionDTO.FromTime, filterTransactionDTO.ToTime, 
+                    filterTransactionDTO.PageIndex, filterTransactionDTO.PageSize);
                 var result = _mapper.Map<Pagination<TransactionViewDTO>>(transactions);
                 response.Data = result;
                 response.isSuccess = true;

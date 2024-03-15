@@ -63,7 +63,7 @@ namespace eFurnitureProject.Application.Services
                         BalanceRemain = (double)user.Wallet,
                         UserId = user.Id,
                         Status = 1,
-                        Description = $"Transfer {updateWalletDTO.Wallet:F2} from eFurniturePay to User Wallet for paying Order by Admin",
+                        Description = $"Transfer {updateWalletDTO.Wallet:F2} from eFurniturePay to User Wallet by Admin",
 
                     });
                 var createCheck = await _unitOfWork.SaveChangeAsync() > 0;
@@ -120,7 +120,7 @@ namespace eFurnitureProject.Application.Services
                         BalanceRemain = (double)user.Wallet,
                         UserId = user.Id,
                         Status = 0,
-                        Description = $"Transfer {updateWalletDTO.Wallet:F2} from User wallet to eFurniturePay for paying Order by Admin",
+                        Description = $"Transfer {updateWalletDTO.Wallet:F2} from User wallet to eFurniturePay by Admin",
 
                     });
                 var createCheck = await _unitOfWork.SaveChangeAsync() > 0;

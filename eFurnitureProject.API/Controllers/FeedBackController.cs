@@ -14,7 +14,7 @@ namespace eFurnitureProject.API.Controllers
             _feedBackService = feedBackService;
         }
         [HttpPost]
-        public async Task<ApiResponse<FeedBackDTO>> CreateFeed(CreateFeedBackDTO feedBackDTO, Guid productID) => await _feedBackService.CreateFeedBack(feedBackDTO, productID);
+        public async Task<ApiResponse<FeedBackDTO>> CreateFeed(CreateFeedBackDTO feedBackDTO, string productID) => await _feedBackService.CreateFeedBack(feedBackDTO, productID);
 
         [HttpGet]
         public async Task<ApiResponse<Pagination<FeedBackViewDTO>>> GetFeedBackJWT(int pageIndex, int PageSize) => await _feedBackService.GetFeedBackJWT(pageIndex, PageSize);

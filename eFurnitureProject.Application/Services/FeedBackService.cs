@@ -28,12 +28,13 @@ namespace eFurnitureProject.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO, Guid feedBackId)
+        public async Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO, string productID)
         {
             var response = new ApiResponse<FeedBackDTO>();
             try
             {
-                var checkFeedBack = await _unitOfWork.FeedbackRepository.CheckProduct(feedBackId);
+                var proDtuctID = Guid.Parse(productID);
+                var checkFeedBack = await _unitOfWork.FeedbackRepository.CheckProduct(proDtuctID);
                 if (!checkFeedBack)
                 {
                     response.isSuccess = false;
@@ -51,7 +52,8 @@ namespace eFurnitureProject.Application.Services
                     else
                     {
                         feedback.Status = 1;
-                        feedback.ProductId = feedBackId;
+                        feedback.ProductId = proDtuctID;
+                        feedback.UserId = _claimsService.GetCurrentUserId.ToString();
                         await _unitOfWork.FeedbackRepository.AddAsync(feedback);
                         var issuccess = await _unitOfWork.SaveChangeAsync() > 0;
                         if (issuccess)

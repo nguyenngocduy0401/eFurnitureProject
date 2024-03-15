@@ -94,7 +94,8 @@ namespace eFurnitureProject.Application.Services
                 var userCurrentID = _claimsService.GetCurrentUserId.ToString();
                 var feedbacks = await _unitOfWork.FeedbackRepository.GetFeedBacksByUserID(pageIndex, PageSize, userCurrentID);
                 var result = _mapper.Map<Pagination<FeedBackViewDTO>>(feedbacks);
-
+                response.Data = result;
+                return response;
             }
             catch (Exception ex)
             {

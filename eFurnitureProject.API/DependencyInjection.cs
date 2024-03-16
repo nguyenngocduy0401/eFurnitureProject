@@ -91,6 +91,7 @@ namespace eFurnitureProject.API
             services.AddScoped<RoleInitializer>();
             services.AddScoped<AccountInitializer>();
             services.AddScoped<StatusOrderInitializer>();
+            services.AddScoped<StatusOrderProcessingInitializer>();
             #endregion
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFurnitureProject.Domain.Entities
+namespace eFurnitureProject.Application.ViewModels.OrderProcessingViewModels
 {
-    public class StatusOrderProcessing : BaseEntity
+    public class StatusOrderProcessingViewDTO
     {
         public string Name { get; set; }
         public int StatusCode { get; set; }

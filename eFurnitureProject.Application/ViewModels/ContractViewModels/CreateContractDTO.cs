@@ -11,6 +11,10 @@ namespace eFurnitureProject.Application.ViewModels.ContractViewModels
         public string Description { get; set; }
         public int Value { get; set; }
         public int Pay { get; set; }
-        public CreateOrderProcessingDTO OrderProcessing { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string Name { get; set; }
+        public virtual ICollection<CreateOrderProcessingDetailDTO> Items { get; set; }
     }
 }

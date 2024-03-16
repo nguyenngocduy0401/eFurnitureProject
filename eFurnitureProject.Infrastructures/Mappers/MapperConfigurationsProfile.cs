@@ -16,6 +16,8 @@ using eFurnitureProject.Application.ViewModels.ImportDetailViewModels;
 using eFurnitureProject.Application.ViewModels.CartViewModels;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using eFurnitureProject.Application.ViewModels.FeedBackDTO;
+using eFurnitureProject.Application.ViewModels.OrderProcessingViewModels;
+using eFurnitureProject.Application.ViewModels.OrderProcessingDetailViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -36,9 +38,46 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Product,CreateProductDTO>();
             CreateMap<CreateProductDTO, Product>();
             CreateMap<Appointment, AppointmentDetail>();
-            CreateMap<CreateContractDTO, Contract>();
+            CreateMap<CreateContractDTO, Contract>()
+                 .ForPath(dest => dest.OrderProcessing.Name, opt => opt.MapFrom(x => x.Name))
+                 .ForPath(dest => dest.OrderProcessing.PhoneNumber, opt => opt.MapFrom(x => x.PhoneNumber))
+                 .ForPath(dest => dest.OrderProcessing.Address, opt => opt.MapFrom(x => x.Address))
+                 .ForPath(dest => dest.OrderProcessing.Price, opt => opt.MapFrom(x => x.Value))
+                 .ForPath(dest => dest.OrderProcessing.Email, opt => opt.MapFrom(x => x.Email))
+                 .ForPath(dest => dest.OrderProcessing.UserId, opt => opt.MapFrom(x => x.CustomerId))
+                 .ForPath(dest => dest.OrderProcessing.OrderProcessingDetail, opt => opt.MapFrom(x => x.Items));
             CreateMap<Contract, ContractViewDTO>()
-                 .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
+                 .ForMember(dest => dest.ContractID, opt => opt.MapFrom(src => src.Id))
+                 .ForMember(dest => dest.StatusContract, opt => opt.MapFrom(src => src.Status))
+                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                 .ForMember(dest => dest.CustomerContractName, opt => opt.MapFrom(src => src.Customer.Name))
+                 .ForMember(dest => dest.CustomerOrderProcessName, opt => opt.MapFrom(src => src.OrderProcessing.Name))
+                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.OrderProcessing.PhoneNumber))
+                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.OrderProcessing.Email))
+                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.OrderProcessing.Address))
+                 .ForMember(dest => dest.StatusOrderProcessing, opt => opt.MapFrom(src => new StatusOrderProcessingViewDTO
+                 {
+                     StatusCode = src.OrderProcessing.StatusOrderProcessing.StatusCode,
+                     Name = src.OrderProcessing.StatusOrderProcessing.Name
+                 }));
+            CreateMap<OrderProcessingDetail, OrderProcessingDetailViewDTO>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : ""))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
+            CreateMap<Contract, ContractViewFullDTO>()
+                 .ForMember(dest => dest.ContractID, opt => opt.MapFrom(src => src.Id))
+                 .ForMember(dest => dest.StatusContract, opt => opt.MapFrom(src => src.Status))
+                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                 .ForMember(dest => dest.CustomerContractName, opt => opt.MapFrom(src => src.Customer.Name))
+                 .ForMember(dest => dest.CustomerOrderProcessName, opt => opt.MapFrom(src => src.OrderProcessing.Name))
+                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.OrderProcessing.PhoneNumber))
+                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.OrderProcessing.Email))
+                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.OrderProcessing.Address))
+                 .ForMember(dest => dest.StatusOrderProcessing, opt => opt.MapFrom(src => new StatusOrderProcessingViewDTO
+                 {
+                     StatusCode = src.OrderProcessing.StatusOrderProcessing.StatusCode,
+                     Name = src.OrderProcessing.StatusOrderProcessing.Name
+                 }))
+                 .ForMember(dest => dest.item, opt => opt.MapFrom(src => src.OrderProcessing.OrderProcessingDetail));
             CreateMap<UpdateContractDTO, Contract>();
             CreateMap<CreateAppointmentDTO, Appointment>();
             CreateMap<AppointmentDetailDTO, AppointmentDetail>();
@@ -94,6 +133,8 @@ namespace eFurnitureProject.Infrastructures.Mappers
             CreateMap<Feedback, FeedBackDTO>();
             CreateMap<FeedBackDTO, Feedback>();
             CreateMap<CreateFeedBackDTO, Feedback>();
+            CreateMap<CreateOrderProcessingDetailDTO, OrderProcessingDetail>();
+            
         }
     }
 }

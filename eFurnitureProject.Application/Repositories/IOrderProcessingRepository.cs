@@ -9,5 +9,6 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IOrderProcessingRepository : IGenericRepository<OrderProcessing>
     {
+        Task<OrderProcessing> GetOrderProcessingByContractId(Guid contractId);    
     }
 }

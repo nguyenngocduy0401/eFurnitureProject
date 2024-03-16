@@ -55,7 +55,7 @@ namespace eFurnitureProject.Application.Services
             {
 
                 var appointment = _mapper.Map<Appointment>(createAppointmentDTO);
-                appointment.Status = 2;
+                appointment.Status = 1;
                 ValidationResult validationResult = await _createAppointmentValidator.ValidateAsync(createAppointmentDTO);
                 if (!validationResult.IsValid)
                 {

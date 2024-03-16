@@ -25,15 +25,16 @@ namespace eFurnitureProject.Infrastructures.Repositories
             DateTime? fromTime, DateTime? toTime,
             int pageIndex,int pageSize)
         {
-            var itemList = _dbSet.Where(x => (string.IsNullOrEmpty(type) || x.Type.ToLower() == type.ToLower()) &&
-                                             (!fromTime.HasValue || x.CreationDate >= fromTime) &&
-                                             (!toTime.HasValue || x.CreationDate <= toTime.Value) &&
-                                             string.IsNullOrEmpty(search) ||
-                                             x.User.Name.Contains(search) ||
-                                             x.User.PhoneNumber.Contains(search) ||
-                                             x.User.Email.Contains(search) ||
-                                             x.Description.ToLower().Contains(search.ToLower())
-                                             );
+            var itemList = _dbSet.Where(x =>
+                    (string.IsNullOrEmpty(type) || x.Type.ToLower() == type.ToLower()) &&
+                    (!fromTime.HasValue || x.CreationDate >= fromTime) &&
+                    (!toTime.HasValue || x.CreationDate <= toTime.Value) &&
+                    (string.IsNullOrEmpty(search) ||
+                        x.User.Name.Contains(search) ||
+                        x.User.PhoneNumber.Contains(search) ||
+                        x.User.Email.Contains(search) ||
+                        x.Description.ToLower().Contains(search.ToLower()))
+                        );
             var items = await itemList.
                 OrderByDescending(x => x.CreationDate)
                                     .Skip((pageIndex - 1) * pageSize)

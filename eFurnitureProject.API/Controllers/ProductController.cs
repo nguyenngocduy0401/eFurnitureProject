@@ -26,7 +26,7 @@ namespace eFurnitureProject.API.Controllers
         [HttpGet]
         public async Task<ApiResponse<Pagination<ProductDTO>>> FilterProducts2(
           int page,
-         String? categoryId,
+         string? categoryId,
          string? productName,
            double? minPrice, double? maxPrice,
          int pageSize)

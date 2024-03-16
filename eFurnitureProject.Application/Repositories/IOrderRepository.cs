@@ -17,6 +17,7 @@ namespace eFurnitureProject.Application.Repositories
         Task<Pagination<Order>> GetOrderFilterByLogin(int pageIndex,
             int pageSize, int? status, DateTime? fromTime, DateTime? toTime,
             string? userId);
-        Task<StatusOrder> GetStatusOrderByOrderId(Guid orderId);//11
+        Task<StatusOrder> GetStatusOrderByOrderId(Guid orderId);
+        Task<Order> GetOrderByIdAsync(Guid orderId);
     }
 }

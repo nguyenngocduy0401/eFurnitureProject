@@ -16,14 +16,43 @@ namespace eFurnitureProject.Infrastructures.Repositories
         private readonly AppDbContext _dbContext;
         public TransactionRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
+            _dbContext = context;
         }
 
-        public async Task<Pagination<Transaction>> FilterTransaction(DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize)
+
+        public async Task<Pagination<Transaction>> FilterTransactionAsync(
+            string? search , DateTime? fromTime,
+            DateTime? toTime, int pageIndex, 
+            int pageSize)
         {
-            throw new NotImplementedException();
+            var itemList = _dbSet.Where(x => (!fromTime.HasValue || x.CreationDate >= fromTime) &&
+                                             (!toTime.HasValue || x.CreationDate <= toTime.Value) &&
+                                             string.IsNullOrEmpty(search) ||
+                                             x.User.Name.Contains(search) ||
+                                             x.User.PhoneNumber.Contains(search) ||
+                                             x.User.Email.Contains(search)
+                                             );
+            var items = await itemList.
+                OrderByDescending(x => x.CreationDate)
+                                    .Skip((pageIndex - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+            var itemCount = await itemList.CountAsync();
+            var result = new Pagination<Transaction>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+            return result;
         }
 
-        public async Task<Pagination<Transaction>> FilterTransactionByLogin(string userId, DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize)
+        public async Task<Pagination<Transaction>> FilterTransactionByLoginAsync(
+            string userId, DateTime? fromTime, 
+            DateTime? toTime, int pageIndex, 
+            int pageSize)
         {
             var itemList = _dbSet.Where(x => x.UserId == userId &&
                                            (!fromTime.HasValue || x.CreationDate >= fromTime) &&

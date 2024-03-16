@@ -120,6 +120,11 @@ namespace eFurnitureProject.Infrastructures.Repositories
         {
             return await _dbContext.Vouchers.FirstOrDefaultAsync(v => v.VoucherName == voucherName && v.IsDeleted);
         }
+
+        public void UpdateVoucher(Voucher voucher)
+        {
+            _dbSet.Update(voucher);
+        }
     }
 }
       

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -340,6 +341,7 @@ namespace eFurnitureProject.Application.Services
                     return response;
                 }
                 var user = _mapper.Map<User>(createUserDTO);
+                user.Wallet = 0;
                 var identityResult = await _userManager.CreateAsync(user, createUserDTO.Password);
                 if (identityResult.Succeeded == true)
                 {

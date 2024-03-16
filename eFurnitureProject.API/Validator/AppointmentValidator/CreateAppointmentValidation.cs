@@ -24,9 +24,11 @@ namespace eFurnitureProject.API.Validator.AppointmentValidator
 
 
             RuleFor(x => x.Time)
-           .NotEmpty().WithMessage("Time is required.")
-           .Matches(@"^(1[0-2]|0?[1-9]):([0-5][0-9]) (AM|PM|am|pm)$")
-           .WithMessage("Time must be in valid format, e.g., 9:00 AM or 9:00PM");
+    .NotEmpty().WithMessage("Time is required.")
+    .Matches(@"^((?:[01]\d|2[0-3]):[0-5]\d|24:00)$")
+        .WithMessage("Time must be in valid format, e.g., 00:00 to 24:00")
+    .When(x => x.Time != null);
+      
 
         }
 

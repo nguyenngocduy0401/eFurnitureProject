@@ -1,4 +1,4 @@
-﻿using eFurnitureProject.Application.Repositories;
+﻿ using eFurnitureProject.Application.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +31,7 @@ namespace eFurnitureProject.Application
         public IUserRepository UserRepository { get; }
         public IVoucherRepository VoucherRepository { get; }
         public IVoucherDetailRepository VoucherDetailRepository { get; }
+        public IResponseRepository ResponseRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

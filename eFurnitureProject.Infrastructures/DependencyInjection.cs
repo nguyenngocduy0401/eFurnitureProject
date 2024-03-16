@@ -43,6 +43,8 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IImportService, ImportService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<IResponseService ,ResponseService>();
+            services.AddScoped<IFeedBackService, FeedBackService>();
             #endregion
 
             #region Repository DI
@@ -71,7 +73,7 @@ namespace eFurnitureProject.Infrastructures
             services.AddScoped<IVoucherDetailRepository, VoucherDetailRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            services.AddScoped<IFeedBackService, FeedBackService>();
+            services.AddScoped<IResponseRepository ,ResponseRepository>();
             #endregion
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
          

@@ -41,18 +41,13 @@ namespace eFurnitureProject.Application.Services
                 var user = new User();
                 var signature = _appConfiguration.MoMoConfig.Signature;
                 if (signature != moMoDTO.signature) throw new Exception("signature is wrong!");
-
-                if (moMoDTO.partnerId != null)
+                user = await _userManager.FindByNameAsync(moMoDTO.comment);
+                if (user != null)
                 {
-                    user = await _unitOfWork.UserRepository.GetByPhoneNumberAsync(moMoDTO.partnerId);
-                    if (user != null)
-                    {
-                        user.Wallet = user.Wallet + moMoDTO.amount;
-                        await _userManager.UpdateAsync(user);
-                    }
-                } else user.Id = null;
-
-
+                user.Wallet = user.Wallet + moMoDTO.amount;
+                await _userManager.UpdateAsync(user);
+                }
+                else user.Id = null;
                 await _unitOfWork.TransactionRepository.AddTransactionAsync(
                     new Transaction
                     {
@@ -64,7 +59,7 @@ namespace eFurnitureProject.Application.Services
                         BalanceRemain = (double)user.Wallet,
                         UserId = user.Id,
                         Status = 1,
-                        Description = $"Transfer {moMoDTO.amount:F2} from MoMo to {moMoDTO.partnerId}, comment: {moMoDTO.comment}. {moMoDTO.tranId}",
+                        Description = $"Transfer {moMoDTO.amount:F2} from MoMo to {moMoDTO.comment}. {moMoDTO.tranId}",
 
                     });
                 await _unitOfWork.SaveChangeAsync();

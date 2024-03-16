@@ -18,5 +18,6 @@ namespace eFurnitureProject.Application.Repositories
             int pageSize, int? status, DateTime? fromTime, DateTime? toTime,
             string? userId);
         Task<StatusOrder> GetStatusOrderByOrderId(Guid orderId);
+        Task<Order> GetOrderByIdAsync(Guid orderId);
     }
 }

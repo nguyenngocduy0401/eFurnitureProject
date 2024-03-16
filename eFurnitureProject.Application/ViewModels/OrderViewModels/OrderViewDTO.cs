@@ -9,7 +9,7 @@ namespace eFurnitureProject.Application.ViewModels.OrderViewModels
 {
     public class OrderViewDTO : BaseEntity
     {
-        public int Price { get; set; }
+        public double Price { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }

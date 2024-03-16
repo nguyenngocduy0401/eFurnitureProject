@@ -9,7 +9,8 @@ namespace eFurnitureProject.Application.ViewModels.VoucherDTO
     public class VoucherViewDTO
     {
         public Guid Id { get; set; }
-        public string VoucherName { get; set; }
+        public string? VoucherName { get; set; }
+       // public string? VoucherCode {  get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double Percent { get; set; }

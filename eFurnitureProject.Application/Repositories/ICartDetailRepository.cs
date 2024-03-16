@@ -12,5 +12,6 @@ namespace eFurnitureProject.Application.Repositories
         void UpdateQuantityProductInCart(CartDetail cartdetail);
         Task AddAsync(CartDetail cartdetail);
         void DeleteProductInCart(Guid cartId, Guid productId);
+        void DeleteCart(Guid cartId);
     }
 }

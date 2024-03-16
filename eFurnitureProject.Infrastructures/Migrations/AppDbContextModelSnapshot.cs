@@ -889,11 +889,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Amount")
-                        .HasColumnType("int");
+                    b.Property<double?>("Amount")
+                        .HasColumnType("float");
 
-                    b.Property<int?>("BalanceRemain")
-                        .HasColumnType("int");
+                    b.Property<double>("BalanceRemain")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");

@@ -1,7 +1,6 @@
 ﻿using eFurnitureProject.Application.Interfaces;
 using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +20,12 @@ namespace eFurnitureProject.Infrastructures.Repositories
 
         public async Task AddAsync(CartDetail cartdetail) => await _dbContext.AddAsync(cartdetail);
 
+        public void DeleteCart(Guid cartId)
+        {
+            var cartDetails = _dbContext.CartDetails.Where(cd => cd.CartId == cartId).ToList();
+            _dbContext.CartDetails.RemoveRange(cartDetails);
+        }
+
         public void DeleteProductInCart(Guid cartId, Guid productId)
         {
             var itemInCart = new CartDetail()
@@ -30,11 +35,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
             };
             _dbContext.CartDetails.Remove(itemInCart);
         }
-
         
-
         public void UpdateQuantityProductInCart(CartDetail cartdetail) => _dbContext.Update(cartdetail);
-
-
     }
 }

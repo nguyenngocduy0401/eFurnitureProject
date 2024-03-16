@@ -132,6 +132,7 @@ namespace eFurnitureProject.Application.Services
                 else
                 {
                     var user = _mapper.Map<User>(userRegisterDTO);
+                    user.Wallet = 0;
                     var identityResult = await _userManager.CreateAsync(user, user.PasswordHash);
                     if (identityResult.Succeeded == true)
                     {

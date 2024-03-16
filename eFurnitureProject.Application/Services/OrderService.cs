@@ -7,10 +7,14 @@ using eFurnitureProject.Application.ViewModels.OrderDetailViewModels;
 using eFurnitureProject.Application.ViewModels.OrderViewModels;
 using eFurnitureProject.Application.ViewModels.ProductDTO;
 using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
+using eFurnitureProject.Application.ViewModels.WalletViewModels;
 using eFurnitureProject.Domain.Entities;
 using eFurnitureProject.Domain.Enums;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,22 +31,29 @@ namespace eFurnitureProject.Application.Services
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
         private readonly UserManager<User> _userManager;
+        private readonly IValidator<CreateOrderDTO> _validatorCreateOrder;
 
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService,
-                            UserManager<User> userManager) 
+                            UserManager<User> userManager, IValidator<CreateOrderDTO> validatorCreateOrder) 
         { 
             _mapper = mapper;
             _unitOfWork = unitOfWork;  
             _claimsService = claimsService;
             _userManager = userManager;
+            _validatorCreateOrder = validatorCreateOrder;
         }
-        public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderByIdAsync(Guid orderId)
+        public async Task<ApiResponse<OrderViewDTO>> GetOrderByIdAsync(Guid orderId)
         {
-            var response = new ApiResponse<OrderDetailViewDTO>();
+            var response = new ApiResponse<OrderViewDTO>();
             try
             {
-                var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
-                
+                var order = await _unitOfWork.OrderRepository.GetOrderByIdAsync(orderId);
+                if (order == null) throw new Exception("Not found!");
+                var result = _mapper.Map<OrderViewDTO>(order);
+                response.Data = result;
+                response.isSuccess = true;
+                response.Message= "Successful!";
+                return response;
             }
             catch (DbException ex)
             {
@@ -202,21 +213,40 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
+                ValidationResult validationResult = await _validatorCreateOrder.ValidateAsync(createOrderDTO);
+                if (!validationResult.IsValid)
+                {
+                    response.isSuccess = false;
+                    response.Message = string.Join(", ", validationResult.Errors.Select(error => error.ErrorMessage));
+                    return response;
+                }
+
                 bool checkVoucher = false;
                 var voucherInfo = new Voucher();
                 var userId = _claimsService.GetCurrentUserId.ToString();
-                if (!createOrderDTO.voucherId.Equals(null))
+                if (!createOrderDTO.VoucherId.IsNullOrEmpty())
                 {
+                    var voucherId = Guid.Parse(createOrderDTO.VoucherId);
                     //Check voucher existed
-                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync((Guid)createOrderDTO.voucherId);
+                    voucherInfo = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId);
                     if (voucherInfo == null || voucherInfo.IsDeleted || voucherInfo.Number <= 0) throw new Exception("Not found voucher!");
-                    //Check voucher be used
-                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, (Guid)createOrderDTO.voucherId)) 
-                        throw new Exception("Voucher is used!");
                     else 
+                    { 
+                        //Update Voucher
+                        voucherInfo.Number = voucherInfo.Number - 1;
+                        _unitOfWork.VoucherRepository.Update(voucherInfo);
+                        await _unitOfWork.VoucherDetailRepository.AddAsync(new VoucherDetail {UserId = userId, VoucherId = voucherId});
+                    }
+                    //Check voucher be used
+                    if (await _unitOfWork.VoucherDetailRepository.CheckVoucherBeUsedByUser(userId, voucherId))
+                        throw new Exception("Voucher is used!");
+                    else
                         checkVoucher = true;
                 }
+                else { createOrderDTO.VoucherId = null; }
                 var cartDetails = await _unitOfWork.CartRepository.GetCartDetailsByUserId(userId);
+                if (cartDetails.IsNullOrEmpty()) throw new Exception("Your cart has no products!");
+
                 var createOrder = _mapper.Map<Order>(createOrderDTO);
                 await _unitOfWork.OrderRepository.AddAsync(createOrder);
                 var resultCreate = await _unitOfWork.SaveChangeAsync() > 0;
@@ -225,26 +255,33 @@ namespace eFurnitureProject.Application.Services
                 var price = 0d;
                 // insert product from cart to orderDetail
                 List<OrderDetail> orderDetails = new List<OrderDetail>();
+                List<Product> products = new List<Product>();
                 foreach (var cartDetail in cartDetails)
                 {
+                    
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(cartDetail.ProductId);
                     if (product == null) throw new Exception($"Some products do not exist in your shopping cart!");
                     if (product.IsDeleted) throw new Exception($"{product.Name} do not exist in your shopping cart!");
-                    if (product.Status != 2) throw new Exception($"{product.Name} has been discontinued!");
+                    if (product.Status != (int)ProductStatusEnum.Unlock) throw new Exception($"{product.Name} has been discontinued!");
                     if (product.InventoryQuantity <=0) throw new Exception($"{product.Name} out of stock!");
-                        orderDetails.Add(new OrderDetail
+                    product.InventoryQuantity = product.InventoryQuantity - cartDetail.Quantity;
+                    products.Add(product);
+                    orderDetails.Add(new OrderDetail
                     {
-                        ProductId = id,
+                        OrderId = id,
+                        ProductId = product.Id,
                         Quantity = cartDetail.Quantity,
                         Price = product.Price,
                     });
                     price =+ product.Price * cartDetail.Quantity;  
                 }
+                await _unitOfWork.OrderDetailRepository.AddRangeAsync(orderDetails);
+                _unitOfWork.ProductRepository.UpdateProductByOrder(products);
                 if (checkVoucher)
                 {
                     if (voucherInfo.MinimumOrderValue <= price)
                     {
-                        var discount = voucherInfo.Percent * price;
+                        var discount = voucherInfo.Percent/100 * price;
                         if (discount > voucherInfo.MaximumDiscountAmount)
                         {
                             price = price - voucherInfo.MaximumDiscountAmount;
@@ -256,14 +293,32 @@ namespace eFurnitureProject.Application.Services
                 createOrder.Address = createOrderDTO.Address;
                 createOrder.Email = createOrderDTO.Email;
                 createOrder.PhoneNumber = createOrderDTO.PhoneNumber;
-                createOrder.StatusId = (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode(1)).Id;
+                createOrder.StatusId = (await _unitOfWork.StatusOrderRepository.GetStatusByStatusCode((int)OrderStatusEnum.Pending)).Id;
                 createOrder.Name = createOrderDTO.Name;
-
+                createOrder.UserId = userId;
                 var user = await _userManager.FindByIdAsync(userId);
-                if (user.Wallet < price) throw new Exception("Not enough money!");
+                if (user.Wallet < price || user.Wallet == null) throw new Exception("Not enough money!");
                 user.Wallet = user.Wallet - price;
+                var cartId = await _unitOfWork.CartRepository.GetCartIdAsync();
+                _unitOfWork.CartDetailRepository.DeleteCart(cartId);
+
+                var transaction = new Transaction
+                {
+                    OrderId = id,
+                    Amount = price,
+                    From = "Wallet",
+                    To = "eFurniturePay",
+                    Type = "Order",
+                    BalanceRemain = (double)user.Wallet,
+                    UserId = userId,
+                    Status = 0,
+                    Description = $"Transfer {price:F2} from User wallet to eFurniturePay for paying Order",
+                };
+                await _unitOfWork.TransactionRepository.AddAsync(transaction);
+                
                 _unitOfWork.OrderRepository.Update(createOrder);
                 var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                await _userManager.UpdateAsync(user);
                 if (!isSuccess) throw new Exception("Create fail!");
                 response.isSuccess = true;
                 response.Message = "Checkout Successfully!";

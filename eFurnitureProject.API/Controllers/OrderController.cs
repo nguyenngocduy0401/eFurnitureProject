@@ -29,14 +29,15 @@ namespace eFurnitureProject.API.Controllers
         [HttpPut]
         public async Task<ApiResponse<string>> UpdateOrderStatus([FromBody]UpdateOrderStatusDTO updateOrderStatusDTO) =>
             await _service.UpdateOrderStatusAsync(updateOrderStatusDTO);
-        [Authorize(Roles = AppRole.Admin + "," + AppRole.Staff + "," + AppRole.DeliveryStaff)]
+        [Authorize]
         [HttpGet]
-        public async Task<ApiResponse<OrderDetailViewDTO>> GetOrderById(Guid orderId) =>
+        public async Task<ApiResponse<OrderViewDTO>> GetOrderById(Guid orderId) =>
             await _service.GetOrderByIdAsync(orderId);
         [Authorize]
         [HttpGet]
         public async Task<ApiResponse<StatusDetailOrderViewDTO>> GetStatusByOrderId(Guid orderId) =>
             await _service.GetOrderStatusByOrderId(orderId);
+        [Authorize(Roles = AppRole.Customer)]
         [HttpPost]
         public async Task<ApiResponse<string>> CheckOut(CreateOrderDTO createOrderDTO) =>
             await _service.CheckOut(createOrderDTO);

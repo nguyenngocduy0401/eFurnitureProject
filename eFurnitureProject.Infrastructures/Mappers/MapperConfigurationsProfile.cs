@@ -18,6 +18,7 @@ using eFurnitureProject.Application.ViewModels.StatusOrderViewModels;
 using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 using eFurnitureProject.Application.ViewModels.OrderProcessingViewModels;
 using eFurnitureProject.Application.ViewModels.OrderProcessingDetailViewModels;
+using eFurnitureProject.Application.ViewModels.TransactionViewModels;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -127,14 +128,16 @@ namespace eFurnitureProject.Infrastructures.Mappers
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Product != null ? src.Product.Image : ""));
             CreateMap<Cart, CartDetailViewDTO>();
             CreateMap<StatusOrder,StatusDetailOrderViewDTO>();
-            CreateMap<CreateOrderDTO, Order>();
             CreateMap<Import, ImportViewFullDTO>()
                 .ForMember(dest => dest.importDetailViewDTOs, opt => opt.MapFrom(src => src.ImportDetail));
             CreateMap<Feedback, FeedBackDTO>();
             CreateMap<FeedBackDTO, Feedback>();
             CreateMap<CreateFeedBackDTO, Feedback>();
             CreateMap<CreateOrderProcessingDetailDTO, OrderProcessingDetail>();
-            
+            CreateMap<CreateOrderDTO, Order>()
+            .ForMember(dest => dest.VoucherId,opt => opt
+            .MapFrom(src => string.IsNullOrEmpty(src.VoucherId) ? (Guid?)null : Guid.Parse(src.VoucherId)));
+            CreateMap<Transaction, TransactionViewDTO>();
         }
     }
 }

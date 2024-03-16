@@ -22,6 +22,8 @@ namespace eFurnitureProject.API.Controllers
         [HttpPost]
         public async Task<ApiResponse<string>> SubtractMoneyByUserId(UpdateWalletDTO updateWalletDTO) =>
             await _walletService.SubtractMoneyByUserIdAsync(updateWalletDTO);
-
+        [HttpPost]
+        public async Task<ApiResponse<string>> MoMoApi(MoMoDTO moMoDTO) =>
+            await _walletService.MoMoApi(moMoDTO);
     }
 }

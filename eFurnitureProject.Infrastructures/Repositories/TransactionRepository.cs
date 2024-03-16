@@ -19,6 +19,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _dbContext = context;
         }
 
+        public async Task AddTransactionAsync(Transaction transaction)
+        {
+            await _dbSet.AddAsync(transaction);
+        }
 
         public async Task<Pagination<Transaction>> FilterTransactionAsync(
             string? search, string? type, 

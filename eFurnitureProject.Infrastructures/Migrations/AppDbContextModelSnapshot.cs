@@ -178,7 +178,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.AppointmentDetail", b =>
@@ -198,7 +198,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("AppointmentId");
 
-                    b.ToTable("AppointmentDetails", (string)null);
+                    b.ToTable("AppointmentDetails");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Cart", b =>
@@ -236,7 +236,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.CartDetail", b =>
@@ -254,7 +254,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartDetails", (string)null);
+                    b.ToTable("CartDetails");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Category", b =>
@@ -290,7 +290,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Contract", b =>
@@ -347,9 +347,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("OrderProcessingId");
+                    b.HasIndex("OrderProcessingId")
+                        .IsUnique()
+                        .HasFilter("[OrderProcessingId] IS NOT NULL");
 
-                    b.ToTable("Contracts", (string)null);
+                    b.ToTable("Contracts");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Feedback", b =>
@@ -401,7 +403,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Feedbacks", (string)null);
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Import", b =>
@@ -443,7 +445,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Imports", (string)null);
+                    b.ToTable("Imports");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.ImportDetail", b =>
@@ -466,7 +468,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ImportsDetail", (string)null);
+                    b.ToTable("ImportsDetail");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Order", b =>
@@ -528,7 +530,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderDetail", b =>
@@ -551,7 +553,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrdersDetails", (string)null);
+                    b.ToTable("OrdersDetails");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderProcessing", b =>
@@ -596,10 +598,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("StatusOrderProcessingId")
+                    b.Property<Guid>("StatusOrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -608,16 +611,16 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrderProcessings", (string)null);
+                    b.ToTable("OrderProcessings");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderProcessingDetail", b =>
                 {
-                    b.Property<Guid?>("OrderProcessingId")
+                    b.Property<Guid>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
-                    b.Property<Guid?>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
@@ -634,7 +637,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProcessingDetails", (string)null);
+                    b.ToTable("OrderProcessingDetails");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Product", b =>
@@ -691,7 +694,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.RefreshToken", b =>
@@ -728,7 +731,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Response", b =>
@@ -775,7 +778,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("Responses", (string)null);
+                    b.ToTable("Responses");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Role", b =>
@@ -841,7 +844,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StatusOrders", (string)null);
+                    b.ToTable("StatusOrders");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.StatusOrderProcessing", b =>
@@ -880,7 +883,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StatusOrderProcessings", (string)null);
+                    b.ToTable("StatusOrderProcessings");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Transaction", b =>
@@ -948,7 +951,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.User", b =>
@@ -1085,7 +1088,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vouchers", (string)null);
+                    b.ToTable("Vouchers");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.VoucherDetail", b =>
@@ -1105,7 +1108,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("VouchersDetails", (string)null);
+                    b.ToTable("VouchersDetails");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1217,8 +1220,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .IsRequired();
 
                     b.HasOne("eFurnitureProject.Domain.Entities.OrderProcessing", "OrderProcessing")
-                        .WithMany()
-                        .HasForeignKey("OrderProcessingId");
+                        .WithOne("Contract")
+                        .HasForeignKey("eFurnitureProject.Domain.Entities.Contract", "OrderProcessingId");
 
                     b.Navigation("Customer");
 
@@ -1305,11 +1308,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 {
                     b.HasOne("eFurnitureProject.Domain.Entities.StatusOrderProcessing", "StatusOrderProcessing")
                         .WithMany()
-                        .HasForeignKey("StatusOrderProcessingId");
+                        .HasForeignKey("StatusOrderProcessingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("StatusOrderProcessing");
 
@@ -1436,6 +1443,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderProcessing", b =>
                 {
+                    b.Navigation("Contract");
+
                     b.Navigation("OrderProcessingDetail");
                 });
 

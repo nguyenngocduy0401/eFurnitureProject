@@ -30,7 +30,10 @@ namespace eFurnitureProject.Infrastructures.Repositories
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        
+
+
+        public async Task<User> GetByPhoneNumberAsync(string phoneNumber) =>
+            await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
         public async Task<Pagination<User>> GetUsersByFilter
             (string search, string role, int pageIndex = 1, int pageSize = 10) 
         {

@@ -12,5 +12,6 @@ namespace eFurnitureProject.Application.Interfaces
     {
         Task<ApiResponse<string>> SubtractMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO);
         Task<ApiResponse<string>> AddMoneyByUserIdAsync(UpdateWalletDTO updateWalletDTO);
+        Task<ApiResponse<string>> MoMoApi(MoMoDTO moMoDTO);
     }
 }

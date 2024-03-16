@@ -15,9 +15,11 @@ namespace eFurnitureProject.Domain.Entities
         public int Value { get; set; }
         public int Status { get; set; } = 1;
         public int Pay { get; set; }
+        public string CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
+        public User? Customer { get; set; }
         public Guid? OrderProcessingId { get; set; }
         [ForeignKey("OrderProcessingId")]
         public OrderProcessing? OrderProcessing { get; set; }
-
     }
 }

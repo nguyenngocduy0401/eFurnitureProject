@@ -39,5 +39,9 @@ namespace eFurnitureProject.API.Controllers
         [Authorize(Roles = AppRole.Admin + "," + AppRole.Staff)]
         [HttpPut]
         public async Task<ApiResponse<string>> UpdateStatusOrderProcessing(string contractId, int status) => await _contractService.UpdateStatusOrderProcessingAsync(contractId, status);
+
+        [Authorize(Roles = AppRole.Customer)]
+        [HttpPut]
+        public async Task<ApiResponse<string>> PayRemainingCostContractCustomer(string contractId) => await _contractService.PayRemainingCostContractCustomerAsync(contractId);
     }
 }

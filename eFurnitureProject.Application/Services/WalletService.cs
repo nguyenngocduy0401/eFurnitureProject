@@ -71,7 +71,6 @@ namespace eFurnitureProject.Application.Services
                         To = moMoDTO.partnerId,
                         CreationDate = moMoDTO.ackTime,
                         Type = "3rd",
-                        BalanceRemain = (double)user.Wallet,
                         Status = 1,
                         Description = $"Transfer {moMoDTO.amount:F2} from MoMo to {moMoDTO.comment}. {moMoDTO.tranId}",
 

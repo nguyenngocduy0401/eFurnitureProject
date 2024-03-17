@@ -9,7 +9,6 @@ namespace eFurnitureProject.Application.ViewModels.WalletViewModels
     public class MoMoDTO
     {
         public string signature { get; set; }
-        public string? ackTime { get; set; }
         public string tranId { get; set; }
         public string? partnerId { get; set; }
         public string? partnerName { get; set;}

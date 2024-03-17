@@ -46,13 +46,12 @@ namespace eFurnitureProject.Application.Services
                 {
                     user.Wallet = user.Wallet + moMoDTO.amount;
                     await _userManager.UpdateAsync(user);
-                    await _unitOfWork.TransactionRepository.AddTransactionAsync(
+                    await _unitOfWork.TransactionRepository.AddAsync(
                     new Transaction
                     {
                         Amount = moMoDTO.amount,
                         From = "MoMo",
                         To = moMoDTO.partnerId,
-                        CreationDate = moMoDTO.ackTime,
                         Type = "3rd",
                         BalanceRemain = (double)user.Wallet,
                         UserId = user.Id,
@@ -63,13 +62,12 @@ namespace eFurnitureProject.Application.Services
                 }
                 else 
                 {
-                    await _unitOfWork.TransactionRepository.AddTransactionAsync(
+                    await _unitOfWork.TransactionRepository.AddAsync(
                     new Transaction
                     {
                         Amount = moMoDTO.amount,
                         From = "MoMo",
                         To = moMoDTO.partnerId,
-                        CreationDate = moMoDTO.ackTime,
                         Type = "3rd",
                         Status = 1,
                         Description = $"Transfer {moMoDTO.amount:F2} from MoMo to {moMoDTO.comment}. {moMoDTO.tranId}",

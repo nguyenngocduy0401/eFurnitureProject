@@ -12,6 +12,5 @@ namespace eFurnitureProject.Application.Repositories
     {
         Task<Pagination<Transaction>> FilterTransactionByLoginAsync(string userId, DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize);
         Task<Pagination<Transaction>> FilterTransactionAsync(string? search, string? type,DateTime? fromTime, DateTime? toTime, int pageIndex, int pageSize);
-        Task AddTransactionAsync(Transaction transaction);
     }
 }

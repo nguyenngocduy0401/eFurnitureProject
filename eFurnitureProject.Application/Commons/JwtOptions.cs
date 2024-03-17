@@ -8,8 +8,8 @@ namespace eFurnitureProject.Application.Commons
 {
     public class JwtOptions
     {
-        public String Issuer { get; set; } = string.Empty;
-        public String Audience { get; set; } = string.Empty;
-        public String Secret { get; set; } = string.Empty;
+        public string Issuer { get; set; } = string.Empty;
+        public string Audience { get; set; } = string.Empty;
+        public string Secret { get; set; } = string.Empty;
     }
 }

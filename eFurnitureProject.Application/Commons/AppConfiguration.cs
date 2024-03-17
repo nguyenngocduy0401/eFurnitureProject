@@ -11,7 +11,7 @@ namespace eFurnitureProject.Application.Commons
         public string DatabaseConnection { get; set; }
 
         public JwtOptions JwtOptions { get; set; }
-    }
-    
 
+        public MoMoConfig MoMoConfig { get; set; }
+    }
 }

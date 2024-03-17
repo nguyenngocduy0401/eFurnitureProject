@@ -9,6 +9,7 @@ namespace eFurnitureProject.Application.ViewModels.TransactionViewModels
     public class FilterTransactionDTO
     {
         public string? Search { get; set; }
+        public string? Type { get; set; }
         public DateTime? FromTime { get; set; }
         public DateTime? ToTime { get; set; }
         public int PageIndex { get; set; } = 1;

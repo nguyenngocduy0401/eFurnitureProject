@@ -138,6 +138,7 @@ namespace eFurnitureProject.Infrastructures.Mappers
             .ForMember(dest => dest.VoucherId,opt => opt
             .MapFrom(src => string.IsNullOrEmpty(src.VoucherId) ? (Guid?)null : Guid.Parse(src.VoucherId)));
             CreateMap<Transaction, TransactionViewDTO>();
+            CreateMap<CreateFeedBackDTO, Feedback>();
         }
     }
 }

@@ -19,6 +19,7 @@ using eFurnitureProject.Application.ViewModels.FeedBackDTO;
 using eFurnitureProject.Application.ViewModels.OrderProcessingViewModels;
 using eFurnitureProject.Application.ViewModels.OrderProcessingDetailViewModels;
 using eFurnitureProject.Application.ViewModels.TransactionViewModels;
+using eFurnitureProject.Application.ViewModels.DashBoardViewModel;
 
 namespace eFurnitureProject.Infrastructures.Mappers
 {
@@ -139,6 +140,20 @@ namespace eFurnitureProject.Infrastructures.Mappers
             .MapFrom(src => string.IsNullOrEmpty(src.VoucherId) ? (Guid?)null : Guid.Parse(src.VoucherId)));
             CreateMap<Transaction, TransactionViewDTO>();
             CreateMap<CreateFeedBackDTO, Feedback>();
+            CreateMap<OrderDetail, ProductTop5DTO>()
+           .ForMember(dest => dest.TotalQuantity, opt => opt.MapFrom(src => src.Quantity));
+            CreateMap<int, TotalFinishedOrderDTO>()
+           .ForMember(dest => dest.TotalFinishedOrders, opt => opt.MapFrom(src => src));
+            CreateMap<int, TotalUserDTO>()
+          .ForMember(dest => dest.TotalUsers, opt => opt.MapFrom(src => src));
+            CreateMap<int, TotalProcessOderDTO>()
+             .ForMember(dest => dest.total, opt => opt.MapFrom(src => src));
+            CreateMap<double, TotalMoneyDTO>()
+                  .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src));
+            CreateMap<ProductTopDTO, Product>();
+            CreateMap<Product, ProductTopDTO>();
+            CreateMap<User, Top5UserDTO>();
+
         }
     }
 }

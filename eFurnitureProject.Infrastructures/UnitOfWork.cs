@@ -37,6 +37,7 @@ namespace eFurnitureProject.Infrastructures
         private readonly IVoucherDetailRepository _voucherDetailRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IResponseRepository _responseRepository;
+        private readonly IDashBoardRepository _dashBoardRepository;
         public UnitOfWork(AppDbContext dbContext, IAppointmentRepository appointmentRepository,
             IAppointmentDetailRepository appointmentDetailRepository, ICartDetailRepository cartDetailRepository,
             ICartRepository cartRepository, ICategoryRepository categoryRepository,
@@ -47,7 +48,7 @@ namespace eFurnitureProject.Infrastructures
             IProductRepository productRepository, IRoleRepository roleRepository, IStatusOrderProcessingRepository statusOrderProcessingRepository, 
             IStatusOrderRepository statusOrderRepository, ITransactionRepository transactionRepository, 
             IUserRepository userRepository, IVoucherRepository voucherRepository, 
-            IVoucherDetailRepository voucherDetailRepository, IRefreshTokenRepository refreshTokenRepository,IResponseRepository responseRepository)
+            IVoucherDetailRepository voucherDetailRepository, IRefreshTokenRepository refreshTokenRepository,IResponseRepository responseRepository,IDashBoardRepository dashBoardRepository)
         {   
             _refreshTokenRepository = refreshTokenRepository;
             _appointmentRepository = appointmentRepository;
@@ -74,6 +75,7 @@ namespace eFurnitureProject.Infrastructures
             _voucherRepository = voucherRepository;
             _voucherDetailRepository = voucherDetailRepository;
             _responseRepository = responseRepository;
+            _dashBoardRepository = dashBoardRepository;
         }
         public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository;
         public IAppointmentRepository AppointmentRepository => _appointmentRepository;
@@ -100,6 +102,10 @@ namespace eFurnitureProject.Infrastructures
 
         public ICartRepository CartRepository => _cartRepository;
         public IResponseRepository ResponseRepository => _responseRepository;
+      
+
+        public IDashBoardRepository DashBoardRepository => _dashBoardRepository;
+
         public async Task<int> SaveChangeAsync()
         {
             return await _dbContext.SaveChangesAsync();

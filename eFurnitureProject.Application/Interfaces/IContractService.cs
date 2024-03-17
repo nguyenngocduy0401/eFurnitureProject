@@ -15,6 +15,7 @@ namespace eFurnitureProject.Application.Interfaces
         Task<ApiResponse<ContractViewFullDTO>> GetContractWithItemAsync(string contractId);
         Task<ApiResponse<string>> UpdateStatusContractAsync(string contractId, int status);
         Task<ApiResponse<string>> UpdateStatusOrderProcessingAsync(string contractId, int status);
+        Task<ApiResponse<string>> PayRemainingCostContractCustomerAsync(string contractId);
         //Task<ApiResponse<Pagination<ContractViewDTO>>> GetContractByFilterAsync(FilterContractDTO filterContractDTO);
     }
 }

@@ -44,11 +44,9 @@ namespace eFurnitureProject.Application.Services
                 user = await _userManager.FindByNameAsync(moMoDTO.comment);
                 if (user != null)
                 {
-                user.Wallet = user.Wallet + moMoDTO.amount;
-                await _userManager.UpdateAsync(user);
-                }
-                else user.Id = null;
-                await _unitOfWork.TransactionRepository.AddTransactionAsync(
+                    user.Wallet = user.Wallet + moMoDTO.amount;
+                    await _userManager.UpdateAsync(user);
+                    await _unitOfWork.TransactionRepository.AddTransactionAsync(
                     new Transaction
                     {
                         Amount = moMoDTO.amount,
@@ -62,6 +60,25 @@ namespace eFurnitureProject.Application.Services
                         Description = $"Transfer {moMoDTO.amount:F2} from MoMo to {moMoDTO.comment}. {moMoDTO.tranId}",
 
                     });
+                }
+                else 
+                {
+                    await _unitOfWork.TransactionRepository.AddTransactionAsync(
+                    new Transaction
+                    {
+                        Amount = moMoDTO.amount,
+                        From = "MoMo",
+                        To = moMoDTO.partnerId,
+                        CreationDate = moMoDTO.ackTime,
+                        Type = "3rd",
+                        BalanceRemain = (double)user.Wallet,
+                        Status = 1,
+                        Description = $"Transfer {moMoDTO.amount:F2} from MoMo to {moMoDTO.comment}. {moMoDTO.tranId}",
+
+                    });
+
+                }
+                
                 await _unitOfWork.SaveChangeAsync();
                 response.isSuccess = true;
                 response.Message = "Successful!";

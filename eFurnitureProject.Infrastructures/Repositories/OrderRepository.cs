@@ -27,6 +27,15 @@ namespace eFurnitureProject.Infrastructures.Repositories
         }
 
 
+        public async Task<Order> GetOrderByIdAsync(Guid orderId)
+        {
+            var order = await _dbContext.Orders.Where(x => x.Id == orderId)
+                                         .Include(x => x.StatusOrder)
+                                         .Include(x => x.User).FirstOrDefaultAsync();
+            if (order == null) throw new Exception("Not found!");
+            return order;
+        }
+
         public async Task<Pagination<Order>> GetOrderByFilter(int pageIndex,
             int pageSize, int? status, DateTime? fromTime, DateTime? toTime,
             string? search)
@@ -86,6 +95,25 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 Items = items,
             };
             return result;
+        }
+        public async Task<StatusOrder> GetStatusOrderByOrderId(Guid orderId)
+        {
+            var order = await _dbSet
+                .Where(x => x.Id == orderId)
+                .Include(x => x.StatusOrder)
+                .FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                throw new Exception("Not Found!");
+            }
+
+            if (order.StatusOrder == null)
+            {
+                throw new Exception("StatusOrder not found!");
+            }
+
+            return order.StatusOrder;
         }
     }
 }

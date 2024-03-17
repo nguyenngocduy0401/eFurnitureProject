@@ -173,8 +173,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("Time")
-                        .HasColumnType("int");
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -305,6 +305,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -326,6 +330,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid?>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Pay")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -338,7 +345,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderProcessingId");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderProcessingId")
+                        .IsUnique()
+                        .HasFilter("[OrderProcessingId] IS NOT NULL");
 
                     b.ToTable("Contracts");
                 });
@@ -375,6 +386,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -429,9 +443,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("TotalQuantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Imports");
@@ -475,9 +486,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -502,8 +510,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("StatusId")
                         .HasColumnType("uniqueidentifier");
@@ -511,11 +519,16 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("VoucherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VoucherId");
 
                     b.ToTable("Orders");
                 });
@@ -530,8 +543,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -585,10 +598,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("StatusOrderProcessingId")
+                    b.Property<Guid>("StatusOrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -602,11 +616,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderProcessingDetail", b =>
                 {
-                    b.Property<Guid?>("OrderProcessingId")
+                    b.Property<Guid>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
-                    b.Property<Guid?>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
@@ -864,6 +878,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("StatusOrderProcessings");
@@ -875,19 +892,16 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<double?>("Amount")
+                        .HasColumnType("float");
 
-                    b.Property<int>("BalanceRemain")
-                        .HasColumnType("int");
+                    b.Property<double>("BalanceRemain")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("DeleteBy")
@@ -896,8 +910,10 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("From")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -915,18 +931,13 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<Guid?>("OrderProcessingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("To")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOrder")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -1010,8 +1021,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("Wallet")
-                        .HasColumnType("int");
+                    b.Property<double?>("Wallet")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -1050,6 +1061,12 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<double>("MaximumDiscountAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MinimumOrderValue")
+                        .HasColumnType("float");
+
                     b.Property<Guid?>("ModificationBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1084,7 +1101,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
-                    b.Property<int>("Count")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("VoucherId", "UserId");
@@ -1196,9 +1213,17 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Contract", b =>
                 {
-                    b.HasOne("eFurnitureProject.Domain.Entities.OrderProcessing", "OrderProcessing")
+                    b.HasOne("eFurnitureProject.Domain.Entities.User", "Customer")
                         .WithMany()
-                        .HasForeignKey("OrderProcessingId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eFurnitureProject.Domain.Entities.OrderProcessing", "OrderProcessing")
+                        .WithOne("Contract")
+                        .HasForeignKey("eFurnitureProject.Domain.Entities.Contract", "OrderProcessingId");
+
+                    b.Navigation("Customer");
 
                     b.Navigation("OrderProcessing");
                 });
@@ -1249,9 +1274,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         .WithMany("Order")
                         .HasForeignKey("UserId");
 
+                    b.HasOne("eFurnitureProject.Domain.Entities.Voucher", "Voucher")
+                        .WithMany("Order")
+                        .HasForeignKey("VoucherId");
+
                     b.Navigation("StatusOrder");
 
                     b.Navigation("User");
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderDetail", b =>
@@ -1277,11 +1308,15 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 {
                     b.HasOne("eFurnitureProject.Domain.Entities.StatusOrderProcessing", "StatusOrderProcessing")
                         .WithMany()
-                        .HasForeignKey("StatusOrderProcessingId");
+                        .HasForeignKey("StatusOrderProcessingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("eFurnitureProject.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("StatusOrderProcessing");
 
@@ -1408,6 +1443,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.OrderProcessing", b =>
                 {
+                    b.Navigation("Contract");
+
                     b.Navigation("OrderProcessingDetail");
                 });
 
@@ -1435,6 +1472,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             modelBuilder.Entity("eFurnitureProject.Domain.Entities.Voucher", b =>
                 {
+                    b.Navigation("Order");
+
                     b.Navigation("VoucherDetail");
                 });
 #pragma warning restore 612, 618

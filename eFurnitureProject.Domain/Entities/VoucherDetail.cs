@@ -18,7 +18,7 @@ namespace eFurnitureProject.Domain.Entities
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public User? User { get; set; }
-        public int Count { get; set; }
+        public int Status { get; set; }
 
     }
 }

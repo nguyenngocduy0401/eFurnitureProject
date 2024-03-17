@@ -14,7 +14,7 @@ namespace eFurnitureProject.Application.ViewModels.AppointmentViewModel.Appointm
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public int Status { get; set; }
-        public int Time { get; set; }
+        public string? Time { get; set; }
         public string? CustomerName { get; set; }
         public List<string>? StaffName { get; set; }
     }

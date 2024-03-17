@@ -37,7 +37,11 @@ namespace eFurnitureProject.Infrastructures
         private readonly IVoucherDetailRepository _voucherDetailRepository;
         private readonly IResponseRepository _responseRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+<<<<<<< HEAD
        
+=======
+        private readonly IResponseRepository _responseRepository;
+>>>>>>> main
         public UnitOfWork(AppDbContext dbContext, IAppointmentRepository appointmentRepository,
             IAppointmentDetailRepository appointmentDetailRepository, ICartDetailRepository cartDetailRepository,
             ICartRepository cartRepository, ICategoryRepository categoryRepository,
@@ -75,7 +79,11 @@ namespace eFurnitureProject.Infrastructures
             _userRepository = userRepository;
             _voucherRepository = voucherRepository;
             _voucherDetailRepository = voucherDetailRepository;
+<<<<<<< HEAD
             _responseRepository= responseRepository;
+=======
+            _responseRepository = responseRepository;
+>>>>>>> main
         }
         public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository;
         public IAppointmentRepository AppointmentRepository => _appointmentRepository;
@@ -102,7 +110,10 @@ namespace eFurnitureProject.Infrastructures
 
         public ICartRepository CartRepository => _cartRepository;
         public IResponseRepository ResponseRepository => _responseRepository;
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
         public async Task<int> SaveChangeAsync()
         {
             return await _dbContext.SaveChangesAsync();

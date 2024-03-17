@@ -29,6 +29,7 @@ namespace eFurnitureProject.Infrastructures.Repositories
         public async Task<bool> CheckProduct(Guid productId)
         {
             var userIdcurrent = _claimsService.GetCurrentUserId.ToString();
+<<<<<<< HEAD
            
             // Kiểm tra xem sản phẩm có trong trạng thái 4 không và người đăng nhập có phải là người đặt hàng không
             var isProductInStatus4 = await _dbContext.Products
@@ -41,10 +42,25 @@ namespace eFurnitureProject.Infrastructures.Repositories
                .AnyAsync();
 
             return isProductInStatus4;
+=======
+
+            var statusOrderID = _dbContext.StatusOrders.Where(so => so.StatusCode == 4).Select(so => so.Id).FirstOrDefault();
+            var orderExist = _dbContext.Orders
+                .Where(o => o.StatusId == statusOrderID
+                &&o.UserId==userIdcurrent 
+                && _dbContext.OrdersDetails.Any(od => od.OrderId == o.Id && od.ProductId == productId)).
+                Any();
+
+            return orderExist;
+>>>>>>> main
         }
       public async   Task<Pagination<FeedBackViewDTO>> GetFeedBacksByUserID(int pageIndex, int pageSize, string userID)
         {
             var feedbackList = await _dbContext.Feedbacks
+<<<<<<< HEAD
+=======
+                .Include(p => p.Product)
+>>>>>>> main
         .Where(f => f.UserId == userID)
         .OrderByDescending(f => f.CreationDate)
         .Skip(pageIndex * pageSize)
@@ -61,7 +77,11 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 Details = f.Details,
                 Title = f.Title,
                 ProductId = f.ProductId,
+<<<<<<< HEAD
                 ProductName = f.Product.Name
+=======
+                ProductName = f.Product != null ? f.Product.Name : null
+>>>>>>> main
             }).ToList();
 
             var pagination = new Pagination<FeedBackViewDTO>
@@ -73,6 +93,28 @@ namespace eFurnitureProject.Infrastructures.Repositories
             };
 
             return pagination;
+<<<<<<< HEAD
+=======
+        }
+        public async Task<Pagination<Product>> GetProductNotFeedbackByUserID(int pageIndex, int pageSize, string userID)
+        {
+          var products= await _dbContext.Products
+                .Where(p=>!_dbContext.Feedbacks.Any(f => f.UserId == userID && f.ProductId == p.Id)).
+                Skip(pageIndex * pageSize).  
+                Take(pageSize)
+               .ToListAsync();
+            var count = await _dbContext.Products
+            .CountAsync(p => !_dbContext.Feedbacks.Any(f => f.UserId == userID && f.ProductId == p.Id));
+            var pagination = new Pagination<Product>
+            {
+                Items = products,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = count
+            };
+
+            return pagination;
+>>>>>>> main
         }
     }
 }

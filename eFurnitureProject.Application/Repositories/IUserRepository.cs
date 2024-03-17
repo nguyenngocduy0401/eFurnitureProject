@@ -11,6 +11,7 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IUserRepository
     {
+        Task<User> GetByPhoneNumberAsync(string phoneNumber);
         Task<List<string>> GetRolesByUserId(string userId);
         Task<Pagination<User>> GetUsersByFilter
         (string search, string role, int pageIndex = 1, int pageSize = 10);

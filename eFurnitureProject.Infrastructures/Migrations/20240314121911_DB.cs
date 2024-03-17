@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eFurnitureProject.Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateCartDetail : Migration
+    public partial class DB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Time = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -58,7 +58,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     DateOfBird = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Wallet = table.Column<int>(type: "int", nullable: true),
+                    Wallet = table.Column<double>(type: "float", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -107,7 +107,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -170,6 +169,8 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Percent = table.Column<double>(type: "float", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
+                    MinimumOrderValue = table.Column<double>(type: "float", nullable: false),
+                    MaximumDiscountAmount = table.Column<double>(type: "float", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -433,13 +434,13 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -462,6 +463,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                         column: x => x.StatusId,
                         principalTable: "StatusOrders",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_Vouchers_VoucherId",
+                        column: x => x.VoucherId,
+                        principalTable: "Vouchers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -470,7 +476,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 {
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -522,6 +528,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -635,7 +642,7 @@ namespace eFurnitureProject.Infrastructures.Migrations
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false)
+                    Price = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -659,14 +666,13 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BalanceRemain = table.Column<int>(type: "int", nullable: false),
+                    BalanceRemain = table.Column<double>(type: "float", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    From = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    To = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    TypeOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    From = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    To = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OrderProcessingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -831,6 +837,11 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_VoucherId",
+                table: "Orders",
+                column: "VoucherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrdersDetails_ProductId",
                 table: "OrdersDetails",
                 column: "ProductId");
@@ -946,9 +957,6 @@ namespace eFurnitureProject.Infrastructures.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Vouchers");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
@@ -959,6 +967,9 @@ namespace eFurnitureProject.Infrastructures.Migrations
 
             migrationBuilder.DropTable(
                 name: "StatusOrders");
+
+            migrationBuilder.DropTable(
+                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

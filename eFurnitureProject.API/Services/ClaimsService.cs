@@ -1,4 +1,5 @@
 ﻿using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Domain.Entities;
 using System.Security.Claims;
 
 namespace eFurnitureProject.API.Services

@@ -9,5 +9,7 @@ namespace eFurnitureProject.Application.Repositories
 {
     public interface IStatusOrderProcessingRepository : IGenericRepository<StatusOrderProcessing>
     {
+        Task<bool> CheckStatusOrderProcessingExisted(string name);
+        Task<StatusOrderProcessing> GetStatusByStatusCode(int statusCode);
     }
 }

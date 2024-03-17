@@ -59,5 +59,11 @@ namespace eFurnitureProject.Infrastructures.Repositories
                 .Where(ad => ad.AppointmentId == appointmentId)
                 .ToListAsync();
         }
+        public async Task<List<AppointmentDetail>> GetByAppointmentByStaffIdAsync(DateTime date,  string staffId)
+        {
+            return await _dbContext.AppointmentDetails
+                .Where(ad => ad.UserId == staffId && ad.IsDeleted==false && ad.Appointment.Date.Date==date.Date)
+                .ToListAsync();
+        }
     }
 }

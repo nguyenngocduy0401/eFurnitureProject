@@ -14,13 +14,13 @@ namespace eFurnitureProject.Domain.Entities
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? Name { get; set; }
-        public Guid? StatusOrderProcessingId { get; set; }
+        public Guid StatusOrderProcessingId { get; set; }
         [ForeignKey("StatusOrderProcessingId")]
         public StatusOrderProcessing? StatusOrderProcessing { get; set; }
-        public string? UserId { get; set; }
+        public string UserId { get; set; }
         [ForeignKey("UserId")]
         public User? User { get; set; }
-
+        public Contract? Contract { get; set; }
         public virtual ICollection<OrderProcessingDetail>? OrderProcessingDetail { get; set; }
     }
 }

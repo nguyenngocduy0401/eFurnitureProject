@@ -15,6 +15,7 @@ namespace eFurnitureProject.Application.Repositories
         Task UpdateAsync(AppointmentDetail appointmentDetail);
         Task<List<AppointmentDetail>> GetByAppointmentIdAsync(Guid appointmentId);
 
-
+        Task<List<AppointmentDetail>> GetByAppointmentByStaffIdAsync(DateTime date, string staffId);
+       
     }
 }

@@ -14,6 +14,7 @@ namespace eFurnitureProject.Application.Repositories
     public interface IFeedbackRepository : IGenericRepository<Feedback>
     {
         Task<bool> CheckProduct(Guid productId);
+        Task<Pagination<Product>> GetProductNotFeedbackByUserID(int pageIndex, int pageSize, string userID);
         Task<Pagination<FeedBackViewDTO>> GetFeedBacksByUserID(int pageIndex, int pageSize, string userID);
 
     }

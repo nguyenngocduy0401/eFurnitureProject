@@ -24,6 +24,12 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics;
+using eFurnitureProject.Application.ViewModels.VoucherDTO;
+using eFurnitureProject.API.Validator.VoucherValidator;
+using eFurnitureProject.Application.ViewModels.WalletViewModels;
+using eFurnitureProject.API.Validator.WalletValidator;
+using eFurnitureProject.Application.ViewModels.OrderViewModels;
+using eFurnitureProject.API.Validator.OrderValidator;
 
 namespace eFurnitureProject.API
 {
@@ -85,6 +91,7 @@ namespace eFurnitureProject.API
             services.AddScoped<RoleInitializer>();
             services.AddScoped<AccountInitializer>();
             services.AddScoped<StatusOrderInitializer>();
+            services.AddScoped<StatusOrderProcessingInitializer>();
             #endregion
             #region Validator
             services.AddTransient<IValidator<UserRegisterDTO>, UserRegisterValidation>();
@@ -99,7 +106,9 @@ namespace eFurnitureProject.API
             services.AddTransient<IValidator<CreateImportDTO>, CreateImportValidation>();
             services.AddTransient<IValidator<CreateImportDetailDTO>, CreateImportDetailValidation>();
             services.AddTransient<IValidator<UpdateImportDTO>, UpdateImportValidation>();
-
+            services.AddTransient<IValidator<CreateVoucherDTO>, CreateVoucherValidation>();
+            services.AddTransient<IValidator<UpdateWalletDTO>,UpdateWalletValidation>();
+            services.AddTransient<IValidator<CreateOrderDTO>, CreateOrderValidation>();
             #endregion
 
             return services;

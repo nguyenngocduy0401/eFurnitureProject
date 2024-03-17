@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eFurnitureProject.Domain.Enums
 {
-    public enum AppointmentStatus
+    public enum AppointmentStatusEnum
     {
         Processing = 1,
         Pending = 2,

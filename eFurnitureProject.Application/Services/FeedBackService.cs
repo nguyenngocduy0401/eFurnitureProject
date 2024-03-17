@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +28,14 @@ namespace eFurnitureProject.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO, Guid productId)
+        public async Task<ApiResponse<FeedBackDTO>> CreateFeedBack(CreateFeedBackDTO feedBackDTO, string productID)
         {
             var response = new ApiResponse<FeedBackDTO>();
             try
             {
-                var checkProduct = await _unitOfWork.FeedbackRepository.CheckProduct(productId);
-                if (!checkProduct)
+                var proDtuctID = Guid.Parse(productID);
+                var checkFeedBack = await _unitOfWork.FeedbackRepository.CheckProduct(proDtuctID);
+                if (!checkFeedBack)
                 {
                     response.isSuccess = false;
                     response.Message = "Fail by product";
@@ -42,23 +44,46 @@ namespace eFurnitureProject.Application.Services
                 {
 
                     var feedback = _mapper.Map<Feedback>(feedBackDTO);
-                    feedback.Status = 1;
-                    feedback.ProductId = productId;
-                    await _unitOfWork.FeedbackRepository.AddAsync(feedback);
-                    await _unitOfWork.SaveChangeAsync();
-                    return response;
-                }
+                    if (feedback.Status == 2)
+                    {
+                        response.isSuccess = false;
+                        response.Message = " FeedBack has responsed ";
+                    }
+                    else
+                    {
+                        feedback.Status = 1;
+                        feedback.ProductId = proDtuctID;
+                        feedback.UserId = _claimsService.GetCurrentUserId.ToString();
+                        await _unitOfWork.FeedbackRepository.AddAsync(feedback);
+                        var issuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                        if (issuccess)
+                        {
+                            response.isSuccess = true;
+                            response.Message = "Create Successfully";
+                            return response;
 
+                        }
+                        else
+                        {
+                            response.isSuccess = false;
+                            response.Message = "Create Fail";
+                            return response;
 
+                        }
+                        }
+                    }
+                } 
+            
+            catch (DbException ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
             }
             catch (Exception ex)
             {
-
-                response.Data = null;
                 response.isSuccess = false;
-                response.Message = $"An error occurred while creating the appointment: {ex.Message}";
+                response.Message = ex.Message;
             }
-
             return response;
         }
         public async Task<ApiResponse<Pagination<FeedBackViewDTO>>> GetFeedBackJWT(int pageIndex, int PageSize)
@@ -69,7 +94,8 @@ namespace eFurnitureProject.Application.Services
                 var userCurrentID = _claimsService.GetCurrentUserId.ToString();
                 var feedbacks = await _unitOfWork.FeedbackRepository.GetFeedBacksByUserID(pageIndex, PageSize, userCurrentID);
                 var result = _mapper.Map<Pagination<FeedBackViewDTO>>(feedbacks);
-
+                response.Data = result;
+                return response;
             }
             catch (Exception ex)
             {
@@ -81,12 +107,35 @@ namespace eFurnitureProject.Application.Services
 
             return response;
         }
-        public async Task<ApiResponse<bool>> DeleteFeedBack(Guid id)
+
+        public async Task<ApiResponse<Pagination<Product>>> GetFeedBackNotReviewedJWT(int pageIndex, int PageSize)
+        {
+            var response = new ApiResponse<Pagination<Product>>();
+            try
+            {
+                var userCurrentID = _claimsService.GetCurrentUserId.ToString();
+                var feedbacks = await _unitOfWork.FeedbackRepository.GetProductNotFeedbackByUserID(pageIndex, PageSize, userCurrentID);
+                var result = _mapper.Map<Pagination<Product>>(feedbacks);
+                response.Data = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response.Data = null;
+                response.isSuccess = false;
+                response.Message = $" error : {ex.Message}";
+            }
+
+            return response;
+        }
+        public async Task<ApiResponse<bool>> DeleteFeedBack(string id)
         {
             var response = new ApiResponse<bool>();
             try
             {
-                var exist = await _unitOfWork.FeedbackRepository.GetByIdAsync(id);
+                var ID=Guid.Parse(id);
+                var exist = await _unitOfWork.FeedbackRepository.GetByIdAsync(ID);
                 if (exist == null)
                 {
                     response.isSuccess = false;
@@ -101,7 +150,21 @@ namespace eFurnitureProject.Application.Services
                 }
                 _unitOfWork.FeedbackRepository.SoftRemove(exist);
                 var isSuccess = await _unitOfWork.SaveChangeAsync();
-                return response;
+                var issuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                if (issuccess)
+                {
+                    response.isSuccess = true;
+                    response.Message = "Delete Successfully";
+                    return response;
+
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    response.Message = "Delete Fail";
+                    return response;
+
+                }
             }
             catch (Exception ex)
             {

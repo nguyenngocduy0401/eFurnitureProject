@@ -14,11 +14,11 @@ namespace eFurnitureProject.Domain.Entities
         public int Quantity { get; set; }
         public int Price { get; set; }
         [Key, Column(Order = 1)]
-        public Guid? OrderProcessingId { get; set; }
+        public Guid OrderProcessingId { get; set; }
         [ForeignKey("OrderProcessingId")]
         public OrderProcessing? OrderProcessing { get; set; }
         [Key, Column(Order = 2)]
-        public Guid? ProductId { get; set; }
+        public Guid ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
 

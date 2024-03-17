@@ -10,5 +10,7 @@ namespace eFurnitureProject.Application.Repositories
     public interface ICartRepository : IGenericRepository<Cart>
     {
         Task<Cart> GetCartAsync();
+        Task<Guid> GetCartIdAsync();
+        Task<IEnumerable<CartDetail>> GetCartDetailsByUserId(string userId);
     }
 }

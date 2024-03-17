@@ -13,11 +13,5 @@ namespace eFurnitureProject.Application.ViewModels.ImportViewModels
         public string Name { get; set; }
         public double TotalPrice { get; set; }
         public int Status { get; set; }
-        public int TotalQuantity { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime? ModificationDate { get; set; }
-        public Guid? CreatedBy { get; set; }
-        public Guid? ModificationBy { get; set; }
-        public DateTime? DeletionDate { get; set; }
     }
 }

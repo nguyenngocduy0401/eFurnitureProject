@@ -32,6 +32,7 @@ namespace eFurnitureProject.Application
         public IVoucherRepository VoucherRepository { get; }
         public IVoucherDetailRepository VoucherDetailRepository { get; }
         public IResponseRepository ResponseRepository { get; }
+        public IDashBoardRepository DashBoardRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

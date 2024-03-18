@@ -78,7 +78,6 @@ namespace eFurnitureProject.Infrastructures.Repositories
                                                              .ThenInclude(op => op.OrderProcessingDetail)
                                                             .ThenInclude(opd => opd.Product)
                                                             .Include(ct => ct.Customer)
-                                                            .AsNoTracking()
                                                             .FirstOrDefaultAsync(ct => ct.Id == contractId);
             if (result is null)
             {

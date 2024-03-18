@@ -43,6 +43,8 @@ namespace eFurnitureProject.Infrastructures.Repositories
                     (result, user) => new Top5UserDTO
                     {
                         UserName = user.UserName,
+                        UserEmail= user.Email,
+                        PhoneNumber=user.PhoneNumber,
                         TotalMoney = result.TotalSpending
                     })
                 .ToList();

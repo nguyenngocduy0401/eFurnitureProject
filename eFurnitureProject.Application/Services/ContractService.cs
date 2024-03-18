@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using eFurnitureProject.Application.Commons;
 using eFurnitureProject.Application.Interfaces;
+using eFurnitureProject.Application.Repositories;
 using eFurnitureProject.Application.ViewModels.ContractViewModels;
 using eFurnitureProject.Application.ViewModels.OrderProcessingDetailViewModels;
 using eFurnitureProject.Domain.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using System.Data.Common;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
@@ -17,14 +19,16 @@ namespace eFurnitureProject.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
+        private readonly UserManager<User> _userManager;
         private readonly IValidator<CreateContractDTO> _validatorCreateContract;
         private readonly IValidator<UpdateContractDTO> _validatorUpdateContract;
 
-        public ContractService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, IValidator<CreateContractDTO> validatorCreateContract, IValidator<UpdateContractDTO> validatorUpdateContract)
+        public ContractService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, UserManager<User> userManager, IValidator<CreateContractDTO> validatorCreateContract, IValidator<UpdateContractDTO> validatorUpdateContract)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _claimsService = claimsService;
+            _userManager = userManager;
             _validatorCreateContract = validatorCreateContract;
             _validatorUpdateContract = validatorUpdateContract;
         }
@@ -46,7 +50,7 @@ namespace eFurnitureProject.Application.Services
                     item.Price = (int)(await _unitOfWork.ProductRepository.GetByIdAsync((Guid)item.ProductId)).Price;
                     totalValueItem += item.Price * item.Quantity;
                 }
-                if(contract.Value < totalValueItem)
+                if (contract.Value < totalValueItem)
                 {
                     throw new Exception($"The value of contract must be greater or equal to the total price item in the contract(>= {totalValueItem})");
                 }
@@ -155,28 +159,44 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
-                if(status < 0 && status > 4)
+                if (status < 0 && status > 4)
                 {
                     throw new Exception("Invalid number status");
                 }
                 var existingContract = await _unitOfWork.ContractRepository.GetByIdAsync(Guid.Parse(contractId));
-                if(existingContract.Status == 3)
+                if (existingContract.Status == 3)
                 {
                     throw new Exception("Can not change status contract anymore because you accepted contract");
                 }
-                if(existingContract.Status >= status && existingContract.Status != 4)
+                if (existingContract.Status >= status && existingContract.Status != 4)
                 {
                     throw new Exception($"Can not update status with value {status} again");
                 }
                 existingContract.Status = status;
                 if (existingContract.Status == 3)
                 {
-                    throw new NotImplementedException();
+                    var customer = await _userManager.FindByIdAsync(existingContract.CustomerId);
+                    if (customer.Wallet < existingContract.Pay || customer.Wallet == null)
+                    {
+                        throw new Exception("Not enough money!");
+                    }
+                    customer.Wallet = customer.Wallet - existingContract.Pay;
+                    var transaction = new Transaction
+                    {
+                        OrderProcessingId = existingContract.OrderProcessingId,
+                        Amount = existingContract.Pay,
+                        From = "Wallet",
+                        To = "eFurniturePay",
+                        Type = "OrderProcessing",
+                        BalanceRemain = (double)customer.Wallet,
+                        UserId = customer.Id,
+                        Status = 0,
+                        Description = $"Transfer {existingContract.Pay:F2} from User wallet to Furniture Pay for partial paying the contract",
+                    };
+                    await _unitOfWork.TransactionRepository.AddAsync(transaction);
+                    await _userManager.UpdateAsync(customer);
                 }
-                else
-                {
-                    _unitOfWork.ContractRepository.Update(existingContract);
-                }
+                _unitOfWork.ContractRepository.Update(existingContract);
                 bool isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
                 if (isSuccess)
                 {
@@ -199,13 +219,31 @@ namespace eFurnitureProject.Application.Services
             var response = new ApiResponse<string>();
             try
             {
+                if(status == 4)
+                {
+                    throw new Exception("Can not set status value 4(Delivering) because depending customer");
+                }
+                var existingContract = await _unitOfWork.ContractRepository.GetByIdAsync(Guid.Parse(contractId));
+                if (existingContract.Status != 3)
+                {
+                    throw new Exception("Can not update order processing because customer have not accepted the contract");
+                }
                 var newStatus = await _unitOfWork.StatusOrderProcessingRepository.GetStatusByStatusCode(status);
                 var existingOrderProcess = await _unitOfWork.OrderProcessingRepository.GetOrderProcessingByContractId(Guid.Parse(contractId));
-
                 var oldStatus = await _unitOfWork.StatusOrderProcessingRepository.GetByIdAsync((Guid)existingOrderProcess.StatusOrderProcessingId);
-                if (newStatus.StatusCode <= oldStatus.StatusCode)
+                if (oldStatus.StatusCode <= 3)
                 {
-                    throw new Exception("Invalid state!");
+                    if (newStatus.StatusCode <= oldStatus.StatusCode || newStatus.StatusCode >= 4)
+                    {
+                        throw new Exception("Invalid state!");
+                    }
+                }
+                else
+                {
+                    if (newStatus.StatusCode <= oldStatus.StatusCode)
+                    {
+                        throw new Exception("Invalid state!");
+                    }
                 }
                 existingOrderProcess.StatusOrderProcessingId = newStatus.Id;
                 _unitOfWork.OrderProcessingRepository.Update(existingOrderProcess);
@@ -271,5 +309,57 @@ namespace eFurnitureProject.Application.Services
             return response;
         }
 
+        public async Task<ApiResponse<string>> PayRemainingCostContractCustomerAsync(string contractId)
+        {
+            var response = new ApiResponse<string>();
+            try
+            {
+                var newStatus = await _unitOfWork.StatusOrderProcessingRepository.GetStatusByStatusCode(4);
+                var existingContract = await _unitOfWork.ContractRepository.GetContractWithDetail(Guid.Parse(contractId));
+                if (existingContract.OrderProcessing.StatusOrderProcessing.StatusCode < 3)
+                {
+                    throw new Exception("Can not pay remaning cost of contract until the status of order processing is Complete Construction");
+                }
+                if(existingContract.OrderProcessing.StatusOrderProcessing.StatusCode > 3)
+                {
+                    throw new Exception("Invalid state");
+                }
+                var customer = await _userManager.FindByIdAsync(existingContract.CustomerId);
+                var remainingCost = existingContract.Value - existingContract.Pay;
+                if (customer.Wallet < remainingCost || customer.Wallet == null)
+                {
+                    throw new Exception("Not enough money!");
+                }
+                customer.Wallet = customer.Wallet - remainingCost;
+                var transaction = new Transaction
+                {
+                    OrderProcessingId = existingContract.OrderProcessingId,
+                    Amount = remainingCost,
+                    From = "Wallet",
+                    To = "eFurniturePay",
+                    Type = "OrderProcessing",
+                    BalanceRemain = (double)customer.Wallet,
+                    UserId = customer.Id,
+                    Status = 0,
+                    Description = $"Transfer {remainingCost:F2} from User wallet to Furniture Pay for pay remaing cost contract",
+                };
+                await _unitOfWork.TransactionRepository.AddAsync(transaction);
+                existingContract.OrderProcessing.StatusOrderProcessingId = newStatus.Id;
+                _unitOfWork.OrderProcessingRepository.Update(existingContract.OrderProcessing);
+                var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+                await _userManager.UpdateAsync(customer);
+                if (!isSuccess)
+                {
+                    throw new Exception("Pay remaing cost contract fail!");
+                }
+                response.Message = "Pay remaing cost contract successful!";
+            }
+            catch (Exception ex)
+            {
+                response.isSuccess = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
     }
 }
